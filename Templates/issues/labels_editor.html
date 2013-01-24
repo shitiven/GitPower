@@ -1,0 +1,109 @@
+<form class="js-label-form">
+  <div class="input-append">
+    <input style="width:133px" name="name" placeholder="新标签" id="appendedInputButton" type="text">
+    <button class="btn" type="button" id="labelCreate">添加</button>
+  </div>
+  <ul class="color-chooser">
+      <li>
+        <span style="background-color:#444444" data-color="#444444" class="color-cooser-color js-color-cooser-color selected" data-last="true">
+          <label>
+            <span class="mini-icon mini-icon-confirm"></span>
+          </label>
+        </span>
+      </li>
+      <li>
+        <span style="background-color:#DDDDDD" data-color="#DDDDDD" class="color-cooser-color js-color-cooser-color">
+          <label>
+            <span class="mini-icon mini-icon-confirm"></span>
+          </label>
+        </span>
+      </li>
+      <li>
+        <span style="background-color:#e10c02" data-color="#e10c02" class="color-cooser-color js-color-cooser-color">
+          <label>
+            <span class="mini-icon mini-icon-confirm"></span>
+          </label>
+        </span>
+      </li>
+      <li>
+        <span style="background-color:#d7e102" data-color="#d7e102" class="color-cooser-color js-color-cooser-color">
+          <label>
+            <span class="mini-icon mini-icon-confirm"></span>
+          </label>
+        </span>
+      </li>
+      <li>
+        <span style="background-color:#02e10c" data-color="#02e10c" class="color-cooser-color js-color-cooser-color">
+          <label>
+            <span class="mini-icon mini-icon-confirm"></span>
+          </label>
+        </span>
+      </li>
+      <li>
+        <span style="background-color:#02d7e1" data-color="#02d7e1" class="color-cooser-color js-color-cooser-color">
+          <label>
+            <span class="mini-icon mini-icon-confirm"></span>
+          </label>
+        </span>
+      </li>
+      <li>
+        <span style="background-color:#0b02e1" data-color="#0b02e1" class="color-cooser-color js-color-cooser-color">
+          <label>
+            <span class="mini-icon mini-icon-confirm"></span>
+          </label>
+        </span>
+      </li>
+      <li>
+        <span style="background:#e102d8" data-color="#e102d8" class="color-cooser-color js-color-cooser-color">
+          <label>
+            <span class="mini-icon mini-icon-confirm"></span>
+          </label>
+        </span>
+      </li>
+  </ul>
+  <input type="text" style="display:none; width:190px;" value="#444444" name="color" />
+  <a href="#" class="custom-color" style="font-size:12px">自定义颜色</a>
+</from>
+<script type="text/javascript">
+  $(".js-color-cooser-color").mouseover(function(event){
+    $(this).css("box-shadow","0 0 5px #2466A7");
+  });
+  $(".js-color-cooser-color").mouseout(function(event){
+    $(this).css("box-shadow","");
+  });
+
+  var color_choosed=$(".color-chooser .selected");
+  $(".js-color-cooser-color").click(function(event){
+    if (color_choosed) {
+      $(color_choosed).removeClass("selected");
+    };
+    $(this).addClass("selected");
+    var color = $(this).attr("data-color");
+    $('.js-label-form input[name="color"]').val(color);
+    color_choosed = $(this);
+  });
+
+  $(".custom-color").click(function(event){
+    event.preventDefault();
+    $(this).hide();
+    $('.js-label-form input[name="color"]').css("display","block");
+    $('.js-label-form input[name="color"]').focus();
+    $('.js-label-form input[name="color"]').select();
+  });
+
+  var api = new gpapi({
+    url: "{%url create_label repo.owner.username repo.name%}",
+    success: function(data){
+        location.reload();
+    }
+  });
+
+  $("#labelCreate").click(function(){
+
+    api.send({
+        "color" : $('.js-label-form input[name="color"]').val(),
+        "name"  : $('.js-label-form input[name="name"]').val()
+      })
+  })
+  
+</script>

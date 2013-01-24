@@ -1,0 +1,67 @@
+{%extends "sample.html"%}
+{%load custom%}
+{%block h1_title%}
+    <h3 class="page_title">
+        <img class="img-circle" src="{%assets%}/img/avatar_default.png" width="45px" height="45px" /> {{request.user.username}}
+    </h3>
+{%endblock%}
+{%block container%}
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span3">
+          {% include "user/settings/sidebar.html" with settings_page="profile"%}
+        </div>
+        <div class="span9">
+          <div class="boxed-group">
+              <h3>个人资料</h3>
+              <div class="boxed-group-inner">
+                <form class="form-horizontal" action="/accounts/settings/team" method="POST">
+                  <p>
+                    <label for="title">昵称</label>
+                    <input type="text" class="input" value="{{user|user_profile:"nickname"|default:user.username}}" />
+                  </p>
+                  <p>
+                    <label for="title">网站</label>
+                    <input type="text" class="input" value='{{user|user_profile:"website"}}' />
+                  </p>
+                  <p>
+                    <label for="title">公司</label>
+                    <input type="text" class="input" value='{{user|user_profile:"company"}}' />
+                  </p>
+                  <p>
+                    <label for="title">城市</label>
+                    <input type="text" class="input" value='{{user|user_profile:"city"}}' />
+                  </p>
+                  <p>
+                    <input type="submit" value="更新资料" class="btn btn-primary" />
+                  </p>
+                  {%csrf_token%}
+                </form>
+              </div>
+          </div>
+
+          <div class="boxed-group">
+              <h3>头像 
+                <span class="meta">默认使用
+                  <a href="https://cn.gravatar.com/" target="_blank">gavatar</a>头像
+                </span>
+              </h3>
+              <div class="boxed-group-inner">
+                <form class="form-horizontal" action="/accounts/settings/team" method="POST">
+                  <div class="control-group avatar_list">
+                      <img src='{{user|user_profile:"avatar_large"}}' />
+                      <img src='{{user|user_profile:"avatar_normal"}}' />
+                      <img src='{{user|user_profile:"avatar_small"}}' />
+                  </div>
+                  <!--div class="control-group avatar_file">
+                      <input type="file" class="input" />
+                  </div-->
+                  {%csrf_token%}
+                </form>
+              </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+{%endblock%}

@@ -1,0 +1,65 @@
+{%extends "sample.html"%}
+
+{%block h1_title%}
+  {%include "repo/repo_head.html"%}
+{%endblock%}
+
+{%block container%}
+    
+    <div class="container-fluid" style="margin-top:30px;">
+      <div class="row-fluid">
+        <div class="span3">
+            {%include "repo/admin/sidebar.html" with repo_admin_page="request"%}
+        </div>
+        <div class="span9">
+          
+          {%include "repo/admin/services/nav.html" with service_nav="inuse"%} 
+
+          <div class="boxed-group flush">
+            <h3>
+              <a class="meta" href="{%url repo_services_filter repo.owner.username repo.name%}">添加服务</a>
+              服务列表
+            </h3>
+            <div class="boxed-group-inner">
+              {%if services|length %}
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>服务名称</th>
+                    <th>所需权限</th>
+                    <th>服务提供者</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {%for service in services%}
+                  <tr>
+                    <td>{{service.name}}</td>
+                    <td>
+                      {%if service.needwrite%}
+                        读写
+                      {%else%}
+                        只读
+                      {%endif%}
+                    </td>
+                    <td>{{service.creater}}</td>
+                    <form action="{%url repo_service_remove repo.owner.username repo.name%}" method="POST">
+                    <td>
+                      <input type="hidden" value="{{service.id}}" name="service_id" />
+                      <button class="btn btn-link" type="submit">移除</button>
+                    </td>
+                    </form>
+                  </tr>
+                  {%endfor%}
+                </tbody>
+              </table>
+              {%else%}
+                该项目还没有添加任何服务
+              {%endif%}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{%endblock%}

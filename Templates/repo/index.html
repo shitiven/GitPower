@@ -1,0 +1,59 @@
+{%extends "sample.html"%}
+{%load custom%}
+
+{%block h1_title%}
+  {%include "repo/repo_head.html"%}
+{%endblock%}
+
+{%block container%}
+
+{%if blank_repo%}
+<h3>通过命令行初始化项目文件</h3>
+<pre class="_code code_padding">
+touch README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin git@assets.m.etao.net:{{repo.owner.username}}/{{repo.name}}.git
+git push -u origin master
+</pre>
+<h3>对已存在的项目请使用以下命令</h3>
+<pre class="_code code_padding">
+git remote add origin git@assets.m.etao.net:{{repo.owner.username}}/{{repo.name}}.git
+git push -u origin master
+</pre>
+{%else%}
+
+    {%include "repo/menu_ul.html"%}
+
+    <div id="treeContainer">
+      <div style="text-align:center">
+          <img class="loading" id="treeLoading" src="{%assets%}/img/loading.gif"/>
+      </div>
+    </div>
+
+    {%if readme%}
+    <div id="readme" class="clearfix announce instapaper_body md" data-path="/">
+          <span class="name"><span class="mini-icon mini-icon-readme"></span> README.md</span>
+          <div class="markdown-body">
+            {%autoescape off%}
+              {{readme}}
+            {%endautoescape%}
+          </div>
+    </div>
+    {%endif%}
+    
+{%endif%}
+
+{%endblock%}
+{%block script%}
+<script type="text/javascript">
+$.ajax({
+  type: "GET",
+  url: "/repo/tree_ajax",
+  data: {"repo_id" : "{{repo.id}}", "branch" : "{{branch}}", "path" : "{{current_path}}"}
+}).done(function( data ) {
+  $("#treeContainer").html(data);
+});
+</script>
+{%endblock%}

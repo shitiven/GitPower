@@ -1,0 +1,182 @@
+{%extends "sample.html"%}
+{%load custom%}
+{%block style%}
+<style type="text/css">
+    #membersbox{
+        list-style: none;
+        max-height: 200px;
+        overflow: auto;
+        border:1px solid #ccc;
+        width:220px;
+        margin:0;
+        display: none;
+        background: #fff;
+    }
+    #membersbox a{
+        display:block;
+        padding:5px;
+    }
+    #membersbox a:hover{
+        color:#fff;
+        background: #4183C4;
+        text-decoration: none;
+    }
+</style>
+{%endblock%}
+{%block h1_title%}
+    <h3 class="page_title">
+        <img class="img-circle" src="{%assets%}/img/avatar_default.png" width="45px" height="45px" /> {{request.user.username}}
+    </h3>
+{%endblock%}
+{%block container%}
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span3">
+          {% include "user/settings/sidebar.html" with settings_page=team.user.username%}
+        </div>
+        <div class="span9">
+
+            <form class="form-horizontal js-teamuser-mananger-form" action="{%url team_members team.user.username%}" method="POST">
+            <div class="boxed-group">
+              <h3>添加成员</h3>
+              <div class="boxed-group-inner"> 
+                  <div class="input-append">
+
+                    <input class="filter_user js-user-filter" name="username" size="16" type="text" placeholder="输入用户名" autocomplete="off" data-provide="typeahead"/>
+                    {%csrf_token%}
+
+                    <div class="btn-group">
+                        <button class="btn dropdown-toggle" data-toggle="dropdown">
+                          <span class="js-jurisdiction-input">
+                            <cite>添加</cite>
+                            <input type="hidden" name="jurisdiction" />
+                          </span>
+                          <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu js-select-option">
+                          <li>
+                            <a href="#" data-value="owner" data-target="js-jurisdiction-input" data-submit="js-teamuser-mananger-form">
+                              管理人员
+                            </a>
+                          </li>
+                          <li>
+                            <a href="#" data-value="developer" data-target="js-jurisdiction-input" data-submit="js-teamuser-mananger-form"> 
+                              开发人员
+                            </a>
+                          </li>
+                          <li>
+                            <a href="#" data-value="reporter" data-target="js-jurisdiction-input" data-submit="js-teamuser-mananger-form">
+                              报告人员
+                            </a>
+                          </li>
+                        </ul>
+                    </div>
+                  </div>
+              </div>
+            </div>
+            </form>
+
+            <div class="boxed-group">
+
+              <h3>管理员</h3>
+              <div class="boxed-group-inner no-padding">
+                <table class="table table-striped">
+                  <tbody>
+                    {%for owner in owners%}
+                    <tr>
+                      <td width="90%">{{owner.first_name}} ({{owner.email}})</td>
+                      <td width="10%">
+                        {%if owner.username != request.user.username%}
+                        <form action="{%url team_remove_member team.user.username%}" method="POST">
+                          <input type="hidden" name="username" value="{{owner.username}}" />
+                          {%csrf_token%}
+                          <button type="submit" class="btn-link">移除</button>
+                        </form>
+                        {%endif%}
+                      </td>
+                    </tr>
+                    {%endfor%}
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+            
+            <div class="boxed-group">
+              <h3>开发人员</h3>
+              <div class="boxed-group-inner no-padding">
+              {%if members%}
+              <table class="table table-striped">
+                <tbody>
+                  {%for member in members%}
+                  <tr>
+                    <td width="90%">{{member.first_name}} ({{member.email}}) <a href=""></a></td>
+                    <td width="10%">
+                      {%if member.username != request.user.username%}
+                      <form action="{%url team_remove_member team.user.username%}" method="POST">
+                        <input type="hidden" name="username" value="{{member.username}}" />
+                        {%csrf_token%}
+                        <button type="submit" class="btn-link">移除</button>
+                      </form>
+                      {%endif%}
+                  </tr>
+                  {%endfor%}
+                </tbody>
+                {%else%}
+                <div class="none">
+                  <p>尚未添加开发人员</p>
+                </div>
+                {%endif%}
+              </table>
+              </div>
+            </div>
+
+            <div class="boxed-group">
+              <h3>报告人员</h3>
+              <div class="boxed-group-inner no-padding">
+              {%if reporters%}
+              <table class="table table-striped">
+                <tbody>
+                  {%for reporter in reporters%}
+                  <tr>
+                    <td width="90%">{{reporter.first_name}} ({{reporter.email}}) <a href=""></a></td>
+                    <td width="10%">
+                      {%if reporter.username != request.user.username%}
+                      <form action="{%url team_remove_member team.user.username%}" method="POST">
+                        <input type="hidden" name="username" value="{{reporter.username}}" />
+                        {%csrf_token%}
+                        <button type="submit" class="btn-link">移除</button>
+                      </form>
+                      {%endif%}
+                    </td>
+                  </tr>
+                  {%endfor%}
+                </tbody>
+                {%else%}
+                <div class="none">
+                  <p>尚未添加报告人员</p>
+                </div>
+                {%endif%}
+              </table>
+              </div>
+            </div>
+
+            <form action="{%url team_delete team.user.username%}" method="POST">
+            <div class="boxed-group">
+              <h3>删除Team</h3>
+              <div class="boxed-group-inner">
+                  <div class="input-append">
+
+                      <input type="text" class="span3" placeholder="输入Team名称" value="" name="confirm_username"/>
+                      {%csrf_token%}
+                      <button class="btn btn-danger" type="submit">删除Team</button>
+                  </div>
+              </div>
+            </div>
+            </form>
+        </div>
+        
+      </div>
+      <ul id="membersbox" style="position:absolute;"></ul>
+    </div>
+{%endblock%}

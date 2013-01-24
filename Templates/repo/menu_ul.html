@@ -1,0 +1,44 @@
+{%load custom%}
+<ul class="nav nav-tabs repo-menu-ul">
+  {%if hidden_branches%}
+  {%else%}
+  <li>
+    <div class="btn-group" style="margin:0 15px 0 0">
+      <a class="btn dropdown-toggle filter-bt-handler" href="#">
+      {%autoescape off%}
+        <span class="mini-icon mini-icon-tree"></span>{{branch|is_tree:git_repo}}
+      {%endautoescape%}
+        <span class="caret"></span>
+      </a>
+    </div>
+  </li>
+  {%endif%}
+
+  {%if current_page == "files"%}
+  <li class="active"><a href="#">文件</a></li>
+  {%else%}
+  <li><a href="/{{repo.owner.username}}/{{repo.name}}/tree/{{branch}}/{{current_path}}">文件</a></li>
+  {%endif%}
+  {%if current_page == "commits"%}
+  <li  class="active"><a href="#">提交历史</a></li>
+  {%else%}
+  <li><a href="/{{repo.owner.username}}/{{repo.name}}/commits/{{branch}}/{{current_path}}">提交历史</a></li>
+  {%endif%}
+</ul>
+{%include "repo/filter_branches_tags.html" with showtab="True"%}
+
+<script type="text/javascript">
+  $(document).ready(function(){
+      var branches = [];
+      var tags = [];
+      {%for branch in git_repo.branches%}
+        branches.push("{{branch}}")
+      {%endfor%}
+      {%for tag in git_repo.tags%}
+        tags.push("{{tag}}")
+      {%endfor%}
+
+      var filter = FilterDropDown()
+      filter.init(branches, tags, function(){});
+  })
+</script>

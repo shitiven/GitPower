@@ -1,0 +1,75 @@
+{%extends "sample.html"%}
+{%load custom%}
+{%block style%}
+<style type="text/css">
+	h3.userinfo span{
+		font-weight: normal;
+		color: #999;
+	}
+	h3.userinfo {
+		border-bottom: 1px solid #ddd;
+		padding:0 0 10px 0;
+	}
+	.userinfo-item{
+		color: #999;
+	}
+	h5 {
+		margin:0;
+		color:#999;
+	}
+	h5 span{
+		font-weight: normal;
+		display: block;
+	}
+</style>
+{%endblock%}
+{%block container%}
+	<div class="container-fluid">
+	  <div class="row-fluid">
+	    <div class="span3">
+	    	<div style="padding-right:15px">
+		    	<img class="img-rounded" style="border:1px solid #ddd;padding:5px;" src="{%assets%}/img/avatar_default.png" width="210px" height="210px"/>
+		    	<p>
+		    		<h3 class="userinfo">
+		    			{%if is_team%}
+		    				{{current_user.username}}
+		    			{%else%}
+		    				{{current_user.first_name}}
+		    				<span>({{current_user.username}})</span>
+		    			{%endif%}
+		    		</h3>
+		    	</p>
+		    	{%if is_team%}
+		    	Team
+		    	{%else%}
+		    	<p class="userinfo-item">
+		    		email: {{current_user.email}}
+		    	</p>
+		    	{%endif%}
+		    </div>
+	    </div>
+	    <div class="span9">
+	        <table class="table">
+	        	<thead>
+	        		<tr>
+	        			<th>项目</th>
+	        		</tr>
+	        	</thead>
+	            <tbody>
+	                {%for repo in repos%}
+	                <tr>
+	                  <td>
+	                  	<h5>
+	                  		<a href="#"><a href="/{{repo.owner.username}}/{{repo.name}}">{{repo.name}}</a>
+	                  		<span>{{repo.des}}</span>
+	                  	</h5>
+	                  </td>
+	                </tr>
+	                {%endfor%}
+	            </tbody>
+	        </table>
+
+	    </div>
+	  </div>
+	</div>
+{%endblock%}

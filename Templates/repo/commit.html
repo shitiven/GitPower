@@ -1,0 +1,44 @@
+{%extends "sample.html"%}
+{%load custom%}
+{%block h1_title%}
+  {%include "repo/repo_head.html"%}
+{%endblock%}
+{%block style%}
+<style type="text/css">
+    {{"emacs"|code2Css:"diff"}}
+</style>
+{%endblock%}
+{%block container%}
+    {%include "repo/menu_ul.html"%}
+    <table class="table table-bordered" style="position:relative">
+      <tbody>
+        <tr>
+          <td>
+            <div class="commit-links">
+                <div>
+                    <a class="btn btn-small" href="{%url repo_tree repo.owner.username repo.name commit.hexsha current_path%}">浏览代码<span class="mini-icon mini-icon-arr-right-mini"></span>
+                    </a>
+                </div>
+            </div>
+            <h5>{{commit.message}}</h5>
+            {{commit.author.name}}<cite style="color:#999">({{commit.author.email}}) {{commit.committed_date|cover_commit_date|timesince}}</cite>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    {%for diff in diffes%}
+    <div class="bubble" id="files">
+        <div class="meta">
+          <div class="info">
+            {{diff.a_blob.path}}
+          </div>
+        </div>
+        <div class="file diff-file">
+            {%autoescape off%}
+                {{diff|diff2html}}
+            {%endautoescape%}
+        </div>
+    </div>
+    {%endfor%}
+{%endblock%}
+

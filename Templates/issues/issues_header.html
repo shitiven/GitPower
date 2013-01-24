@@ -1,0 +1,22 @@
+<ul class="nav nav-tabs">
+    <li style="float:right">
+        <span class="btn">
+            <a href="{%url issue_create repo.owner.username repo.name%}">新建issue</a>
+        </span>
+    </li>
+    {%if issues_page == "issues"%}
+    <li class="active">
+    <a href="#">缺陷</a>
+    </li>
+    {%else%}
+    <li>
+        <a href="{%url issues repo.owner.username repo.name%}">缺陷</a>
+    </li>
+    {%endif%}
+
+    {%if issues_page == "milestone"%}
+    <li class="active"><a href="#">里程碑</a></li>
+    {%else%}
+    <li><a  href="{%url milestones repo.owner.username repo.name%}">里程碑</a></li>
+    {%endif%}
+</ul>

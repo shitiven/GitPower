@@ -1,0 +1,115 @@
+{%load custom%}
+<div class="discussion-topic-infobar">
+    <div class="milestone">
+        {%if issue.milestone %}
+            里程碑: {{issue.milestone}}
+        {%else%}
+            <span class="assigned_milestone">No milestone</span>
+            <input type="hidden" name="milestone" />
+        {%endif%}
+
+        {%if repo_roles|arrayIndex:"owner"%}
+            <span class="btn-group">
+            <a style="padding:0 5px;" class="btn dropdown-toggle " data-toggle="dropdown" href="#">
+                <span class="mini-icon mini-icon-assign"></span>
+                <span class="caret"></span>
+            </a>
+
+            <!--assigne some one -->
+            <div class="dropdown-menu filter-context-panel" style="margin-top:10px;margin-left:-260px;">
+                <div class="context-title">
+                  指派
+                  <a href="#" class="close js-menu-close">
+                    <span class="mini-icon mini-icon-remove-close"></span>
+                  </a>
+                </div>
+                <div class="tabbable">
+                  <div class="tab-content">
+                    <ul class="tab-panel active" id="bt_tab1" style="display: block;">
+                      {%for milestone in milestones%}
+                      <li>
+                        {%if none_issue%}
+                        <a class="milestone-assign" data-milestone="{{milestone.id}}" href="#">
+                        {%else%}
+                        <a class="milestone-assign" data-milestone="{{milestone.id}}" href="{%url issue_assign_milestone repo.owner.username repo.name issue.id milestone.id%}">
+                        {%endif%}
+                          {%if issue.milestone == milestone%}
+                          <span class="mini-icon mini-icon-confirm"></span>
+                          {%endif%}
+                          <span class="head-name">{{milestone}}</span>
+                        </a>
+                      </li>
+                      {%endfor%}
+                    </ul>
+                  </div>
+                </div>
+            </div>
+            <!--end-->
+            </span>
+        {%endif%}
+    </div>
+
+    <div class="assigner">
+
+        {%if issue.assigner %}
+        已指派给 {{issue.assigner}}
+        {%else%}
+          <span class="assigned_assigner">No one is assigned</span>
+          <input type="hidden" name="assigner" />
+        {%endif%}
+
+        {%if repo_roles|arrayIndex:"owner"%}
+            <span class="btn-group">
+            <a style="padding:0 5px;" class="btn dropdown-toggle " data-toggle="dropdown" href="#">
+                <span class="mini-icon mini-icon-assign"></span>
+                <span class="caret"></span>
+            </a>
+
+            <!--assigne some one -->
+            <div class="dropdown-menu filter-context-panel" style="margin-top:10px;">
+
+                <div class="context-title">
+                  指派
+                  <a href="#" class="close js-menu-close">
+                    <span class="mini-icon mini-icon-remove-close"></span>
+                  </a>
+                </div>
+
+                <div class="tabbable">
+                  
+                  <div class="tab-content">
+                    <ul class="tab-panel active" id="bt_tab1" style="display: block;">
+                    {%if is_team%}
+                      {%for member in members%}
+                      <li>
+                        {%if none_issue%}
+                        <a class="assigner_assign" href="#" data-assigner="{{member.id}}">
+                        {%else%}                        
+                        <a class="assigner_assign" href="{%url issue_assign_assigner repo.owner.username repo.name issue.id member.id%}" data-assigner="{{member.id}}">
+                        {%endif%}
+                          {%if member == issue.assigner%}
+                          <span class="mini-icon mini-icon-confirm"></span>
+                          {%endif%}
+                          <span class="head-name">{{member.first_name}}</span>
+                        </a>
+                      </li>
+                      {%endfor%}
+                    {%else%}
+                    <li>
+                    <a href="#">
+                        <span class="head-name">没有其他成员可以选择</span>
+                    </a>
+                    </li>
+                    {%endif%}
+                    </ul>
+                  </div>
+
+                </div>
+            </div>
+            <!--end-->
+
+            </span>
+        {%endif%}
+    </div>
+
+</div>

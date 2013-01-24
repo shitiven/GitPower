@@ -1,0 +1,93 @@
+{%extends "sample.html"%}
+{%load custom%}
+{%block h1_title%}
+	{%include "repo/repo_head.html"%}
+{%endblock%}
+{%block container%}
+<div class="row" style="margin-top:30px">
+  <div class="span2">
+  	<div class="pull_left_menu">
+	  	<ul class="nav nav-pills nav-stacked">
+
+        {%if current_left_menu == "all"%}
+	      <li class="active">
+        {%else%}
+        <li>
+        {%endif%}
+          <a href="{%url pulls repo.owner.username repo.name%}"><span class="count">{{pulls_length}}</span>所有请求</a>
+        </li>
+          {% if request.user.is_authenticated%}
+	      {%if current_left_menu == "yours"%}
+        <li class="active">
+        {%else%}
+        <li>
+        {%endif%}
+          <a href="{%url your_pulls repo.owner.username repo.name request.user.username%}"><span class="count">
+          {{current_user_pulls_length}}</span>你的请求</a>
+        </li>
+          {%endif%}
+	    </ul>
+	</div>
+  </div>
+  <div class="span7">
+  	<div class="tabbable"> <!-- Only required for left/right tabs -->
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#tabOpen" data-toggle="tab">Open</a></li>
+        <li><a href="#tabClosed" data-toggle="tab">Closed</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="tabOpen">
+          <table class="table table-striped pull_list">
+              <tbody>
+                {%for pull in open_pulls%}
+                <tr>
+                  <td>
+                    <a href="{%url pull repo.owner.username repo.name pull.id%}" class="commit-msg"><strong>{{pull.commit_msg}}</strong></a>
+                    <p>
+                    {%if pull.comment%}
+                        {{pull.comment}}
+                    {%else%}
+                        <cite style="font-size:12px;color:#aaa">没有任何描述</cite>
+                    {%endif%}
+                    </p>
+                    <p class="comment">
+                        由<a href="/{{pull.requester}}">{{pull.requester}}</a>发起 ({{pull.create_date|timesince}}) from {{pull.from_head}} into {{pull.to_head}} 
+                    </p>
+                  </td>
+                </tr>
+                {%endfor%}
+              </tbody>
+            </table>
+        </div>
+        <div class="tab-pane" id="tabClosed">
+            <table class="table table-striped pull_list">
+              <tbody>
+                {%for pull in closed_pulls%}
+                <tr>
+                  <td>
+                    <strong>
+                      <a href="{%url pull repo.owner.username repo.name pull.id%}" class="commit-msg">
+                      {{pull.commit_msg}}
+                      </a>
+                    </strong>
+                    <p>
+                    {%if pull.comment%}
+                        {{pull.comment}}
+                    {%else%}
+                        <cite style="font-size:12px;color:#aaa">没有任何描述</cite>
+                    {%endif%}
+                    </p>
+                    <p class="comment">
+                        由<a href="/{{pull.requester}}">{{pull.requester}}</a>发起 ({{pull.create_date|timesince}}) from {{pull.from_head}} into {{pull.to_head}} 
+                    </p>
+                  </td>
+                </tr>
+                {%endfor%}
+              </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{%endblock%}

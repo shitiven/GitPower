@@ -1,0 +1,56 @@
+{%extends "sample.html"%}
+{%load custom%}
+{%block style%}
+
+{%endblock%}
+{%block container%}
+<div class="main-guide">
+  <div class="row-fluid">
+    <div class="span8">
+      <h1>Super awesome marketing speak!</h1>
+      <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+    </div>
+    <div class="span4">
+      <form class="singup" class="form-horizontal" action="/accounts/signup" method="post">
+        <div class="control-group">
+            <input type="text" class="input-singup"  name="email" placeholder="常用邮箱" value="{{form.email.value|default:""}}">
+        </div>
+        <div class="control-group">
+            <input type="text" class="input-singup"  name="username" placeholder="用户名" value="{{form.username.value|default:""}}" />
+        </div>
+        <div class="control-group">
+            <input type="password" class="input-singup"  name="password" placeholder="登录密码" >
+        </div>
+        <div class="control-group">
+            <button class="btn btn-large btn-success" type="submit">马上注册</button>
+        </div>
+        {%csrf_token%}
+    </form>
+    </div>
+  </div>
+  <hr />
+  <div class="row-fluid marketing">
+    <div class="span6">
+      <h4>Subheading</h4>
+      <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+
+      <h4>Subheading</h4>
+      <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+
+      <h4>Subheading</h4>
+      <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+    </div>
+
+    <div class="span6">
+      <h4>Subheading</h4>
+      <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+
+      <h4>Subheading</h4>
+      <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+
+      <h4>Subheading</h4>
+      <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+    </div>
+  </div>
+</div>
+{%endblock%}

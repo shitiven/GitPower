@@ -1,0 +1,57 @@
+<div class="markdown-box">
+    <div class="tabbable">
+        <ul class="nav nav-tabs">
+            <li class="active" style="margin-left:10px">
+                <a href="#markdownEditor" data-toggle="tab">编辑</a>
+            </li>
+            <li><a href="#markdownPreview" data-toggle="tab">预览</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="markdownEditor">
+                <div class="markdown-write">
+                    <textarea id="markdownWriter" name="{{markdown_field}}">{{markdown_content}}</textarea>
+
+                    <p class="align-right">
+                        <a href="#" class="insert-image">插入图片</a>
+                    </p>
+                </div>
+            </div>
+            <div class="tab-pane markdown-preview" id="markdownPreview">
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        var writeBoardInsert = function(obj, str){
+            var startPos = obj.selectionStart,
+                endPos = obj.selectionEnd,
+                cursorPos = startPos,
+                tmpStr = obj.value;
+            console.log(tmpStr)
+            obj.value = tmpStr.substring(0, startPos) + str + tmpStr.substring(endPos, tmpStr.length);
+            cursorPos += str.length;
+            obj.selectionStart = obj.selectionEnd = cursorPos;
+        }
+
+        $('.insert-image').fineUploader({
+            request: {
+                endpoint: '/upload/endpoint'
+            },
+            multiple : false,
+            text : {
+                uploadButton : "插入图片"
+            }
+        });
+
+        $("a[href=#markdownPreview]").click(function(event){
+
+            $("#markdownPreview").html(markdown.toHTML($("#markdownWriter").val()));
+        
+        });
+
+        
+    })
+    
+</script>

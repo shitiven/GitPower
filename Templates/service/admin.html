@@ -1,0 +1,60 @@
+{%extends "sample.html"%}
+{%load custom%}
+{%block h1_title%}
+    <h3 class="page_title">
+        <img class="img-circle" src="{%assets%}/img/avatar_default.png" width="45px" height="45px" /> {{request.user.username}}
+    </h3>
+{%endblock%}
+
+{%block container%}
+
+  <div class="container-fluid" style="margin-top:30px;">
+      <div class="row-fluid">
+        <div class="span3">
+            {% include "user/settings/sidebar.html" with settings_page="my_services"%}
+        </div>
+        <div class="span9">  
+          <div class="boxed-group flush">
+            <h3>服务列表</h3>
+            <div class="boxed-group-inner">
+              {%if services|length %}
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>服务名称</th>
+                      <th>API地址</th>
+                      <th>权限</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {%for service in services%}
+                    <tr>
+                      <td><a href="{%url service_edit service.id%}">{{service.name}}</a></td>
+                      <td>{{service.call_url}}</td>
+                      <td>
+                        {%if service.needwrite%}
+                          读写
+                        {%else%}
+                          只读
+                        {%endif%}
+                      </td>
+                      <td>
+                        <form action="{%url service_delete service.id%}" method="POST">
+                          <button type="submit" class="btn btn-link">删除</button>  
+                          <input type="hidden" name="service_id" value="{{service.id}}"/>
+                        </form>
+                      </td>
+                    </tr>
+                    {%endfor%}
+                  </tbody>
+                </table>
+              {%endif%}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>  
+
+{%endblock%}

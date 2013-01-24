@@ -1,0 +1,129 @@
+{%extends "sample.html"%}
+{%load custom%}
+{%load newsfeed%}
+{%block h1_title%}
+    {%include "repo/repo_head.html"%}
+{%endblock%}
+{%block container%}
+    <div class="pull-head" id="pull-head">
+        <div class="pull-description">
+          <span class="pull-state">
+              <span class="label label-warning">
+                {{pull.stat}}
+              </span>
+          </span>
+          <p class="pull-head-des">
+            <a href="/{{pull.requester}}">
+                {{pull.requester}} 
+            </a>发起的合并请求
+                From: <span class="label label-inverse">{{pull.from_head}}</span>
+                To: <span class="label label-inverse">{{pull.to_head}}</span>
+          </p>
+          <div class="pull-head-meta">
+              <span class="pull-number">
+                 <a href="#">#{{pull.id}}</a>
+              </span>
+          </div>
+        </div>
+  </div>
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#topic_tab1" data-toggle="tab">
+      <span class="mini-icon mini-icon-discussion"></span>&nbsp;&nbsp;讨论</a>
+    </li>
+    <li>
+      <a href="#topic_tab2" data-toggle="tab">
+        <span class="mini-icon mini-icon-diff"></span>&nbsp;&nbsp;文件对比
+      </a>
+    </li>
+  </ul>
+  <div class="tabbable comment_form" id="requestPull"> <!-- Only required for left/right tabs -->
+      <div class="row">
+        <div class="span8">
+            <div class="tab-content">
+                <div class="tab-pane active pull-topic" id="topic_tab1" style="width:80%;">
+                  <div class="bubble" style="margin-bottom:20px;">
+                      <div class="topic-header">
+                        <a href="/{{pull.requester}}" class="topic-requester"><strong>{{pull.requester}}</strong></a>
+                            发起了该合并请求，在{{pull.create_date|timesince}}
+                      </div>
+                      <div class="pull-topic-body"  style="padding-top:0">
+                        <div class="topic-body">
+                            <h4>{{pull.commit_msg}}</h4>
+                            {%if pull.comment%}
+                            {{pull.comment}}
+                            {%else%}
+                              没有任何描述
+                            {%endif%}
+                        </div>
+                      </div>
+                  </div>
+                  {%if pull.stat == "open"%}
+                    {%if request.user|user_role:repo == "owner"%}
+                    <div class="alert alert-success" id="autoMergeMsg">
+                      <div class="merge-loading">
+                        <img src="{%assets%}/img/loading-16px.gif" />正在进行自动合并检查!!
+                      </div>
+                      <div class="merge-auto">
+                        该请求可由系统进行自动合并! <button class="btn btn-success merge-action">进行合并</button>
+                      </div>
+                    </div>
+                    {%endif%}
+                  {%endif%}
+                  <div class="feed">
+                    {%autoescape off%}
+                    {%for feed in newsfeed%}
+                       <p>{{feed|news_template}}</p>
+                    {%endfor%}
+                    {%endautoescape%}
+                  </div>
+                </div>
+                <div class="tab-pane" id="topic_tab2">
+                  <p>
+
+                  </p>
+                </div>
+            </div>
+        </div>
+        <div class="span2"></div>
+    </div>
+  </div>
+{%endblock%}
+{%block script%}
+<script type="text/javascript">
+$(document).ready(function(){
+  $("#autoMergeMsg .merge-action").click(function(){
+         $.ajax({
+          type: "POST",
+          url: "/pull/check_merge_ajax?time=111",
+          data: {
+              "from_head" : "{{pull.from_head}}", 
+              "to_head" : "{{pull.to_head}}", 
+              "repo_id":"{{pull.repo.id}}",
+              "merge_action":true,
+              "pull_id" : "{{pull.id}}"
+          }
+        }).done(function( data ) {
+            if (data.status == "ok") {
+                location.href = "{%url pull repo.owner.username repo.name pull.id%}"
+            }else{
+                $("#autoMergeMsg").html("该请求无法进行自动合并，请进行手动合并!");
+            }
+        });
+    });
+
+   $.ajax({
+      type: "POST",
+      url: "/pull/check_merge_ajax",
+      data: {"from_head" : "{{pull.from_head}}", "to_head" : "{{pull.to_head}}", "repo_id":"{{pull.repo.id}}"}
+    }).done(function( data ) {
+      if(data.can_auto_merge){
+        $("#autoMergeMsg .merge-loading").hide();
+        $("#autoMergeMsg .merge-auto").show();
+      }else{
+        $("#autoMergeMsg").attr("class","alert alert-error");
+        $("#autoMergeMsg").html("该请求无法进行自动合并，请进行手动合并!");
+      }
+    }); 
+}); 
+</script>
+{%endblock%}

@@ -1,0 +1,97 @@
+{%extends "sample.html"%}
+{%load custom%}
+{%load issues%}
+{%block h1_title%}
+    {%include "repo/repo_head.html"%}
+{%endblock%}
+{%block container%}
+    <div class="container-fluid" style="margin-top:30px;">
+
+        {%include "issues/issues_header.html" with issues_page="milestone"%}
+
+        <div class="row-fluid">
+            <div class="span3">
+                <ul class="nav nav-pills nav-stacked" style="border-bottom:1px solid #ddd">
+                    <li class="active"><a href="#">进行中的里程碑</a></li>
+                    <li><a href="#">已结束的里程碑</a></li>
+                </ul>
+                <span class="btn btn-large btn-block">
+                    <a href="{%url create_milestone repo.owner.username repo.name%}">创建里程碑</a>
+                </span>
+            </div>
+            <div class="span9">  
+                <div class="boxed-group flush">
+                    <h3>里程碑</h3>
+                    <div class="boxed-group-inner milestone-list">
+                        {%for milestone in milestones%}
+                            <div class="milestone">
+                                <div class="milestone-progress">
+                                    <ul class="milestone-meta">
+                                        <li class="numbers">
+                                            {{milestone|issues_closed_number}} closed — {{milestone|issues_opened_number}} open
+                                        </li>
+                                        <li class="delete">
+                                            <a href="#" data-id="{{milestone.id}}" class="danger milestone-delete">删除</a>
+                                        </li>
+                                        <li class="edit">
+                                            <a href="{%url edit_milestone repo.owner.username repo.name milestone.id%}">编辑</a>
+                                        </li>
+                                        <li class="brower"><a href="">浏览Issues →</a></li>
+                                    </ul>
+                                    <span class="milestone-progress-bar">
+                                        <span class="progress" style="width: {{milestone|milestone_percent}}%">&nbsp;</span>
+                                        <span class="percent">{{milestone|milestone_percent}}%</span>
+                                    </span>
+                                </div>
+                                <h4>
+                                    <a href="">{{milestone.title}}</a>
+                                    <p class="due-date">
+                                        Due in {{milestone.duedate|milestone_dueday}}
+                                    </p>
+                                </h4>
+                                <div class="description">
+                                    {{milestone.content}}
+                                </div>
+                            </div>
+                        {%endfor%}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="deleteConfim">
+        <form id="milestoneDeleteForm" method="POST" action="{%url delete_milestone repo.owner.username repo.name%}">
+            <div class="alert alert-block">删除里程碑后，该里程碑下的Issue将同时被删除，你将永远无法看到这些Issue，请谨慎操作!
+            </div>
+            <input type="hidden" name="milestone_id" id="milestoneDeleteId" />
+        </form>
+    </div>
+
+{%endblock%}
+{%block script%}
+<script type="text/javascript">
+    $( "#deleteConfim" ).dialog({
+        autoOpen: false,
+        resizable: false,
+        height:270,
+        modal: true,
+        title : "确定删除？",
+        buttons: {
+            "删除": function() {
+                $("#milestoneDeleteForm").submit();
+            },
+            "取消": function() {
+               $( this ).dialog( "close" );
+            }
+        }
+    });
+
+    $( ".milestone-delete" ).click(function(){
+        event.preventDefault();
+        console.log(this);
+
+        $("#milestoneDeleteId").val($(this).attr("data-id"));
+        $( "#deleteConfim" ).dialog("open");
+    });
+</script>
+{%endblock%}

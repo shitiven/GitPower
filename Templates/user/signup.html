@@ -1,0 +1,25 @@
+{%extends "sample.html"%}
+{%block h1_title%}
+    <h3 class="page_title">注册账号</h3>
+{%endblock%}
+{%block container%}
+<form class="form-horizontal" action="/accounts/signup" method="post">
+    <div class="control-group">
+        <label class="control-label" for="inputEmail"></label>
+        <div class="controls">
+          <input type="text" id="username" name="username" placeholder="前缀即可">
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="inputPassword">域密码</label>
+        <div class="controls">
+          <input type="password" id="password" name="password" placeholder="Password">
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+          <button type="submit" class="btn">Sign in</button>
+        </div>
+    </div>
+</form>
+{%endblock%}

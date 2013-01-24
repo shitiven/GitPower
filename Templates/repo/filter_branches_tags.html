@@ -1,0 +1,48 @@
+{%load custom%}
+<script type="text/javascript" src="{%assets%}/js/main.js"></script>
+<div id="filterBandT" class="filter-context-panel" style="display:none;position:absolute">
+    <div class="context-title">
+      Switch branches/tags
+      <a href="#" class="close js-menu-close">
+        <span class="mini-icon mini-icon-remove-close"></span>
+      </a>
+    </div>
+    <div class="context-filter">
+        <input class="filter-input" placeholder="Fitler branches/tags" />
+    </div>
+    <div class="tabbable">
+      {%if showtab%}
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#bt_tab1" data-toggle="tab-panel">Branches</a></li>
+        <li><a href="#bt_tab2" data-toggle="tab-panel">Tags</a></li>
+      </ul>
+      {%endif%}
+      <div class="tab-content">
+        <ul class="tab-panel active" id="bt_tab1">
+          {%for b in git_repo.branches%}
+            {%if b.name == branch%}
+                <li data-name="{{b}}"><a href="/{{repo.owner.username}}/{{repo.name}}/tree/{{b}}">
+                    <span class="mini-icon mini-icon-confirm"></span><span class="head-name">{{b}}</span></a>
+                </li>
+            {%else%}
+                <li data-name="{{b}}"><a href="/{{repo.owner.username}}/{{repo.name}}/tree/{{b}}">
+                   <span class="mini-icon"></span><span class="head-name">{{b}}</span></a></li>
+            {%endif%}
+          {%endfor%}
+        </ul>
+        {%if showtab%}
+        <ul class="tab-panel" id="bt_tab2">
+            {%for t in git_repo.tags%}
+            {%if t.name == branch%}
+                <li data-name="{{t}}"><a href="/{{repo.owner.username}}/{{repo.name}}/tree/{{t}}">
+                  <span class="mini-icon mini-icon-confirm"></span><span class="head-name">{{t}}</span></a></li>
+            {%else%}
+                 <li data-name="{{t}}"><a href="/{{repo.owner.username}}/{{repo.name}}/tree/{{t}}">
+                  <span class="mini-icon"></span><span class="head-name">{{t}}</span></a></li>
+            {%endif%}
+          {%endfor%}
+        </ul>
+        {%endif%}
+      </div>
+    </div>
+</div>

@@ -1,0 +1,178 @@
+{%extends "sample.html"%}
+{%load custom%}
+{%load issues%}
+{%load markup%}
+{%block h1_title%}
+    {%include "repo/repo_head.html"%}
+{%endblock%}
+
+{%block container%}
+
+    <div class="container-fluid" style="margin-top:30px;">
+        {%include "issues/issues_header.html" with issues_page="issues"%}
+        <div class="row-fluid">
+            <div class="span10">
+                <div class="discussion">
+                    <img src="{%assets%}/img/avatar_default.png" class="avatar" width="48" height="48"/>
+                    <div class="bubble discussion-bubble">
+                        <div class="discussion-bubble-inner">
+
+                            <form action="{%url issue_state_toggle repo.owner.username repo.name%}" method="POST">
+                            <div class="discussion-topic-header">
+                                <span style="float:right">
+                                {%if issue_role == "submitter"%}
+                                <a href="{% url issue_edit repo.owner.username repo.name issue.id%}" class="btn btn-small">编辑</a>
+                                {%endif%}
+
+                                {%if issue_role == "submitter"%}
+
+                                    <input type="hidden" value="{{issue.id}}" name="issue" />
+                                    {%csrf_token%}
+                                    {%if issue.is_open%}
+                                    <button type="submit" class="btn btn-small">关闭</button>
+                                    {%else%}
+                                    <button type="submit" class="btn btn-small">打开</button>
+                                    {%endif%}
+
+                                {%endif%}
+                                </span>
+                                <h2 class="discussion-topic-title">
+                                    {{issue.title}}
+                                </h2>
+                                <span class="discussion-topic-author">
+                                    <a href="">{{issue.submitter}}</a>
+                                    {{issue.created|timesince}}提交
+                                </span>
+                            </div>
+                            </form>
+
+                            {%include "issues/issue_infobar.html"%}
+                            <div class="comment-content">
+                                {{issue.content|markdown}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {%for comment in comments%}
+                <div class="discussion discussion-comment">
+                    <img src="{%assets%}/img/avatar_default.png" class="avatar" width="48" height="48"/>
+                    <div class="bubble discussion-bubble">
+                        <div class="discussion-bubble-inner">
+                            <div class="comment-header">
+                                <span class="comment-header-right">
+                                    <span class="comment-header-date">
+                                        {{comment.created|timesince}}
+                                    </span>
+                                    <!--a class="mini-icon mini-icon-edit" href="#"></a>
+                                    <a class="delete-button mini-icon mini-icon-delete-note" href="#"></a-->
+                                </span>
+                                <a href="#" class="mini-icon mini-icon-commit-comment"></a>
+                                {{comment.submitter}}
+                            </div>
+                            <div class="comment-boday">
+                                {{comment.content}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {%endfor%}
+                <form action="{%url issue_comment repo.owner.username repo.name issue.id%}" method="POST">
+                <div class="discussion" style="margin-top:30px">
+                    <img src="{%assets%}/img/avatar_default.png" class="avatar" width="48" height="48"/>
+                    <div class="bubble discussion-bubble">
+                        <div class="discussion-bubble-inner" style="padding-top:20px">
+                        {%include "markdown_edit.html" with markdown_field="content" markdown_content=form.content.value|default:""%}
+                        </div>
+                    </div>
+                </div>
+                {% csrf_token %}
+
+                <p class="align-form-button">
+                    <button type="submit" class="btn btn-primary">评论</button>
+                </p>
+                </form>
+            </div>
+
+            <div class="span2">
+                <span class="label label-{{issue.state}} issue-state">{{issue.state|title}}</span>
+                <p class="meta">{{commets|length}}条评论</p>
+                <hr/>
+                <div class="issue_labels">
+
+                <form action="{%url issue_labels_update repo.owner.username repo.name issue.id%}" method="POST">
+                <ul class="color-label-list">
+                {%for label in repo|issue_labels%}
+                  <li class="js-color-label-item">
+                    <div class="color-label-view">
+                    {%if labels|arrayIndex:label.name%}
+                    <a href="#" class="filter-item color-label selected" style="background:{{label.color}};color:#fff" data-color="{{label.color}}" data-id="{{label.id}}">
+                      <span class="color" style="background-color: {{label.color}}">&nbsp;</span>
+                      <span class="name">{{label.name}}</span>
+                      <input type="hidden" name="label" value="{{label.id}}"/>
+                    </a>
+                    {%else%}
+                        {%if repo_roles|arrayIndex:"owner"%}
+                        <a href="#" class="filter-item color-label" data-color="{{label.color}}" data-id="{{label.id}}">
+                          <span class="color" style="background-color: {{label.color}}">&nbsp;</span>
+                          <span class="name">{{label.name}}</span>
+                        </a>
+                        {%endif%}
+                    {%endif%}
+                    </div>
+                  </li>
+                {%endfor%}
+                </ul>
+                {%csrf_token%}
+                <p class="align-right js-labels_editor" style="display:none">
+                    <button class="btn btn-primary btn-mini">更新</button>
+                </p>
+                </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{%endblock%}
+{%block script%}
+
+<script type="text/javascript">
+{%if repo_roles|arrayIndex:"owner"%}
+var editor = []
+var default_labels = $.map($('.color-label-list input[name="label"]'), function(e) { 
+    return $(e).val(); 
+});
+
+$(".color-label-list a.color-label").click(function(event){
+
+        event.preventDefault();
+
+        if($(this).hasClass("selected")){
+            $(this).css("background-color","")
+            $(this).css("color","#999");
+            $(this).removeClass("selected");
+
+            $('input[name="label"]', $(this)).remove();
+        }else{
+
+            $(this).css("background-color",$(this).attr("data-color"));
+            $(this).css("color","#fff");
+            $(this).addClass("selected");
+
+            var input = $('<input type="hidden" name="label" />');
+            input.val($(this).attr("data-id"));
+            $(this).append(input);
+
+        }  
+
+        var editor_values = $.map($('.color-label-list input[name="label"]'), function(e) { 
+            return $(e).val(); 
+        });
+        if(arrays_equal(default_labels, editor_values)){
+             $(".js-labels_editor").hide();
+        }else{
+             $(".js-labels_editor").show();
+        }
+    });
+{%endif%}
+</script>
+{%endblock%}

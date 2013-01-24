@@ -1,0 +1,172 @@
+# encoding: utf-8
+
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+from django.db.models import Q
+from django.core.mail import send_mail
+from Account.models import *
+from Account.profile.forms import UserForm
+from Depot.models import *
+from Common import *
+
+import json, urllib
+
+
+def index(request, username):
+    current_user  = get_object_or_404(User, username = username)
+    repos = []
+
+    teams = UserProfile.objects.filter(owners__in = [current_user])
+    for team in teams:
+        repos.extend(Repo.objects.filter(owner = team.user))
+
+    repos.extend(Repo.objects.filter(owner = current_user))
+
+    current_profile = current_user.get_profile()
+
+    return render_to_response("user/index.html", context_instance  = RequestContext(request,{
+                "current_user"  : current_user,
+                "repos" : repos,
+                "is_team" : current_profile.is_team
+            }))
+
+
+@login_required
+def filter_user(request):
+    keywords = request.POST.get("keywords").lower()
+    users = User.objects.filter(Q(username__startswith = keywords) | Q(first_name__startswith = keywords))
+    result = {}
+    result["users"] = []
+    for user in users:
+        if user.get_profile().is_team is False:
+            result["users"].append({
+                "username" : user.username,
+                "email"    : user.email,
+                "first_name" : user.first_name
+            })
+
+    return HttpResponse(json.dumps(result))
+
+@csrf_protect
+def signup(request):
+
+    if request.method == "POST":
+        form = UserForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
+            email    = form.cleaned_data["email"]
+
+            user = User.objects.create_user(username, email=email, password=password)
+            user.is_active = False
+            user.save()
+
+            user = authenticate(username=username, password=password)
+            login(request, user)
+
+            return HttpResponseRedirect("/accounts/settings")
+
+        else:
+
+            form_message(request, form)
+
+    else:
+        form = UserForm()
+
+    return render("index_nologin.html", request, context={
+        "form" : form
+    })
+
+
+@login_required
+@csrf_protect
+def user_to_active(request):
+    '''user to active'''
+
+    if request.method == "POST":
+        invite_code  = request.POST.get("invite_code", None)
+        user_profile = request.user.get_profile()
+        try:
+            invite_code = InviteCode.objects.get(code=invite_code, used=False)
+            
+            active_params = {
+                "active_code":user_profile.active_code,
+                "invite_code":invite_code.code,
+                "user_email":request.user.email
+            }
+            active_url = settings.APP_URL+"/accounts/user_active?"+urllib.urlencode(active_params)
+
+            mail_body  = u'请点击以下链接进行激活: <a href="%s">%s</a>'%(active_url, active_url)
+            send_mail('GitPower激活邮件',mail_body, 'service@gitpower.com', [request.user.email])
+
+            invite_code.used = True
+            invite_code.user = request.user
+            invite_code.save()
+
+            messages.success(request, u'已将激活连接发送至<strong>"%s"</strong>，请进入你的邮箱进行激活'%request.user.email)
+
+        except InviteCode.DoesNotExist:
+            messages.error(request, "邀请码已过期")
+
+    return HttpResponseRedirect("/")
+
+
+def user_active(request):
+    '''active from mail'''
+
+    invite_code = request.GET.get("invite_code", None)
+    active_code = request.GET.get("active_code", None)
+    user_email  = request.GET.get("user_email", None)
+
+    try:
+        invite_code = InviteCode.objects.get(code=invite_code, user__email=user_email)
+        try:
+            user_profile = UserProfile.objects.get(active_code=active_code, user__email=user_email)
+            user = user_profile.user
+            user.is_active = True
+            user.save()
+
+            messages.success(request, "激活成功, 欢迎加入GitPower")
+
+        except UserProfile.DoesNotExist:
+            messages.error(request, "激活码已过期")
+
+    except InviteCode.DoesNotExist:
+        messages.error(request, "激活码已过期")
+
+    return HttpResponseRedirect("/")
+
+
+def login_out(request):
+    logout(request)
+    return HttpResponseRedirect("/")
+
+
+@csrf_protect
+def login_user(request):
+
+    if request.method == "POST":
+        username = request.POST.get("username", None)
+        password = request.POST.get("password", None)
+
+        if re.match("^(.*)@(.*)$", username):
+            try:
+                user = User.objects.get(email=username)
+                username = user.username
+            except User.DoesNotExist:
+                messages.error(request, "用户不存在")
+                return HttpResponseRedirect("/")
+
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            messages.success(request, "登录成功")
+            return HttpResponseRedirect("/")
+        else:
+            messages.error(request, "用户名或密码错误")
+
+    return  render("login.html", request, context = {
+
+    })
+

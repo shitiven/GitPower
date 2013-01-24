@@ -1,0 +1,54 @@
+{%extends "sample.html"%}
+{%load custom%}
+{%block h1_title%}
+    <h3 class="page_title">
+        <img class="img-circle" src="{%assets%}/img/avatar_default.png" width="45px" height="45px" /> {{request.user.username}}
+    </h3>
+{%endblock%}
+{%block container%}
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span3">
+          {% include "user/settings/sidebar.html" with settings_page="sshkey"%}
+        </div>
+        <div class="span9">
+          {%if sshkeys%}
+          <div class="boxed-group">
+              <h3>keys</h3>
+              <div class="boxed-group-inner no-padding">
+              <table class="table table-striped">
+                  <tbody>
+                      {%for sshkey in sshkeys%}
+                        <tr>
+                          <td width="80%"><strong>{{sshkey.title}}</strong> <cite>({{sshkey.mac}})</cite></td>
+                          <td width="20%"><a href="/accounts/settings/sshkey/{{sshkey.id}}/delete" class="btn btn-link">删除</a></td>
+                        </tr>
+                      {%endfor%}
+                  </tbody>
+              </table>
+              </div>
+            </div>
+            {%endif%}
+            <form class="form-horizontal" action="{%url settings_sshkey%}" method="POST">
+              <div class="boxed-group">
+                <h3>添加</h3>
+                <div class="boxed-group-inner">
+                <label for="title">标题</label>
+                <p>
+                  <input type="text" class="input-xlarge" name="title" placeholder="小于10个字母" maxlength="10" value="{{form.title.value|default:""}}"/>
+                </p>
+                <p>Key</p>
+                <p>
+                  <textarea name="content" class="textarea-normal">{{form.content.value|default:""}}</textarea>
+                </p>
+                <p>
+                    <button type="submit" class="btn">添加</button>
+                </p>
+                {%csrf_token%}
+                </div>
+              </div>
+            </form>
+        </div>
+      </div>
+    </div>
+{%endblock%}

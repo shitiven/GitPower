@@ -1,0 +1,377 @@
+{%extends "sample.html"%}
+{%load custom%}
+{%load issues%}
+{%block h1_title%}
+    {%include "repo/repo_head.html"%}
+{%endblock%}
+
+{%block container%}
+    <div class="container-fluid" style="margin-top:30px;">
+
+        {%include "issues/issues_header.html" with issues_page="issues"%}
+        
+        <div class="row-fluid">
+            <div class="span3">
+                <ul class="nav nav-pills nav-stacked">
+                    {%if issues_page == "all"%}
+                    <li class="active">
+                      <a href="#">
+                        <span class="number_right">{{repo|issues_numbers}}</span>
+                        所有缺陷
+                      </a>
+                    </li>
+                    {%else%}
+                    <li>
+                      <a href="{%url issues repo.owner.username repo.name%}?{{query|issues_path_params}}">
+                        <span class="number_right">{{repo|issues_numbers}}</span>
+                        所有缺陷
+                      </a>
+                    </li>
+                    {%endif%}
+
+                    {% if request.user.is_authenticated%}
+
+                    {%if issues_page == "submitter"%}
+                    <li class="active">
+                      <a href="#">
+                        <span class="number_right">
+                          {{repo|issues_submitter_numbers:request.user}}
+                        </span>
+                        你创建的
+                      </a>
+                    </li>
+                    {%else%}
+                    <li>
+                      <a href="{%url issues_created_by repo.owner.username repo.name request.user.username%}?{{query|issues_path_params}}">
+                        <span class="number_right">
+                          {{repo|issues_submitter_numbers:request.user}}
+                        </span>
+                        你创建的
+                      </a>
+                    </li>
+                    {%endif%}
+
+                    <li><a href="#">指派给你的</a></li>
+                    {%endif%}
+                </ul>
+
+                <ul class="sidebar-menu">
+                  <li class="section">
+                    <span class="header">
+                      <a href="#" data-state="view" class="js-labels-edit section-edit-right">编辑</a>标签
+                    </span>
+                    <div class="issue_labels">
+                        <ul class="color-label-list">
+                          {%for label in repo|issue_labels%}
+                          <li class="js-color-label-item">
+                            <div class="color-label-view">
+                            <a href="#" class="filter-item color-label" data-label="bug">
+                              <span class="count">{{label|issue_labels_number:repo}}</span>
+                              <span class="color" style="background-color: {{label.color}}">&nbsp;</span>
+                              <span class="name">{{label.name}}</span>
+                            </a>
+                            </div>
+                            <div class="color-label-edit js-label-edit-item" style="display:none" data-id="{{label.id}}">
+                              <span class="mini-icon mini-icon-remove-close" data-id="{{label.id}}"></span>
+                              <input type="text" value="{{label.color}}" name="color" class="span5"/>
+                              <input type="text" value="{{label.name}}" name="name" class="span7"/>
+                              <input type="hidden" value="{{label.id}}" name="id" />
+                            </div>
+                          </li>
+                          {%endfor%}
+                        </ul>
+                      </div>
+                  </li>
+                  <div class="lables_editor_btn js-edit-btn" style="display:none;text-align:right">
+                    <input type="button" class="btn btn-primary js-edit-btn-ok" value="保存"/>
+                  </div>
+                  <div class="labels_box js-new-labels">
+                    {%include "issues/labels_editor.html"%}
+                  </div>
+                </ul>
+
+            </div>
+            <div class="span9">  
+                <div class="boxed-group flush">
+                    <div class="list-browser-filterbar">
+                        <ul class="list-browser-filter-tabs">
+                        <li>
+                          {%if state == "opened"%}
+                          <a href="#" data-filter="open" class="filter-tab selected">
+                            {{opened_number}}
+                            open issues
+                          </a>
+                          {%else%}
+                            <a href="{{issues_path}}?state=opened&{{query|issues_path_params:"state"}}" data-filter="open" class="filter-tab">
+                            {{opened_number}}
+                            open issues
+                          </a>
+                          {%endif%}
+                        </li>
+                        <li>
+                          {%if state == "closed"%}
+                          <a href="#" data-filter="closed" class="filter-tab selected">
+                            {{closed_number}}
+                            closed issues
+                          </a>
+                          {%else%}
+                          <a href="{{issues_path}}?state=closed&{{query|issues_path_params:"state"}}" data-filter="closed" class="filter-tab ">
+                            {{closed_number}}
+                            closed issues
+                          </a>                          
+                          {%endif%}
+                        </li>
+                        </ul>
+                    </div>
+                    <div style="clear:both"></div>
+                    <div class="issues-list-actions">
+                        <!--div class="btn-group">
+                          <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                            Close
+                          </a>
+                        </div-->
+                        <div class="btn-group">
+                          {%if filter_label%}
+                          <a class="btn dropdown-toggle" style="background:{{filter_label.color}};color:#fff" data-toggle="dropdown" href="#">
+                              {{filter_label.name}}
+                            <span class="caret" style="color:#fff"></span>
+                          </a>
+                          {%else%}
+                          <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                              Labels
+                            <span class="caret"></span>
+                          </a>
+                          {%endif%}
+                          <ul class="dropdown-menu color-label-list" style="padding:8px">
+                            {%if filter_label%}
+                            <li class="js-color-label-filter">
+                              <a href="{{issues_path}}?{{query|issues_path_params:"label"}}">All</a>
+                            </li>
+                            {%endif%}
+                            {%for label in repo|issue_labels%}
+                            <li class="js-color-label-filter">
+                              <div class="color-label-view">
+                              {%if label.id != filter_label.id%}
+                              <a href="{{issues_path}}?label={{label.id}}&{{query|issues_path_params:"label"}}" class="filter-item color-label" data-color="{{label.color}}" data-id="{{label.id}}">
+                                <span class="color" style="background-color: {{label.color}}">&nbsp;</span>
+                                <span class="name">{{label.name}}</span>
+                              </a>
+                              {%endif%}
+                              </div>
+                            </li>
+                            {%endfor%}
+                          </ul>
+                        </div>
+                        <div class="btn-group">
+                          <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                            {{ assigner.first_name|default:"Assignee"}}
+                            <span class="caret"></span>
+                          </a>
+                          <ul class="dropdown-menu">
+                            {%if assigner%}
+                            <li>
+                              <a href="{{issues_path}}?{{query|issues_path_params:"assigner"}}">
+                               All
+                              </a>
+                            </li>
+                            {%endif%}
+                            {%for member in members%}
+                            {%if assigner != member %}
+                            <li>
+                              <a href="{{issues_path}}?assigner={{member.username}}&{{query|issues_path_params:"assigner"}}">
+                              {{member.first_name}}
+                              </a>
+                            </li>
+                            {%endif%}
+                            {%endfor%}
+                          </ul>
+                        </div>
+                        <div class="btn-group">
+
+                          <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                            {{ milestone|default:"Milestone"}}
+
+                            <span class="caret"></span>
+
+                          </a>
+                          <ul class="dropdown-menu">
+                            {%if milestone%}
+                            <li>
+                              <a href="{{issues_path}}?{{query|issues_path_params:"milestone"}}">All</a>
+                            </li>
+                            {%endif%}
+                            {%for ms in milestones%}
+                            {%if milestone != ms%}
+                              <li>
+                                <a href="{{issues_path}}?milestone={{ms.id}}&{{query|issues_path_params:"milestone"}}">{{ms}}</a>
+                              </li>
+                            {%endif%}
+                            {%endfor%}
+                          </ul>
+                        </div>
+                    </div>
+
+                    <div class="boxed-group-inner" style="border-top:0">
+                    {%if issues|length%}
+                        <table class="table issues-list">
+                          <thead>
+                            <th class="number">
+                              {%if repo_roles|arrayIndex:"owner"%}
+                                <!--label class="checkbox" style="margin-bottom:0">
+                                    <input type="checkbox" name="issue_id" class="js-issue-all"/> 编号
+                                  </label-->
+                              {%else%}{%endif%}
+                              编号
+                            </th>
+                            <th class="number">标题</th>
+                          </thead>
+                          <tbody>
+                            {%for issue in issues%}
+                            <tr class="list-browser-item">
+                              <td class="number">
+                                {%if repo_roles|arrayIndex:"owner"%}
+                                  <!--label class="checkbox">
+                                    <input type="checkbox" name="issue_id" /> #{{issue.id}}
+                                  </label-->
+                                  #{{issue.id}}
+                                {%else%}
+                                  #{{issue.id}}
+                                {%endif%}
+                              </td>
+                              <td class="info">
+                                <div class="info-wrapper">
+                                  <h4>
+                                    <a href="{%url issue repo.owner.username repo.name issue.id%}">
+                                      {{issue.title}}
+                                    </a>
+                                  </h4>
+                                  <p>by 
+                                    <strong>
+                                      <a href="/{{issue.submitter}}">{{issue.submitter}}</a> 
+                                    </strong> 
+                                    <time datetime="{{issue.created}}" title="{{issue.created}}">
+                                      {{issue.created|timesince}}
+                                    </time>
+                                  </p>
+
+                                  <div class="list-browser-bottom-right-info">
+                                    <span class="list-browser-bottom-right-item">
+                                      <span class="mini-icon mini-icon-discussion"></span> 
+                                      {{issue|comments_number}} 评论
+                                    </span>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                            {%endfor%}
+                          </tbody>
+                        </table>
+                      {%else%}
+                      <div class="none">
+                        <p>空</p>
+                      </div>
+                      {%endif%}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+{%endblock%}
+{%block script%}
+<script type="text/javascript">
+  $(document).ready(function(){
+
+    //全选
+    $(".js-issue-all").click(function(){
+      if($(this).is(':checked')){
+        $('.list-browser-item input[name="issue_id"]').attr("checked",true)
+      }else{
+        $('.list-browser-item input[name="issue_id"]').attr("checked",false)
+      }
+    });
+
+    var api = new gpapi({
+      "url" : "{%url edit_labels repo.owner.username repo.name%}",
+      "success" : function(data){
+
+        $(".js-edit-btn").hide();
+        $(".js-new-labels").show();
+        $(".color-label-view").show();
+        $(".color-label-edit").hide();
+        $(".section-edit-right").html("编辑");
+        
+        $(".js-color-label-item").each(function(index, item){
+            var value = $('input[name="name"]', item).val();
+            $("span.name", item).html(value);
+        });  
+
+        $(".js-label-remove-item").parent().remove();    
+      }
+    });
+
+    $(".js-edit-btn-ok").click(function(){
+      var data = [];
+      $(".js-label-edit-item").each(function(index, el){
+        var name  = $('input[name="name"]',el).val();
+        var color = $('input[name="color"]',el).val();
+        var id    = $('input[name="id"]',el).val();
+        data.push({
+          "name"  : name,
+          "color" : color,
+          "id"    : id
+        }); 
+      });
+      var removes = []
+      $(".js-label-remove-item").each(function(index, el){
+          removes.push($(this).attr("data-id"))
+      });
+      console.log(removes)
+      api.send({"data":JSON.stringify(data),"removes":JSON.stringify(removes)});
+    });
+    
+    $(".mini-icon-remove-close").click(function(event){
+        var _this = this;
+        var item = $(this).parent();
+        item.fadeTo('fast', 0.3, function() {
+            
+        });
+        item.removeClass("js-label-edit-item")
+        item.addClass("js-label-remove-item")
+        $(_this).fadeTo('fast', 0, function() {
+            $(_this).hide();
+        });
+
+    });
+
+    $(".section-edit-right").click(function(event){
+      event.preventDefault();
+      if ($(this).attr("data-state") == "view") {
+
+        $(".color-label-view").hide();
+        $(".color-label-edit").show();
+        $(this).attr("data-state","edit");
+        $(this).html("取消");
+        $(".js-edit-btn").show();
+        $(".js-new-labels").hide();
+
+      }else{
+
+        $(".color-label-view").show();
+        $(".color-label-edit").hide();
+        $(this).attr("data-state","view");
+        $(this).html("编辑");
+
+        $(".js-edit-btn").hide();
+        $(".js-new-labels").show();
+
+        $(".color-label-edit").css("opacity","1");
+        $(".color-label-edit").addClass("js-label-edit-item");
+        $(".color-label-edit").removeClass("js-label-remove-item");
+
+        $(".mini-icon-remove-close").css("opacity","1");
+        $(".mini-icon-remove-close").show();
+      }
+    });
+  });
+</script>
+{%endblock%}

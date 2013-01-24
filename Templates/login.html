@@ -1,0 +1,26 @@
+{%extends "sample.html"%}
+{%block h1_title%}
+    <h3 class="page_title">登录</h3>
+{%endblock%}
+{%block container%}
+<form class="form-horizontal" action="/accounts/login" method="post">
+    <div class="control-group">
+        <label class="control-label" for="inputEmail">账号</label>
+        <div class="controls">
+          <input type="text" id="username" name="username" placeholder="邮箱地址 / 用户名" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="inputPassword">密码</label>
+        <div class="controls">
+          <input type="password" id="password" name="password" placeholder="登录密码" />
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+          <button type="submit" class="btn">登录</button>
+        </div>
+    </div>
+    {%csrf_token%}
+</form>
+{%endblock%}

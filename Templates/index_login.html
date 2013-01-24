@@ -1,0 +1,128 @@
+{%extends "sample.html"%}
+{%block style%}
+  <style type="text/css">
+    h5 {
+      margin:0;
+      color:#999;
+    }
+    h5 span{
+      font-weight: normal;
+      display: block;
+    }
+    .repos {
+      margin: 15px 0;
+      width: 333px;
+      border: 1px solid #DDD;
+      border-radius: 5px;
+    }
+    .repos .top-bar{
+      position: relative;
+      height: 44px;
+      background: #FAFAFA;
+      background: -moz-linear-gradient(#FAFAFA, #EAEAEA);
+      background: -webkit-linear-gradient(#FAFAFA, #EAEAEA);
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+      border-bottom: 1px solid #E1E1E2; 
+    }
+    .repos h2 {
+      margin: 0;
+      height: 44px;
+      line-height: 44px;
+      padding: 0 10px;
+      font-size: 16px;
+      color: #52595D;
+    }
+    ul#repo_listing a{
+      border-bottom: 1px solid #E5E5E5;
+      padding: 6px 10px 5px 10px;
+      display: block;
+    }
+    ul#repo_listing{
+      margin: 0;
+      padding: 0;
+    }
+    ul#repo_listing li{
+      list-style: none;
+      margin-bottom: 5px;
+    }
+    #your_repos h2 em{
+      font-weight: normal;
+      font-style: normal;
+      color: #bbb;
+    }
+    #your_repos .my_index{
+      font-weight: normal;
+      font-style: normal;
+      float: right;
+    }
+    cite{
+      color: #bbb;
+    }
+  </style>
+{%endblock%}
+{%block container%}
+<div class="container-fluid" style="min-height:500px">
+  <div class="row-fluid">
+    <div class="span7">
+      {%if request.user.is_active%}
+        {%if sshkeys_len < 1%}
+        <div class="alert alert-error">
+          你尚未添加ssh key, 请<a href="/accounts/settings/sshkey">点击添加</a>
+        </div>
+        {%endif%}
+        
+      {%else%}
+        <form action="{%url validate_code%}" method="POST">
+        <div class="alert alert-waring">
+          <p>使用GitPower目前需要使用邀请码，请输入邀请码:</p>
+          <p>
+            <div class="input-prepend input-append">
+              <input class="span5" type="text" name="invite_code" placeholder="输入邀请码"/>
+              <div class="btn-group">
+                <button type="submit" class="btn">
+                  马上激活
+                </button>
+              </div>
+              {%csrf_token%}
+            </div>
+          </p>
+        </div>
+        </form>
+      {%endif%}
+      <h4 style="margin-top:20px">快捷入口</h4>
+      <ul>
+        <li><a href="/accounts/settings/sshkey">公钥管理</a></li>
+        <li><a href="/accounts/settings/team">添加Team</a></li>
+        <li><a href="/repo/add">项目创建</a></li>
+        <li><a href="/{{request.user}}">我的主页</a></li>
+      </ul>
+
+      <h4 style="margin-top:20px">更新日志</h4>
+      <ul>
+        <li><a href="/xuning/GitPower/tree/gp-pages/Readme/gp-pages.md">gp-pages</a> 
+          <small><cite>2012.10.15</cite></small>
+        </li>
+      </ul>
+    </div>
+    <div class="span5">
+      <div class="repos" id="your_repos">
+          <div class="top-bar">
+            <h2>我的项目 <em>({{rlen}})</em></h2>
+          </div>
+          <ul id="repo_listing">
+            {%for repo in repos%}
+            <li class="source">
+              <a href="/{{repo.owner.username}}/{{repo.name}}">
+                {{repo.owner.username}} / <strong>{{repo.name}}</strong>
+              </a>
+            </li>
+            {%endfor%}
+              <li style="text-align:right"><a style="border-bottom:none;" href="/{{request.user}}">查看所有项目</a></li>
+          </ul>
+        <div class="bottom-bar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+{%endblock%}

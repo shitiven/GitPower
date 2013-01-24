@@ -1,0 +1,153 @@
+{%extends "sample.html"%}
+{%block h1_title%}
+<div class="title-actions-bar">
+    <div class="title-actions-first">
+    <span style="font-size:24px">
+    <a href="/{{repo.owner.username}}">{{repo.owner.username}}</a> <span style="font-size:20px;color:#aaa">/</span> <a href="{%url repo_tree repo.owner.username repo.name branch ''%}">{{repo.name}}</a>
+    </span>
+    {%if repo.is_public%}
+        <span style="width:30px;position:absolute;left:-32px;color:#bbb">公开</span>
+    {%else%}
+        <span style="width:30px;position:absolute;left:-32px;color:#bbb">私有</span>
+    {%endif%}
+    </div>
+</div>
+{%endblock%}
+{%block container%}
+    <div id="requestPull">
+        <div class="range-editor">
+            <span class="pull-flag"><span class="mini-icon mini-icon-pull-request"></span></span>
+            <div class="editor-form">
+                <div class="btn-group">
+                  <a class="btn filter-bt-handler" href="#" data-head="fromHeadInput">
+                    <span class="inner"><cite>From Branch:</cite> <span>选择一个分支</span></span>
+                    <span class="caret"></span>
+                  </a>
+                </div>
+                <span class="mini-icon mini-icon-arr-right action-indicator"></span>
+                <div class="btn-group">
+                  <a class="btn filter-bt-handler" href="#" data-head="toHeadInput">
+                    <span class="inner"><cite>To Branch:</cite><span>选择一个分支</span></span>
+                    <span class="caret"></span>
+                  </a>
+                </div>
+            </div>
+        </div>
+        <div class="alert alert-error" id="errorMsgBox" style="margin-top:20px;display:none"></div>
+        <div class="tabbable comment_form" style="display:none"> <!-- Only required for left/right tabs -->
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#topic_tab1" data-toggle="tab">
+              <span class="mini-icon mini-icon-discussion"></span>&nbsp;&nbsp;新建Pull Request</a>
+            </li>
+            <li>
+              <a href="#topic_tab2" data-toggle="tab">
+                <span class="mini-icon mini-icon-diff"></span>&nbsp;&nbsp;文件对比
+              </a>
+            </li>
+          </ul>
+          <div id="formErrors"></div>
+          <div class="tab-content">
+            <div class="tab-pane active pull-topic" id="topic_tab1">
+              <form action="/{{repo.owner.username}}/{{repo.name}}/pull/new" method="post">
+              <input type="hidden" id="fromHeadInput" name="from_head" />
+              <input type="hidden" id="toHeadInput" name="to_head" />
+              <input type="hidden" id="commitHexsha"  name="commit" />
+              <div class="bubble">
+                  <div class="pull-topic-body">
+                        <p>
+                          <input class="input" id="commitMsg" name="commit_msg"type="text" placeholder="标题" style="width:440px;"/></p>
+                        <p>
+                          <textarea style="height:126px; width:440px;" id="Comment" name="comment"></textarea>
+                        </p>
+                  </div>
+              </div>
+              <p style="text-align:right;padding-right:20px;margin-top:15px;">
+                <input class="btn btn-primary" id="postPull" value="提交请求" type="button"/>
+              </p>
+              </form>
+            </div>
+            <div class="tab-pane" id="topic_tab2">
+              <p>Howdy, I'm in Section 2.</p>
+            </div>
+          </div>
+        </div>
+    </div>
+    {%include "repo/filter_branches_tags.html" with  branch=""%}
+
+{%endblock%}
+{%block script%}
+<script type="text/javascript">
+    $(document).ready(function(){
+      var branches = [];
+      var tags = [];
+      {%for branch in git_repo.branches%}
+        branches.push("{{branch}}")
+      {%endfor%}
+      {%for tag in git_repo.tags%}
+        tags.push("{{tag}}")
+      {%endfor%}
+
+      var filter = FilterDropDown()
+      filter.init(branches, tags, function(a, el, event){
+             event.preventDefault();
+             $("span.inner span", el).html(a.parent().attr('data-name'));
+             $("#"+el.attr("data-head")).val($('.head-name', a).text())
+             filter.hide();
+
+             var from_head = $("#fromHeadInput").val()
+             var to_head   = $("#toHeadInput").val()
+
+             if (from_head.length && to_head.length) {
+                $.ajax({
+                  type: "POST",
+                  url: "/pull/check_merge_ajax",
+                  data: {"from_head" : from_head, "to_head" : to_head, "repo_id":"{{repo.id}}"}
+                }).done(function( data ) {
+                  $("#commitHexsha").val(data.commit)
+                  if(data.should_merge){
+                    $('.comment_form').show();
+                    $("#errorMsgBox").hide();
+                  }else{
+                    $('.comment_form').hide();
+                    $("#errorMsgBox").html(data.error_msg);
+                    $("#errorMsgBox").show();
+                  }
+                });
+             };
+      });
+
+      $("#postPull").click(function(){
+        var data = {
+          "commit" : $("#commitHexsha").val(),
+          "from_head" : $("#fromHeadInput").val(),
+          "to_head" : $("#toHeadInput").val(),
+          "commit_msg" : $("#commitMsg").val()
+        }
+        comment = $("#Comment").val().replace(" ","")
+        if(comment.length) data["comment"] = $("#Comment").val()
+        $.ajax({
+          type: "post",
+          url: '/{{repo.owner.username}}/{{repo.name}}/pull/new',
+          data: data,
+          contentType: "application/json; charset=utf-8"
+        }).done(function( data ) {
+          if (data.status == "fail") {
+            var item = {
+              "commit_msg" : "标题"
+            }
+            var errors = []
+            for(m in data.form_errors){
+              errors.push('<p class="alter alert-error">' + item[m] + ':' + data.form_errors[m] + '</p>')
+            }
+            $("#formErrors").html(errors.join(""));
+          }
+
+          if (data.status == "ok") {
+            location.href = "/{{repo.owner.username}}/{{repo.name}}/pull/" + data.pull_id
+          };
+
+        });
+      });
+  })
+</script>
+{%endblock%}

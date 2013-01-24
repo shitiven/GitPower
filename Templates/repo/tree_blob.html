@@ -1,0 +1,29 @@
+{%load custom%}
+<style type="text/css">
+	{{"emacs"|code2Css:"html"}}
+</style>
+{%if md_data%}
+{%autoescape off%}
+<div id="readme" class="clearfix announce instapaper_body md" data-path="/">
+      <div class="markdown-body">
+          {{md_data}}
+      </div>
+</div>
+{%endautoescape%}
+{%else%}
+{%autoescape off%}
+<div class="bubble" id="files">
+	<div class="meta">
+      <div class="info">
+        <span class="mode" title="File Mode">file</span>
+          <span class="left-line">{{data_lines}} lines</span>
+          <span class="left-line">{{data_size}} kb</span>
+      </div>
+      <a class="history-right" href="/{{repo.owner.username}}/{{repo.name}}/commits/{{branch}}/{{current_path}}"><strong>history</strong></a>
+    </div>
+	<div class="file">
+		{{data|code2html:"html"}}
+	</div>
+</div>
+{%endautoescape%}
+{%endif%}

@@ -1,0 +1,12 @@
+{%extends "sample.html"%}
+{%load custom%}
+{%load newsfeed%}
+{%block h1_title%}
+    {%include "repo/repo_head.html"%}
+{%endblock%}
+
+{%block container%}
+    <div class="alert alert-error" id="autoMergeMsg">
+        你不是该项目成员，无权限进行该操作!
+    </div>
+{%endblock%}

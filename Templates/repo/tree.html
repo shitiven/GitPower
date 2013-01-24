@@ -1,0 +1,44 @@
+{%load custom%}
+<div id="tree-box-slide">
+{%if master_pull%}
+  {%autoescape off%}
+    <h4 class="tree-path-name">
+      <a href="/{{repo.owner.username}}/{{repo.name}}/commits/{{branch}}/{{current_path}}" class="commit-history">
+        <span class="mini-icon mini-icon-history tooltipped"></span>
+        {{commits|length}} commit
+      </a>
+      {{path}}
+    </h4>
+  {%endautoescape%}
+  {%if is_blob%}
+    {%include "repo/tree_blob.html"%}
+  {%else%}
+    {%include "repo/tree_list.html"%}
+  {%endif%}
+{%endif%}
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+  $("a.tree-dir").live("click", function (event) {
+    event.preventDefault();
+    var repo_id = $(this).attr("data-repoid");
+    var branch  = $(this).attr("data-branch");
+    var path    = $(this).attr("data-path");
+    $("#tree-box-slide").hide("slide", {
+      direction: "left"
+    }, 200, function() {
+      $("#treeLoading").show();
+      $.ajax({
+          type: "GET",
+          url: "/repo/tree_ajax",
+          data: {"repo_id" : repo_id, "branch" : branch, "path" : path}
+        }).done(function( data ) {
+           $("#tree-box-slide").html(data);
+           $("#tree-box-slide").show();
+           $("#treeLoading").hide();
+        });
+    });
+    history.pushState(null, '', '/{{repo.owner.username}}/{{repo.name}}/tree/{{branch}}/'+path);
+  });
+});
+</script>

@@ -1,0 +1,110 @@
+{%extends "sample.html"%}
+{%load custom%}
+{%load issues%}
+{%block h1_title%}
+    {%include "repo/repo_head.html"%}
+{%endblock%}
+{%block container%}
+<div class="container-fluid" style="margin-top:30px;">
+
+    {%include "issues/issues_header.html" with issues_page="issues"%}
+    <div class="row-fluid">
+            {%if issue_edit%}
+            <form action="{%url issue_edit repo.owner.username repo.name issue.id%}" method="POST">
+            {%else%}
+            <form action="{%url issue_create repo.owner.username repo.name%}" method="POST">
+            {%endif%}
+            <div class="span9">
+                <div class="discussion">
+                    <img src="{%assets%}/img/avatar_default.png" class="avatar" width="48" height="48"/>
+                    <div class="bubble discussion-bubble">
+                        <div class="discussion-bubble-inner">
+                          <fieldset>
+                            <div class="discussion-topic-header">
+                                <input type="text" name="title" class="input-xxlarge" value="{{form.title.value|default:""}}" placeholder="标题"/>
+                            </div>
+                            {%if repo_roles|arrayIndex:"member"%}
+                            <div style="margin-bottom:15px">
+                            {%include "issues/issue_infobar.html" with none_issue=1%}
+                            </div>
+                            {%endif%}
+
+                            {%include "markdown_edit.html" with markdown_field="content" markdown_content=form.content.value|default:""%}
+                            
+                            {% csrf_token %}
+                            
+                          </fieldset>
+                        </div>
+                    </div>
+                </div>
+                <p class="align-right line-padding">
+                    <button class="btn btn-primary" type="submit">提交Issue</button>
+                <p>
+            </div>
+
+            <div class="span3">
+                <h5>设置标签</h5>
+                <div class="issue_labels">
+                <ul class="color-label-list">
+                {%for label in repo|issue_labels%}
+                  <li class="js-color-label-item">
+                    <div class="color-label-view">
+                    {%if labels|arrayIndex:label.name%}
+                    <a href="#" class="filter-item color-label selected" style="background:{{label.color}};color:#fff" data-color="{{label.color}}" data-id="{{label.id}}">
+                      <span class="color" style="background-color: {{label.color}}">&nbsp;</span>
+                      <span class="name">{{label.name}}</span>
+                      <input type="hidden" name="label" value="{{label.id}}"/>
+                    </a>
+                    {%else%}
+                    <a href="#" class="filter-item color-label" data-color="{{label.color}}" data-id="{{label.id}}">
+                      <span class="color" style="background-color: {{label.color}}">&nbsp;</span>
+                      <span class="name">{{label.name}}</span>
+                    </a>
+                    {%endif%}
+                    </div>
+                  </li>
+                {%endfor%}
+                </ul>
+                </div>
+            </div>
+            </form>
+    </div>
+</div>
+{%endblock%}
+{%block script%}
+<script type="text/javascript">
+    
+    $(".color-label-list a.color-label").click(function(event){
+        event.preventDefault();
+        if($(this).hasClass("selected")){
+            $(this).css("background-color","")
+            $(this).css("color","#999");
+            $(this).removeClass("selected");
+
+            $('input[name="label"]', $(this)).remove();
+        }else{
+            $(this).css("background-color",$(this).attr("data-color"));
+            $(this).css("color","#fff");
+            $(this).addClass("selected");
+
+            var input = $('<input type="hidden" name="label" />');
+            input.val($(this).attr("data-id"));
+            $(this).append(input);
+        }
+    });
+
+    $(".milestone-assign").click(function(event){
+        event.preventDefault()
+        var milestone_id = $(this).attr("data-milestone");
+        $('input[name="milestone"]').val(milestone_id);
+        $('.assigned_milestone').html("里程碑" + $(".head-name", $(this)).html());
+    });
+
+    $(".assigner_assign").click(function(event){
+        event.preventDefault()
+        var assginer = $(this).attr("data-assigner");
+        $('input[name="assigner"]').val(assginer);
+        $('.assigned_assigner').html("指派给: "  + $(".head-name", $(this)).html());
+    });
+</script>
+{%endblock%}

@@ -1,0 +1,124 @@
+{%load custom%}
+{%load issues%}
+<div class="title-actions-bar">
+
+  <div class="title-actions-second">
+    <div class="btn-group">
+      {% if request.user.is_authenticated%}
+        {%if request.user|user_role:repo == "owner" or request.user|user_role:repo == "member"%}
+        <a class="btn" href="{%url pull_new repo.owner.username repo.name %}">
+          <span class="mini-icon mini-icon-pull-request"></span>Pull Request
+        </a>
+        {%endif%}
+      {%endif%}
+    </div>
+  </div>
+
+  <div class="title-actions-first">
+    <span style="font-size:24px">
+      <a href="/{{repo.owner.username}}">{{repo.owner.username}}</a> <span style="font-size:20px;color:#aaa">/</span> <a href="{%url repo_index repo.owner.username repo.name %}">{{repo.name}}</a>
+    </span>
+    {%if repo.is_public%}
+    <img class="repo-just" src="{%assets%}/img/unlocked.png" />
+    {%else%}
+    <img class="repo-just" src="{%assets%}/img/locked.png" />
+    {%endif%}
+  </div>
+
+</div>
+<div class="repo-head-block">
+  <div class="navbar repo-head-nav">
+    <div class="navbar-inner">
+      <ul class="nav">
+
+        {%if current_block == "code"%}
+        <li class="active none-left-border"><a href="#">代码</a></li>
+        {%else%}
+        <li class="none-left-border">
+          <a href="{%url repo_index repo.owner.username repo.name %}">代码</a>
+        </li>
+        {%endif%}
+
+        {%if current_block == "pull"%}
+        <li  class="active">
+          <a href="#">
+           合并请求 <span class="counter">{{repo|get_pull_length}}</span>
+          </a>
+        </li>
+        {%else%}
+        <li>
+          <a href="{%url pulls repo.owner.username repo.name%}">
+            合并请求 <span class="counter">{{repo|get_pull_length}}</span>
+          </a>
+        </li>
+        {%endif%}
+
+        {%if current_block == "issues"%}
+        <li class="active">
+          <a href="#">
+            工单 <span class="counter">{{repo|issues_numbers:"opened"}}</span>
+          </a>
+        </li>
+        {%else%}
+        <li>
+          <a href="{% url issues repo.owner.username repo.name %}">
+            工单
+            <span class="counter">{{repo|issues_numbers:"opened"}}</span>
+          </a>
+        </li>
+        {%endif%}
+
+        {%if current_block == "admin"%}
+        <li class="active">
+          <a href="{% url repo_admin repo.owner.username repo.name %}">配置管理</a>
+        </li>
+        {%else%}
+        <li><a href="{% url repo_admin repo.owner.username repo.name %}">配置管理</a></li>
+        {%endif%}
+
+      </ul>
+    </div>
+  </div>
+  {%if current_page == "files"%}
+  <div class="repo-head-details">
+    <div class="repo-des">
+      {%if repo.des%}
+        {{repo.des}}
+      {%else%}
+        <p class="meta">该项目没有描述</p>
+      {%endif%}
+    </div>
+    <div class="repo-info">
+      <!--div class="span1">
+          <a class="btn btn-small">
+            <span class="mini-icon mini-icon-download"></span> ZIP
+          </a>
+      </div-->
+      <div class="input-prepend span2">
+        <!--button class="btn btn-small" data-toggle="button" data-type="HTTP">HTTP</button-->
+        <button class="btn btn-small active" data-toggle="button" data-type="SSH">SSH</button>
+        <input class="input input-xlarge" size="16" type="text" value="git@assets.m.etao.net:{{repo.owner.username}}/{{repo.name}}.git" />
+      </div>
+      <div style="clear:both"></div>
+    </div>
+  </div>
+  {%endif%}
+</div>
+<script type="text/javascript">
+  $(document).ready(function(){
+
+      $(".repo-info .input-prepend button").click(function(event){
+        $(".repo-info .input-prepend button").removeClass("active");
+        var path = "";
+        if ($(this).attr("data-type")=="HTTP") {
+          path = "https://git.assets.m.etao.net/{{repo.owner.username}}/{{repo.name}}.git";
+        }else{
+          path = "git://git.assets.m.etao.net:{{repo.owner.username}}/{{repo.name}}.git";
+        }
+        $(".repo-info .clipcopy").attr("data-text",path);
+        $(".repo-info .input-prepend input").val(path)
+
+      });
+
+  });
+</script>

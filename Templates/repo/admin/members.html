@@ -1,0 +1,151 @@
+{%extends "sample.html"%}
+
+{%block h1_title%}
+  {%include "repo/repo_head.html"%}
+{%endblock%}
+
+{%block container%}
+	<div class="container-fluid" style="margin-top:30px;">
+      <div class="row-fluid">
+        <div class="span3">
+            {%include "repo/admin/sidebar.html" with repo_admin_page="members"%}
+        </div>
+        <div class="span9">
+          {%if repo.is_team_owner%}
+          <div class="boxed-group flush">
+            <h3>
+              <a href="{%url team_members repo.owner.username%}" target="_blank" class="title-link-btn float-right">管理成员</a>
+              {{repo.owner}}
+            </h3>
+            <div class="boxed-group-inner boxed-group-inner-nopadding">
+              <table class="table team-users">
+              {%for owner in repo.team_owners%}
+                  <tr>
+                    <td>
+                      <span class="label label-important user-type">管理员</span>
+                      <a href="/{{owner}}" target="_blank">{{owner.first_name}}</a>
+                    </td>
+                  </tr>
+              {%endfor%}
+
+              {%for developer in repo.team_developers%}
+                  <tr>
+                    <td>
+                      <span class="label label-info user-type">开发者</span>
+                      <a href="/{{owner}}" target="_blank">{{developer.first_name}}</a>
+                    </td>
+                  </tr>
+              {%endfor%}
+
+              {%for reporter in repo.team_reporters%}
+                  <tr>
+                    <td>
+                      <span class="label label-default user-type">报告者</span>
+                      <a href="/{{owner}}" target="_blank">{{reporter.first_name}}</a>
+                    </td>
+                  </tr>
+              {%endfor%}
+              </table>
+            </div>
+          </div>
+          {%endif%}
+
+          {%if repo.repo_owners or repo.repo_developers or repo.repo_reporters%}
+            <div class="boxed-group flush">
+            <h3>临时成员</h3>
+            <div class="boxed-group-inner boxed-group-inner-nopadding">
+              <table class="table team-users">
+              {%for owner in repo.repo_owners%}
+                  <tr>
+                    <td>
+                      <form method="POST" action="{%url repo_admin_members_remove repo.owner.username repo.name%}">
+                      <input type="submit" class="btn btn-link float-right delete" value="移除"/>
+                      <input type="hidden" value="{{owner.username}}" name="username"/>
+                      {%csrf_token%}
+
+                      <span class="label label-important user-type">管理员</span>
+                      <a href="/{{owner}}" target="_blank">{{owner.first_name}}</a>
+                      </form>
+                    </td>
+                  </tr>
+              {%endfor%}
+
+              {%for developer in repo.repo_developers%}
+                  <tr>
+                    <td>
+                      <form method="POST" action="{%url repo_admin_members_remove repo.owner.username repo.name%}">
+                      <input type="submit" class="btn btn-link float-right delete" value="移除"/>
+                      <input type="hidden" value="{{developer.username}}" name="username"/>
+                      {%csrf_token%}
+                      <span class="label label-info user-type">开发者</span>
+                      <a href="/{{owner}}" target="_blank">{{developer.first_name}}</a>
+                      </form>
+                    </td>
+                  </tr>
+              {%endfor%}
+
+              {%for reporter in repo.repo_reporters%}
+                  <tr>
+                    <td>
+                      <form method="POST" action="{%url repo_admin_members_remove repo.owner.username repo.name%}">
+                      <input type="submit" class="btn btn-link float-right delete" value="移除"/>
+                      <input type="hidden" value="{{reporter.username}}" name="username"/>
+                      {%csrf_token%}
+                      <span class="label label-default user-type">报告者</span>
+                      <a href="/{{owner}}" target="_blank">{{reporter.first_name}}</a>
+                      </form>
+                    </td>
+                  </tr>
+              {%endfor%}
+              </table>
+            </div>
+          </div>
+          {%endif%}
+          <form class="form-horizontal js-teamuser-mananger-form" action="{%url repo_admin_members repo.owner.username repo.name%}" method="POST">
+            <div class="boxed-group">
+              <h3>添加成员</h3>
+              <div class="boxed-group-inner"> 
+
+                <div class="alert alert-info">
+                  通过该途径添加的成员只对该项目生效！
+                </div>
+                
+                <div class="input-append">
+                  <input class="filter_user js-user-filter" name="username" size="16" type="text" placeholder="输入用户名" autocomplete="off" data-provide="typeahead"/>
+                  {%csrf_token%}
+
+                  <div class="btn-group">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                      <span class="js-jurisdiction-input">
+                        <cite>添加</cite>
+                        <input type="hidden" name="jurisdiction" />
+                      </span>
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu js-select-option">
+                      <li>
+                        <a href="#" data-value="owner" data-target="js-jurisdiction-input" data-submit="js-teamuser-mananger-form">
+                          管理人员
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#" data-value="developer" data-target="js-jurisdiction-input" data-submit="js-teamuser-mananger-form"> 
+                          开发人员
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#" data-value="reporter" data-target="js-jurisdiction-input" data-submit="js-teamuser-mananger-form">
+                          报告人员
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            </form>
+        </div>
+      </div>
+    </div>
+{%endblock%}

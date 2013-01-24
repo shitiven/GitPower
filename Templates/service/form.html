@@ -1,0 +1,64 @@
+{%extends "sample.html"%}
+{%load custom%}
+
+{%block h1_title%}
+    <h3 class="page_title">
+        <img class="img-circle" src="{%assets%}/img/avatar_default.png" width="45px" height="45px" /> {{request.user.username}}
+    </h3>
+{%endblock%}
+
+{%block container%}
+<div class="container-fluid" style="margin-top:30px;">
+  <div class="row-fluid">
+    <div class="span3">
+
+      {%if action == "create"%}
+        {% include "user/settings/sidebar.html" with settings_page="create_service"%}
+      {%else%}
+        {% include "user/settings/sidebar.html" with settings_page="my_services"%}
+      {%endif%}
+    </div>
+    <div class="span9">
+
+      <div class="boxed-group flush">
+        <h3>表单</h3>
+        <div class="boxed-group-inner">
+          {%if action == "edit"%}
+          <form action="{%url service_edit service.id%}" method="POST">
+          {%else%}
+          <form action="{%url service_create%}" method="POST">
+          {%endif%}
+              <label>服务名称</label>
+              <input type="text" name="name" value="{{form.name.value|default:""}}"/>
+
+              <label>服务请求地址</label>
+              <input type="text" name="call_url" class="input input-xxlarge" placeholder="http://" value="{{form.call_url.value|default:""}}"/>’
+
+              <label>请求方法</label>
+              {{form.method}}
+
+              <label class="checkbox">
+                {{form.needwrite}} 需要写权限
+              </label>
+              
+              <label>可使用该服务的项目</label>
+              <input type="text" name="service_to" class="input input-large" value="{{form.service_to.value|default:""}}"/>
+              <span class="help-block">只支持正则表达式，如开发给mix下的所有项目 min\/.*</span>
+
+              <label>deploy_key</label>
+              <textarea name="deploy_key" style="width:400px;height:100px">{{form.deploy_key.value|default:""}}</textarea>
+
+              <label>服务描述</label>
+              <textarea name="des" style="width:400px;height:100px">{{form.des.value|default:""}}</textarea>
+              <span class="help-block" row="150" col="50"></span>
+              <button type="submit" class="btn btn-primary">保存</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+{%endblock%}

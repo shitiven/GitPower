@@ -1,0 +1,79 @@
+{%load custom%}
+<div class="bubble repo-tree-list">
+<table class="table tree-browser">
+  <thead>
+  <tr>
+    <th COLSPAN=3 class="last-commit">
+      <div class="last-commit-message">
+         {{last_commit.message}}
+      </div>
+      <div class="last-commit-meta">
+        <div class="last-commit-hex">
+          最近一次提交<a href="{%url repo_commit repo.owner.username repo.name last_commit.hexsha current_path%}">{{last_commit.hexsha|cut_str:"10"}}</a>
+        </div>
+        <div class="last-commit-author">
+          <a href="/{{last_commit.author.name}}">
+            {{last_commit.author.name}}
+          </a>
+          <cite>
+            ({{last_commit.author.email}})
+            {{last_commit.committed_date|cover_commit_date|timesince}}
+          </cite>
+        </div>
+      </div>
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+   {%if tree_deep > 0%}
+   <tr>
+       <td><a href="{%url repo_tree repo.owner.username repo.name branch prev_path%}">..</a></td>
+       <td></td>
+       <td></td>
+   </tr>
+   {%endif%}
+   {% for element in tree %}
+   {%if element.type == "submodule" %}
+   <tr>
+    {%autoescape off%}
+       <td class="submodule">{{element|get_submodule:submodules}}</td><td></td><td></td>
+    {%endautoescape%}
+   </tr>
+   {%else%}
+      {%if element.type == "tree"%}
+       <tr>
+            <td class="tree">
+              <a class="tree-dir" href="{%url repo_tree repo.owner.username repo.name branch element.path%}" data-repoid="{{repo.id}}" data-branch="{{branch}}" data-path="{{element.path}}">{{element.name}}</a>
+            </td>
+            <td>
+              <span style="color:#aaa;font-size:12px">
+              {{element.path|gener_args:branch|last_commit:git_repo|last_commit_age}}
+              </span>
+            </td>
+            <td>
+              {%autoescape off%}
+              {{element.path|gener_args:branch|last_commit:git_repo|last_commit_message}}
+              {%endautoescape%}
+            </td>
+       </tr>
+      {%else%}
+       <tr>
+           <td class="file">
+            <a class="tree-dir" href="{%url repo_tree repo.owner.username repo.name branch element.path%}" data-repoid="{{repo.id}}" data-branch="{{branch}}" data-path="{{element.path}}">{{element.name}}</a></td>
+           <td> 
+            <span style="color:#aaa;font-size:12px">
+            {{element.path|gener_args:branch|last_commit:git_repo|last_commit_age}}
+            </span>
+           </td>
+           <td>
+              {%autoescape off%}
+              {{element.path|gener_args:branch|last_commit:git_repo|last_commit_message}}
+              {%endautoescape%}
+           </td>
+       </tr>
+      {%endif%}
+   {%endif%}
+   {% endfor %}
+ </tbody>
+</table>
+</div>

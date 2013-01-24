@@ -1,0 +1,40 @@
+{%extends "sample.html"%}
+
+{%block h1_title%}
+  {%include "repo/repo_head.html"%}
+{%endblock%}
+
+{%block container%}
+
+    <div class="container-fluid" style="margin-top:30px;">
+      <div class="row-fluid">
+        <div class="span3">
+            {%include "repo/admin/sidebar.html" with repo_admin_page="option"%}
+        </div>
+        <div class="span9">
+          <div class="boxed-group flush">
+            <h3>项目名称</h3>
+            <div class="boxed-group-inner">
+              <form class="form-inline" action="{%url repo_rename repo.owner.username, repo.name%}" method="POST">
+                <input type="text" class="input-large" value="{{repo.name}}" name="repo_name"/>
+                <button type="submit" class="btn">重命名</button>
+                {%csrf_token%}
+              </form>
+            </div>
+          </div>
+          <div class="boxed-group flush">
+            <h3>删除项目</h3>
+            <div class="boxed-group-inner">
+                <form class="form-inline" action="{%url repo_delete repo.owner.username, repo.name%}" method="POST">
+                  <input class="input-large" name="repo_name" size="16" type="text" placeholder="输入项目名称">
+                  <button class="btn btn-danger" type="submit">删除项目</button>
+                  {%csrf_token%}
+
+                </form>
+             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{%endblock%}

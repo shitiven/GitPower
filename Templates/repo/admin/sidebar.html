@@ -1,0 +1,20 @@
+<ul class="nav nav-pills nav-stacked admin_tab">
+	{%if repo_admin_page == "option"%}
+    <li class="active"><a href="#">基本配置</a></li>
+    {%else%}
+    <li><a href="{%url repo_admin repo.owner.username repo.name%}">基本配置</a></li>
+    {%endif%}
+
+    {%if repo_admin_page == "request"%}
+    <li class="active"><a href="#">请求服务</a></li>
+    {%else%}
+    <li><a href="{%url repo_services repo.owner.username repo.name%}">请求服务</a></li>
+    {%endif%}
+
+    {%if repo_admin_page == "members"%}
+    <li class="active"><a href="#">成员管理</a></li>
+    {%else%}
+    <li><a href="{%url repo_admin_members repo.owner.username repo.name%}">成员管理</a></li>   
+    {%endif%}
+
+</ul>

@@ -1,0 +1,66 @@
+{%load custom%}
+<ul class="sidebar-menu">
+    <li class="section">
+        <span class="header">个人设置</span>
+        <ul class="nav nav-pills nav-stacked">
+
+            {%if settings_page == "profile"%}
+            <li class="active"><a href="/accounts/settings">个人资料</a></li>
+            {%else%}
+            <li><a href="/accounts/settings">个人资料</a></li>
+            {%endif%}
+
+            {%if settings_page == "sshkey"%}
+            <li class="active"><a href="/accounts/settings/sshkey">SSH Keys</a></li>
+            {%else%}
+            <li><a href="/accounts/settings/sshkey">SSH Keys</a></li>
+            {%endif%}
+
+        </ul>
+    </li>
+
+    <li class="section">
+        <span class="header">
+            <a href="/accounts/settings/team" class="float-right"><i class="icon-plus"></i></a> 
+            Teams
+        </span>
+        <ul class="nav nav-pills nav-stacked">
+
+            {% for team in request.user|owner_teams %}
+                {{settings_page.username}}
+                {%if settings_page == team.user.username%}
+                <li class="active">
+                    <a href="/accounts/settings/team/{{team.user.username}}">{{team.user.username}}</a>
+                </li>
+                {%else%}
+                <li>
+                    <a href="/accounts/settings/team/{{team.user.username}}">{{team.user.username}}</a>
+                </li>
+                {%endif%}
+            {%endfor%}
+
+        </ul>
+    </li>
+
+    <li class="section">
+        <span class="header">
+            <a href="{%url service_create%}" class="float-right"><i class="icon-plus"></i></a>服务
+        </span>
+        <ul class="nav nav-pills nav-stacked">
+            {%if settings_page == "my_services"%}
+            <li class="active">
+                <a href="#">我创建的服务</a>
+            </li>
+            {%else%}
+            <li>
+                <a href="{%url service_admin%}">我创建的服务</a>
+            </li>
+            {%endif%}
+        </ul>
+    </li>
+
+</ul>
+
+
+
+

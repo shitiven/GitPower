@@ -1,0 +1,21 @@
+<ul class="nav nav-tabs">
+  {%if service_nav == "inuse"%}
+  <li class="active">
+    <a href="#">使用中的服务</a>
+  </li>
+  {%else%}
+  <li>
+    <a href="{%url repo_services repo.owner.username repo.name%}">使用中的服务</a>
+  </li>
+  {%endif%}
+  
+  {%if service_nav == "canuse"%}
+  <li class="active">
+    <a href="#">可用服务</a>
+  </li>
+  {%else%}
+  <li>
+    <a href="{%url repo_services_filter repo.owner.username repo.name%}">可用服务</a>
+  </li>
+  {%endif%}
+</ul>      

@@ -1,0 +1,61 @@
+{%extends "sample.html"%}
+{%load custom%}
+{%block h1_title%}
+    {%include "repo/repo_head.html"%}
+{%endblock%}
+{%block container%}
+<div class="container-fluid" style="margin-top:30px;">
+
+    {%include "issues/issues_header.html" with issues_page="milestone"%}
+    <div class="row-fluid">
+        {%if is_edit%}
+        <form action="{%url edit_milestone repo.owner.username repo.name milestone.id%}" method="POST">
+        {%else%}
+        <form action="{%url create_milestone repo.owner.username repo.name%}" method="POST">
+        {%endif%}
+        <div class="span8">
+              <fieldset>
+                <label>名称</label>
+                <input type="text" name="title" class="input-xlarge" value="{{form.title.value|default:""}}"/>
+
+                <label>描述</label>
+                <textarea style="width:80%;height:160px" name="content">{{form.content.value|default:""}}</textarea>
+                {% csrf_token %}
+              </fieldset>
+            
+        </div>
+        <div class="span4">
+            <div id="datepicker"></div>
+        </div>
+        
+        <p style="text-align:right; clear:both; border-top:1px solid #ddd;padding:10px 0;">
+            <button type="submit" class="btn btn-primary">
+                {%if is_edit%}
+                保存
+                {%else%}
+                创建里程碑
+                {%endif%}
+            </button>
+        </p>
+        {%if form.duedate.value|is_not_None%}
+        <input type="hidden" name="duedate" id="dueDate" value="{{form.duedate.value|date:'m/d/Y'}}"/>
+        {%else%}
+        <input type="hidden" name="duedate" id="dueDate" />
+        {%endif%}
+        </form>
+    </div>
+</div>  
+{%endblock%}
+
+{%block script%}
+<script type="text/javascript">
+    $("#datepicker").datepicker({
+        {%if form.duedate.value|is_not_None%}
+        "defaultDate" : '{{form.duedate.value|date:"m/d/Y"}}',
+        {%endif%}
+        "onSelect" : function(date){
+            $("#dueDate").val(date);
+        }
+    });
+</script>
+{%endblock%}

@@ -1,0 +1,179 @@
+{%load custom%}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>GitPower</title>
+    <link href="{%assets%}/css/bootstrap.css" rel="stylesheet">
+    <link href="{%assets%}/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="{%assets%}/css/jquery.ui.css" rel="stylesheet">
+    <link href="{%assets%}/css/main.css?11" rel="stylesheet">
+    <link href="{%assets%}/css/icon.css" rel="stylesheet">
+    <style type="text/css">
+      #projectFitlerBox{
+        position: absolute;
+        list-style: none;
+        max-height: 240px;
+        overflow: auto;
+        overflow-x: hidden;
+        border:1px solid #ccc;
+        margin:0;
+        display: none;
+        background: #fff;
+        font-size: 11px;
+      }
+      #projectFitlerBox a{
+        display: block;
+        line-height: 20px;
+        padding:5px;
+        border-bottom: 1px solid #ddd;
+        text-decoration: none;
+        color: #000;
+      }
+      #projectFitlerBox a:hover{
+        background-color: #e0cee0;
+      }
+      #projectFitlerBox a span{
+        margin-left: 8px;
+        color:#999;
+      }
+      #footer{
+        text-align: center;
+        color: #bbb;
+        padding:10px;
+        border-top: 1px solid #eee;
+        width: 920px;
+        margin: 40px auto;
+        font-size: 12px;
+      }
+    </style>
+    {%block style%}{%endblock%}
+    <script src="{%assets%}/js/jquery.js"></script>
+    <script src="{%assets%}/js/jquery_ui.js"></script>
+    <script src="{%assets%}/js/jquery.clipboard.min.js"></script>
+    <script src="{%assets%}/js/bootstrap.min.js?111"></script>
+    <script src="{%assets%}/js/markdown.js"></script>
+    <script src="{%assets%}/js/main.js"></script>
+  </head>
+  <body data-spy="scroll" data-target=".bs-docs-sidebar">
+    <div class="navbar navbar-static-top">
+      <div class="navbar-inner">
+        <div class="inner-box"  style="width:920px;margin:0 auto;">
+          <a class="brand" href="/">GitPower</a>
+          <form class="navbar-search pull-left" action="">
+              <input type="text" class="input-large filter_propject" placeholder="查询项目">
+          </form>
+          <ul class="nav pull-right">
+             {% if request.user.is_authenticated%}
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <img src="{%assets%}/img/avatar_default.png" class="img-circle" width="20" height="20" />
+                  <strong>{{request.user.username}}</strong>
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a href="/accounts/settings">个人设置</a></li>
+                  <li><a href="/accounts/logout">登出系统</a></li>
+                </ul>
+              </li>
+             <li class="divider-vertical"></li>
+             <li><a href="/repo/add"><i class="icon-plus"></i> 添加项目</a></li>
+             {%else%}
+             <li><a href="/accounts/login">登录</a></li>
+             {%endif%}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container" style="width:920px;margin:0 auto">
+
+        {%block h1_title%}<h1 class="page_title"></h1>{%endblock%}
+
+        <div class="error-messages messages">
+          {%if messages%}
+              {% for message in messages %}   
+              <div class="alert alert-{{message.tags}}">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                  {% autoescape off %}
+                    {{message}} 
+                  {% endautoescape %}
+              </div>
+              {%endfor%}
+          {%endif%}
+        </div>
+
+        {%block container%}{%endblock%}
+
+    </div>
+    <div id="footer">Designed by <a href="http://weibo.com/shitiven">shitiven</a>. Powered by GitPower 0.1</div>
+    <ul id="projectFitlerBox"></ul>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $('.filter_propject').focus(function(){
+          $(this).animate({
+            width:"+=100" 
+          }); 
+        });
+        $('.filter_propject').blur(function(){
+          $(this).animate({
+            width:"-=100"
+          });
+          $(this).val("");
+        });
+        $(document.body).click(function(){
+          $("#projectFitlerBox").hide();
+        });
+        $('.filter_propject').keyup(function(event) {
+           var input = $(this);
+           $.ajax({
+            type: "GET",
+            url: "/repo/filter",
+            data: { keyword: input.val()}
+          }).done(function( data ) {
+             var ul = $("#projectFitlerBox");
+             ul.html("");
+
+             data = $.parseJSON(data);
+             console.log(data["result"].length)
+             if(data["result"].length < 1){
+              ul.hide();
+              return;
+             }
+             $(data["result"]).each(function(index,item){
+                var path = item["owner"] + "/" + item["name"];
+                var content = '<a href="/'+ path +'">' + path + "<span>" + item["des"] + "</span>" + '</a>';
+                var li = $("<li></li>").html(content);
+                $("#projectFitlerBox").append(li);
+             });
+             ul.css({
+              "left" : input.offset().left,
+              "top"  : input.offset().top + 28,
+              "width" : input.outerWidth()
+             });
+             ul.show();
+          });
+        });
+
+        
+        $('.js-tooltip').mouseover(function(){
+
+          $(this).tooltip("show");
+
+        });
+
+
+        $(".js-select-option a").click(function(event){
+            event.preventDefault();
+            $("."+$(this).attr("data-target")+" input").val($(this).attr("data-value"));
+            $("."+$(this).attr("data-target")+" cite").html($(this).text());
+
+            if($(this).attr("data-submit")){
+              $("."+$(this).attr("data-submit")).submit();
+            }
+        });
+
+    });
+    </script>
+    {%block script%}{%endblock%}
+  </body>
+</html>
