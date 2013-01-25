@@ -1,7 +1,7 @@
 # Django settings for GitPower project.
 import os
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -14,8 +14,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'gitpower',                      # Or path to database file if using sqlite3.
-        'USER': 'root',                      # Not used with sqlite3.
-        'PASSWORD': '21345',                  # Not used with sqlite3.
+        'USER': 'username',                      # Not used with sqlite3.
+        'PASSWORD': 'password',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
@@ -25,11 +25,11 @@ DATABASES = {
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
 # In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'Asia/Shanghai'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-cn'
 
 SITE_ID = 1
 
@@ -61,7 +61,7 @@ STATIC_ROOT = ''
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = 'http://localhost/gitpower'
+STATIC_URL = 'http://localhost/gitpower/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -91,9 +91,11 @@ TEMPLATE_LOADERS = (
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    #'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'Common.middleware.RequestMiddelWare',
+    'd403handler.middleware.D403Middleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -127,9 +129,14 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.markup',
     'Common',
-    'Account',
+    'Pull',
+    'Service',
     'Depot',
+    'Account',
+    'NewsFeed',
+    'Issues',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -164,8 +171,34 @@ LOGGING = {
         },
     }
 }
-APP_URL="http://localhost:8000"
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
+
+#profile module
 AUTH_PROFILE_MODULE = 'Account.UserProfile'
-BIN_PATH = "%s/.gitolite"%os.getenv("HOME")
+
+#the app visit url
+APP_URL="http://localhost:8000"
+
+#the gitlote bin path default is {home}/.gitlite
+GITLOTE_PATH = "%s/.gitolite"%os.getenv("HOME")
+
+#git repositories path default is {home}/repositories
 REPOS_PATH = "%s/repositories"%os.getenv("HOME")
-GIT_PATH = "/usr/local/git/bin/git"
+
+#git bin path
+GIT_PATH = "/usr/bin/git"
+
+handler404 = 'GitPower.views.view404'
+
+handler500 = 'GitPower.views.view500'
+
+handler403 = 'GitPower.views.view403'
+
+DEFAULT_FILE_STORAGE = 'Common.store.YPStorage'
+
+EMAIL_USE_TLS = False
+EMAIL_HOST = 'smtp.exmail.qq.com'
+EMAIL_HOST_USER = 'service@gitpower.com'
+EMAIL_HOST_PASSWORD = 'sdhzff88'
+EMAIL_PORT = 25
