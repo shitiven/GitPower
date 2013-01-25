@@ -33,16 +33,11 @@ def update_pages(repo_name):
 
     #if pages exits git pull to update else clone new pages
     if os.path.isdir(pages_dir):
-        os.execvp('git', ['--git-dir',pages_dir+"/.git",'--work-tree',pages_dir,"pull"])
+	os.popen("cd %s && env -i git pull"%pages_dir)
     else:
-        os.execvp('git', ['clone', os.getcwd(), '-b', 'gp-pages', pages_dir])
-
-
-if __name__ == '__main___':
-    repo_name = get_repo_name(rename=False)
-
-    #if is gp-pages branch then update
-    if is_gp_pages:
-        update_pages(repo_name)
-        
-    sys.exits(1)
+        os.execvp('git', ['git','clone', os.getcwd(), '-b', 'gp-pages', pages_dir])
+    
+repo_name = get_repo_name(rename=False)
+#if is gp-pages branch then update
+if is_gp_pages:
+    update_pages(repo_name)    
