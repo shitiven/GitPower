@@ -147,8 +147,8 @@ class Repo(models.Model):
         repo = git.Repo.init(repo_path, bare = True)
 
         #link the project's hooks to the default hooks
-        #os.popen('ln -s %s/hooks/common/post-receive %s/hooks/post-receive'%(GITLOTE_PATH, repo_path))
-        #os.popen('ln -s %s/hooks/common/post-update %s/hooks/post-update'%(GITLOTE_PATH, repo_path))
+        os.popen('ln -s %s/post-receive %s/hooks/post-receive.py'%(settings.GIT_HOOKS_DIR, repo_path))
+        os.popen('ln -s %s/post-update %s/hooks/post-update.py'%(settings.GIT_HOOKS_DIR, repo_path))
 
         #clone project to tmp folder
         cl_path = '/tmp/%s%s'%(self.name, time.time())
