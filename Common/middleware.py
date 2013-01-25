@@ -56,7 +56,7 @@ class RequestMiddelWare(object):
 
     def process_view(self, request, view_func, view_args, view_kwargs):
 
-        if re.match("(^\/$)|(^/accounts/signup)|(^/accounts/login)", request.path):
+        if re.match("(^\/$)|(^/accounts/signup)|(^/accounts/login)|(^/accounts/logout)", request.path):
             return
 
         if not request.user.is_authenticated():

@@ -49,14 +49,14 @@ class UserProfile(models.Model):
         return hashlib.md5("active_%s"%str(time.time())).hexdigest()
 
 
-    user     = models.ForeignKey(User, unique=True, verbose_name = '用户的额外信息', related_name = "profile")
+    user     = models.ForeignKey(User, unique=True, verbose_name = u'用户的额外信息', related_name = "profile")
     is_team  = models.BooleanField(default = False)
-    owners   = models.ManyToManyField(User, verbose_name='管理员', related_name="owners")
-    members  = models.ManyToManyField(User, verbose_name='开发者', related_name="members")
-    reporters = models.ManyToManyField(User, verbose_name='报告者', related_name="reporters")
-    teams    = models.ManyToManyField(User, verbose_name = '所属Team', related_name = "team")
+    owners   = models.ManyToManyField(User, verbose_name=u'管理员', related_name="owners")
+    members  = models.ManyToManyField(User, verbose_name=u'开发者', related_name="members")
+    reporters = models.ManyToManyField(User, verbose_name=u'报告者', related_name="reporters")
+    teams    = models.ManyToManyField(User, verbose_name=u'所属Team', related_name = "team")
 
-    nickname  = models.CharField(u'昵称', max_length=20)
+    nickname  = models.CharField(u'昵称', max_length=20, unique=True, null=True, blank=True)
     website   = models.URLField(u'网站', null=True, blank=True)
     company   = models.CharField(u'公司', max_length=100, null=True, blank=True)
     city      = models.CharField(u'城市', max_length=100, null=True, blank=True)
@@ -69,6 +69,19 @@ class UserProfile(models.Model):
         avatar_url = "http://www.gravatar.com/avatar/"
         avatar_url = avatar_url + hashlib.md5(self.user.email.lower()).hexdigest() + "?"
         return avatar_url + urllib.urlencode(params)
+
+
+    @property
+    def date_joined(self):
+        return str(self.user.date_joined.date())
+
+
+    @property
+    def display_name(self):
+        if self.is_team or not self.nickname:
+            return self.user.username
+
+        return self.nickname
 
 
     @property

@@ -22,6 +22,10 @@ register = template.Library()
 def assets():
 	return settings.STATIC_URL
 
+@register.simple_tag
+def app_domain():
+  return settings.APP_DOMAIN
+
 @register.filter
 def is_not_None(val):
     return val is not None

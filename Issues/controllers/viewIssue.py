@@ -52,6 +52,7 @@ def issue_assign_milestone(request, username, repo_name, issue_id, milestone_id)
 
     return HttpResponseRedirect(reverse("issue", args=[request.repo.owner.username, request.repo.name, issue_id]))
 
+
 @repo_access_required("member")
 def issue_assign_assigner(request, username, repo_name, issue_id, assigner_id):
     issue    = get_object_or_404(Issue, id = issue_id)

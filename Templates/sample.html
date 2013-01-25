@@ -67,7 +67,7 @@
              {% if request.user.is_authenticated%}
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <img src="{%assets%}/img/avatar_default.png" class="img-circle" width="20" height="20" />
+                  <img src='{{request.user|user_profile:"avatar_small"}}' class="img-circle" width="20" height="20" />
                   <strong>{{request.user.username}}</strong>
                   <b class="caret"></b>
                 </a>
@@ -105,7 +105,7 @@
         {%block container%}{%endblock%}
 
     </div>
-    <div id="footer">Designed by <a href="http://weibo.com/shitiven">shitiven</a>. Powered by GitPower 0.1</div>
+    <div id="footer">Powered by GitPower 0.1</div>
     <ul id="projectFitlerBox"></ul>
     <script type="text/javascript">
     $(document).ready(function(){

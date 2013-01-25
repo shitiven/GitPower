@@ -2,7 +2,7 @@
 {%load custom%}
 {%block h1_title%}
     <h3 class="page_title">
-        <img class="img-circle" src="{%assets%}/img/avatar_default.png" width="45px" height="45px" /> {{request.user.username}}
+        <img class="img-circle" src="{{request.user|user_profile:"avatar_normal"}}" width="45px" height="45px" /> {{request.user.username}}
     </h3>
 {%endblock%}
 {%block container%}

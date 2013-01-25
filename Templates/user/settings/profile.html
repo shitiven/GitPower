@@ -2,7 +2,7 @@
 {%load custom%}
 {%block h1_title%}
     <h3 class="page_title">
-        <img class="img-circle" src="{%assets%}/img/avatar_default.png" width="45px" height="45px" /> {{request.user.username}}
+        <img class="img-circle" src="{{request.user|user_profile:"avatar_normal"}}" width="45px" height="45px" /> {{request.user.username}}
     </h3>
 {%endblock%}
 {%block container%}
@@ -15,22 +15,22 @@
           <div class="boxed-group">
               <h3>个人资料</h3>
               <div class="boxed-group-inner">
-                <form class="form-horizontal" action="/accounts/settings/team" method="POST">
+                <form class="form-horizontal" action="{%url settings_profile%}" method="POST">
                   <p>
                     <label for="title">昵称</label>
-                    <input type="text" class="input" value="{{user|user_profile:"nickname"|default:user.username}}" />
+                    <input type="text" class="input" name="nickname" value="{{user|user_profile:"nickname"|default:user.username}}" />
                   </p>
                   <p>
                     <label for="title">网站</label>
-                    <input type="text" class="input" value='{{user|user_profile:"website"}}' />
+                    <input type="text" class="input" name="website" value='{{user|user_profile:"website"|default:""}}' />
                   </p>
                   <p>
                     <label for="title">公司</label>
-                    <input type="text" class="input" value='{{user|user_profile:"company"}}' />
+                    <input type="text" class="input" name="company" value='{{user|user_profile:"company"|default:""}}' />
                   </p>
                   <p>
                     <label for="title">城市</label>
-                    <input type="text" class="input" value='{{user|user_profile:"city"}}' />
+                    <input type="text" class="input" name="city" value='{{user|user_profile:"city"|default:""}}' />
                   </p>
                   <p>
                     <input type="submit" value="更新资料" class="btn btn-primary" />

@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'validate_code', profile.user_to_active, name="validate_code"),
     url(r'user_active', profile.user_active, name="user_active"),
 
+    url(r'settings/profile', settings.profile, name="settings_profile"),
     url(r'settings/sshkey/(\d+)/delete$', settings.sshkey_delete),
     url(r'settings/sshkey$', settings.sshkey, name="settings_sshkey"),
 
@@ -20,6 +21,6 @@ urlpatterns = patterns('',
     url(r'settings/team/([-_\.\w+]+)$', settings.team_members, name="team_members"),
     url(r'settings/team$', settings.team, name = "add_team"),    
 
-    url(r'settings$', settings.index, name="settings_index"),
+    url(r'settings$', settings.profile, name="settings_index"),
 
 )

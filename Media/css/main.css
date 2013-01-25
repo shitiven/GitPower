@@ -1106,3 +1106,37 @@ table form, table form button.btn{
   vertical-align:bottom;
   margin-right: 5px;
 }
+h3.userinfo span{
+    font-weight: normal;
+    color: #999;
+}
+h3.userinfo em{
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 24px;
+  color: #666;
+  display: block;
+}
+h3.userinfo {
+  border-bottom: 1px solid #ddd;
+  padding:0 0 10px 0;
+  font-size: 26px;
+  line-height: 26px;
+}
+ul.userinfo-item{
+  list-style: none;
+  margin-left: 0;
+  color: #999;
+}
+ul.userinfo-item li{
+  margin-top: 5px;
+}
+h5 {
+    margin:0;
+    color:#999;
+}
+h5 span{
+    font-weight: normal;
+    display: block;
+}

@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.utils.encoding import force_unicode
 from forms import RepoForm
 from Account.models import SSHKey
+from django.template.base import VariableDoesNotExist
 from models import Repo, DeployService
 from Common.gitolite import human_filesize, pygmentize
 from Common import *
@@ -237,10 +238,12 @@ def get_readme(repo, branch):
 
 def get_repo_tree(repo, branch, path):
     git_repo = None
+
     try:
         git_repo = repo.repo()
         tree = git_repo.tree(branch)
-    except Exception, e:
+
+    except Exception:
         return None
 
     for element in path.split('/'):
@@ -318,20 +321,16 @@ def repo_tree(request, username, repo_name, branch, path):
                 is_owner = True
 
     template_context = get_repo_tree(repo, branch, path)
-    if template_context is not None:
 
-        template_context.update({
-            "repo" : repo,
-            "is_owner" : is_owner,
-            "current_page" : "files"
-        })
+    if template_context is None:
+        return HttpResponseRedirect(reverse("repo_index", args = [username, repo_name]))
 
-    else:
-        template_context = {
-            "repo" : repo,
-            "is_owner" : is_owner,
-            "current_page" : "files"
-        }
+    template_context.update({
+        "repo" : repo,
+        "is_owner" : is_owner,
+        "current_page" : "files"
+    })
+
 
     template_context.update({
         "current_block" : "code"

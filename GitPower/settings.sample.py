@@ -178,7 +178,10 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 AUTH_PROFILE_MODULE = 'Account.UserProfile'
 
 #the app visit url
-APP_URL="http://localhost:8000"
+APP_URL = "http://localhost:8000"
+
+#the app domain
+APP_DOMIAN = "gitpower.com"
 
 #the gitlote bin path default is {home}/.gitlite
 GITLOTE_PATH = "%s/.gitolite"%os.getenv("HOME")

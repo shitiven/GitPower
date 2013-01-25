@@ -7,6 +7,14 @@ from Account.models import UserProfile, SSHKey
 import GitPower.settings as settings
 import os, re
 
+
+class UserProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = UserProfile
+        exclude = ('is_team', 'user', 'owners', 'members', 'reporters', 'teams', 'avatar', 'active_code',)
+
+
 class TeamForm(forms.Form):
     name = forms.CharField(label="名称", max_length = 100, widget=forms.TextInput(attrs={'class':'input-xlarge'}))
 

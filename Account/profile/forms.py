@@ -1,9 +1,10 @@
 # encoding: utf-8
 
 from django import forms
-from Account.models import User
+from Account.models import User, UserProfile
 from Common import regular
 import re
+
 
 class UserForm(forms.ModelForm):
 

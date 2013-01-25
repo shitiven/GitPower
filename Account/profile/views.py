@@ -35,15 +35,16 @@ def index(request, username):
 @login_required
 def filter_user(request):
     keywords = request.POST.get("keywords").lower()
-    users = User.objects.filter(Q(username__startswith = keywords) | Q(first_name__startswith = keywords))
+    users = UserProfile.objects.filter(Q(user__username__startswith = keywords) | Q(nickname__startswith = keywords))
     result = {}
     result["users"] = []
+
     for user in users:
-        if user.get_profile().is_team is False:
+        if user.is_team is False:
             result["users"].append({
-                "username" : user.username,
-                "email"    : user.email,
-                "first_name" : user.first_name
+                "username" : user.user.username,
+                "email"    : user.user.email,
+                "display_name" : user.display_name
             })
 
     return HttpResponse(json.dumps(result))

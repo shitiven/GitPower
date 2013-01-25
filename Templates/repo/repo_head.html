@@ -97,7 +97,7 @@
       <div class="input-prepend span2">
         <!--button class="btn btn-small" data-toggle="button" data-type="HTTP">HTTP</button-->
         <button class="btn btn-small active" data-toggle="button" data-type="SSH">SSH</button>
-        <input class="input input-xlarge" size="16" type="text" value="git@assets.m.etao.net:{{repo.owner.username}}/{{repo.name}}.git" />
+        <input class="input input-xlarge" size="16" type="text" value="git@{%app_domain%}:{{repo.owner.username}}/{{repo.name}}.git" />
       </div>
       <div style="clear:both"></div>
     </div>
@@ -111,9 +111,9 @@
         $(".repo-info .input-prepend button").removeClass("active");
         var path = "";
         if ($(this).attr("data-type")=="HTTP") {
-          path = "https://git.assets.m.etao.net/{{repo.owner.username}}/{{repo.name}}.git";
+          path = "https://{%app_domain%}/{{repo.owner.username}}/{{repo.name}}.git";
         }else{
-          path = "git://git.assets.m.etao.net:{{repo.owner.username}}/{{repo.name}}.git";
+          path = "git://{%app_domain%}:{{repo.owner.username}}/{{repo.name}}.git";
         }
         $(".repo-info .clipcopy").attr("data-text",path);
         $(".repo-info .input-prepend input").val(path)

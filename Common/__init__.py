@@ -26,7 +26,6 @@ def form_message(request, form):
     
     for field in form.fields:
         for error in form[field].errors:
-            print error
             field_label = force_unicode(form[field].label,"utf-8")
             field_error = force_unicode(error,"utf-8")
 

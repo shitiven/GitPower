@@ -25,7 +25,7 @@
 {%endblock%}
 {%block h1_title%}
     <h3 class="page_title">
-        <img class="img-circle" src="{%assets%}/img/avatar_default.png" width="45px" height="45px" /> {{request.user.username}}
+        <img class="img-circle" src="{{request.user|user_profile:"avatar_normal"}}" width="45px" height="45px" /> {{request.user.username}}
     </h3>
 {%endblock%}
 {%block container%}
@@ -84,7 +84,10 @@
                   <tbody>
                     {%for owner in owners%}
                     <tr>
-                      <td width="90%">{{owner.first_name}} ({{owner.email}})</td>
+                      <td width="90%">
+                        <img src="{{request.user|user_profile:'avatar_small'}}" />
+                        {{owner|user_profile:"display_name"}} ({{owner.username}})
+                      </td>
                       <td width="10%">
                         {%if owner.username != request.user.username%}
                         <form action="{%url team_remove_member team.user.username%}" method="POST">
@@ -110,7 +113,10 @@
                 <tbody>
                   {%for member in members%}
                   <tr>
-                    <td width="90%">{{member.first_name}} ({{member.email}}) <a href=""></a></td>
+                    <td width="90%">
+                      <img src="{{request.user|user_profile:'avatar_small'}}" />
+                      {{member.first_name}} ({{member.email}})
+                    </td>
                     <td width="10%">
                       {%if member.username != request.user.username%}
                       <form action="{%url team_remove_member team.user.username%}" method="POST">
@@ -131,7 +137,7 @@
               </div>
             </div>
 
-            <div class="boxed-group">
+            <!--div class="boxed-group">
               <h3>报告人员</h3>
               <div class="boxed-group-inner no-padding">
               {%if reporters%}
@@ -159,7 +165,7 @@
                 {%endif%}
               </table>
               </div>
-            </div>
+            </div-->
 
             <form action="{%url team_delete team.user.username%}" method="POST">
             <div class="boxed-group">

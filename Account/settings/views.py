@@ -13,8 +13,20 @@ import GitPower.settings as settings
 
 import json
 
+
 @login_required
-def index(request):
+def profile(request):
+
+    if request.method == "POST":
+        user_profile = request.user.get_profile()
+        form = UserProfileForm(request.POST,instance=user_profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, u"资料更新成功")
+            return HttpResponseRedirect(reverse("settings_profile"))
+
+        else:
+            form_message(request, form)
 
     return render("user/settings/profile.html", request, context={
                 "page" : "profile",

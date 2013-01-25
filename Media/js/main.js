@@ -290,7 +290,7 @@ $(document).ready(function(){
           success: function( data ) {
             response( $.map( data.users, function( item ) {
               return {
-                label: item.first_name,
+                label: item.display_name+" ("+item.username+")",
                 value: item.username
               }
             }));
