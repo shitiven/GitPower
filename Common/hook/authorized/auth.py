@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding:utf-8 -*-
 
 from access import filter_users_bykey, log 
 import sys, re

@@ -16,7 +16,6 @@ repo_head  = sys.argv[2]
 repo_owner = repo_path.split("/")[0]
 repo_name  = repo_path.split("/")[1]
 
-print repo_path
 
 data = {
 "remote" : "%s:%s"%(settings.APP_URL, repo_path),
@@ -24,7 +23,6 @@ data = {
 "commit_msg" : sys.argv[3] 
 }
 
-print data
 
 repo = Repo.objects.get(owner__username = repo_owner, name = repo_name)
 services = DeployService.objects.filter(repo = repo)
