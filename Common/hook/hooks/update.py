@@ -22,6 +22,8 @@ user_email = commit.author.email
 user_name  = commit.author.name
 
 
+sys.exit("error")
+
 try:
     repo = re.search('([a-zA-Z]+[-_\.a-zA-Z0-9]+)\/([a-zA-Z]+[-_\.a-zA-Z0-9]+)\.git$',a).groups()
     repo_owner = repo[0]
