@@ -7,7 +7,7 @@
       {% if request.user.is_authenticated%}
         {%if request.user|user_role:repo == "owner" or request.user|user_role:repo == "member"%}
         <a class="btn" href="{%url pull_new repo.owner.username repo.name %}">
-          <span class="mini-icon mini-icon-pull-request"></span>Pull Request
+          <span class="mini-icon mini-icon-pull-request"></span>合并请求
         </a>
         {%endif%}
       {%endif%}

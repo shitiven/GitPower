@@ -31,7 +31,7 @@
                                         <img src="{{user|user_profile:'avatar_small'}}" /> {{user|user_profile:'display_name'}} ({{user.username}})
                                         <input type="hidden" value="{{user.username}}" name="username"/>
                                         <input type="hidden" value="{{branch}}" name="branch"/>
-                                        <button class="btn btn-link remove-btn">移除</button>
+                                        <button type="submit" class="btn btn-link">移除</button>
                                         {%csrf_token%}
                                         </form>
                                         </div>
