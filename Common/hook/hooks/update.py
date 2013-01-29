@@ -10,7 +10,7 @@ setup_environ(settings)
 
 from Common import User
 from Depot.models import BranchPermission, Repo
-import os, git
+import os, git, re
 
 head = sys.argv[1]
 project_path = os.getcwd()
@@ -21,7 +21,6 @@ commit = repo.commit(new_commit)
 
 user_email = commit.author.email
 user_name  = commit.author.name
-
 
 try:
     repo = re.search('([a-zA-Z]+[-_\.a-zA-Z0-9]+)\/([a-zA-Z]+[-_\.a-zA-Z0-9]+)\.git$',project_path).groups()
@@ -36,7 +35,7 @@ try:
     head = re.search('heads/(.*)',head).groups()[0]
     try:
         permission = BranchPermission.objects.get(repo=repo, branch=head)
-        if permission.users.all.count():
+        if permission.users.all().count():
 
             try:
                 user = User.objects.get(email=user_email, username=user_name)
