@@ -42,10 +42,10 @@ try:
                 user = User.objects.get(email=user_email, username=user_name)
             except User.DoesNotExist:
                 
-                sys.exit("[Error] %(username)s(%(email)s) not gitpower's member, please visit http://help.gitpower.com")%dict(
-                        "username" : user_name,
-                        "email" : user_email
-                    )
+                sys.exit("[Error] %(username)s(%(email)s) not gitpower's member, please visit http://help.gitpower.com")%{
+                    "username" : user_name,
+                    "email" : user_email
+                }
 
             if not user in permission.users.all():
                 sys.exit('[Access Error] You have not access to push this branch')
