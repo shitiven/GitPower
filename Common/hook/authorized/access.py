@@ -12,7 +12,7 @@ from Depot.models import Repo
 import Account
 import logging
 
-DEBUG = False
+DEBUG = True
 logging.basicConfig(filename="/tmp/autkeys.log", level=logging.DEBUG)
 
 def log(msg):

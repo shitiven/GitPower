@@ -17,7 +17,7 @@ try:
 except Exception,e:
     log(str(e))
 
-if not sshkey_objects: sys.exit("[Error] GitPower can't find your sshkey, more about: http://www.gitpower.com")
+if not sshkey_objects: log("[Error] GitPower can't find your sshkey, more about: http://www.gitpower.com")
 
 outlines = []
 
