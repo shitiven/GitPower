@@ -32,9 +32,9 @@ def repo_access(username, repo_path):
     repo_name  = repo_path.split("/")[1]
    
     try: 
-        user = User.objects.get(username=username)    
+        user = User.objects.get(username=username)  
     except User.DoesNotExist:
-        sys.exit("[ERROR] You are not gitpower member, please got to http://www.gitpower.com")
+        sys.exit("[ERROR] You are not gitpower member, please got to http://help.gitpower.com")
     
     try:
         repo = Repo.objects.get(owner__username=repo_owner, name=repo_name)
