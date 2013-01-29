@@ -38,8 +38,9 @@ def branch_permission(request, username, repo_name):
 def branch_permission_remove(request, username, repo_name):
 
     if request.method == "POST":
-        branch = request.POST.get("branch")
-        member = User.objects.get(username=username)
+        branch   = request.POST.get("branch")
+	member   = request.POST.get("username")
+        member   = User.objects.get(username=member)
         obj = BranchPermission.objects.get(repo=request.repo, branch=branch)
         obj.users.remove(member)
 
