@@ -280,9 +280,13 @@ function arrays_equal(a,b) { return !(a<b || b<a); }
 $(document).ready(function(){
   $( ".js-user-filter" ).autocomplete({
       source: function( request, response ) {
+        var filter_path = "/accounts/filter";
+        if($(this.element).attr("filter_path")){
+          filter_path = $(this.element).attr("filter_path")
+        }
         $.ajax({
-          type : "POST",
-          url: "/accounts/filter",
+          type: "POST",
+          url: filter_path,
           dataType: "json",
           data: {
             keywords : request.term

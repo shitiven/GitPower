@@ -17,4 +17,10 @@
     <li><a href="{%url repo_admin_members repo.owner.username repo.name%}">成员管理</a></li>   
     {%endif%}
 
+    {%if repo_admin_page == "permission"%}
+    <li class="active"><a href="#">分支权限</a></li>
+    {%else%}
+    <li><a href="{%url repo_branch_permission repo.owner.username repo.name%}">分支权限</a></li>   
+    {%endif%}
+
 </ul>

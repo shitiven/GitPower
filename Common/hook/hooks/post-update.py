@@ -8,6 +8,7 @@ head = sys.argv[1]
 REPOS_PATH = "/home/git/repositories"
 PAGES_PATH = "/home/git/pages"
 
+
 def is_gp_pages():
     '''check head is gp-pages branch'''
 
