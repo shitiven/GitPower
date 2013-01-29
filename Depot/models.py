@@ -147,6 +147,7 @@ class Repo(models.Model):
         repo = git.Repo.init(repo_path, bare = True)
 
         #link the project's hooks to the default hooks
+	os.popen('ln -s %s/common.py %s/hooks/common.py'%(settings.GIT_HOOKS_DIR, repo_path))
         os.popen('ln -s %s/post-receive %s/hooks/post-receive.py'%(settings.GIT_HOOKS_DIR, repo_path))
         os.popen('ln -s %s/post-update %s/hooks/post-update.py'%(settings.GIT_HOOKS_DIR, repo_path))
 

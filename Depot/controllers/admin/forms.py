@@ -81,7 +81,7 @@ class RenameForm(forms.Form):
 
         cleaned_name = cleaned_data.get("repo_name")
 
-        name_regular = regular["repo_name"]
+        name_regular = regular["reponame"]
 
         #check the name rules
         if name_regular.match(cleaned_name) is None:
