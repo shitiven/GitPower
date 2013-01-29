@@ -22,8 +22,6 @@ user_email = commit.author.email
 user_name  = commit.author.name
 
 
-sys.exit("error")
-
 try:
     repo = re.search('([a-zA-Z]+[-_\.a-zA-Z0-9]+)\/([a-zA-Z]+[-_\.a-zA-Z0-9]+)\.git$',a).groups()
     repo_owner = repo[0]
@@ -44,10 +42,10 @@ try:
                 user = User.objects.get(email=user_email, username=user_name)
             except User.DoesNotExist:
                 
-                sys.exit("[Error] %(username)s(%(email)s) not gitpower's member, please visit http://help.gitpower.com")%dict(
-                        "username" : user_name,
-                        "email" : user_email
-                    )
+                sys.exit("[Error] %(username)s(%(email)s) not gitpower's member, please visit http://help.gitpower.com")%{
+                    "username" : user_name,
+                    "email" : user_email
+                }
 
             if not user in permission.users.all():
                 sys.exit('[Access Error] You have not access to push this branch')
@@ -55,7 +53,8 @@ try:
     except BranchPermission.DoesNotExist:
         pass
 
-except Exception,e:
+except Exception, e:
     sys.exit(str(e))
 
 sys.exit(0)
+
