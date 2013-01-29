@@ -53,7 +53,7 @@ try:
     except BranchPermission.DoesNotExist:
         pass
 
-except:
-    pass
+except Exception,e:
+    sys.exit(str(e))
 
 sys.exit(0)
