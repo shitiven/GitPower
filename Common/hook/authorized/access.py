@@ -37,7 +37,7 @@ def repo_access(username, repo_path):
         sys.exit("[ERROR] You are not gitpower member, please got to http://www.gitpower.com")
     
     try:
-        repo = Repo.objects.get(owner__username=user, name=repo_name)
+        repo = Repo.objects.get(owner__username=repo_owner, name=repo_name)
     except Repo.DoesNotExist:
        sys.exit("[ERROR] This project is not exist")
 

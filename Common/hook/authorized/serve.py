@@ -18,8 +18,10 @@ COMMANDS_WRITE = [
     'git receive-pack',
     ]
 
-username = sys.argv[1]
-
+try:
+    usernames = sys.argv[1].split(",")
+except:
+    sys.exit("[Error] we can't find your pubkey in our system, please visit http://help.gitpower.com")
 
 def serve(command):
     verb, args = command.split(None, 1)
@@ -35,12 +37,16 @@ def serve(command):
         sys.exit('[ERROR] UnknownCommand')
     
     args = args.replace("'","") 
-    access = repo_access(username, re.sub("\.git$","",args))
-    
-    if not access:
+    accesses = []
+    for username in usernames: 
+        log("----->%s"%username)
+        access = repo_access(username, re.sub("\.git$","",args))
+        accesses.extend(access)
+
+    if not accesses:
         sys.exit('[ERROR] You do not have any permission for this project')
 
-    if "w" not in access and verb in COMMANDS_WRITE:
+    if "w" not in accesses and verb in COMMANDS_WRITE:
         sys.exit('[ERROR] You do not have write permission for this project')
 
 

@@ -17,18 +17,19 @@ try:
 except Exception,e:
     log(str(e))
 
-if not sshkey_objects: log("[Error] GitPower can't find your sshkey, more about: http://www.gitpower.com")
-
-outlines = []
-
+users = []
 for sshkey in sshkey_objects:
-    params = [
-        'command="'+ SCRIPT_PATH + ' %s"'%sshkey.user.username,
-        'no-port-forwarding',
-        'no-X11-forwarding',
-        'no-agent-forwarding',
-        'no-pty'
-    ]
-    outlines.append(",".join(params))
+    users.append(sshkey.user.username)
 
-sys.stdout.write("\n".join(outlines))
+users = ",".join(users)
+
+log(users)
+
+params = [
+    'command="'+ SCRIPT_PATH + ' %s"'%users,
+    'no-port-forwarding',
+    'no-X11-forwarding',
+    'no-agent-forwarding',
+    'no-pty'
+]
+sys.stdout.write(",".join(params))
