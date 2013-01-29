@@ -10,10 +10,13 @@ setup_environ(settings)
 
 from Common import User
 from Depot.models import BranchPermission, Repo
-import os, git
+import os, git, re
+
+print sys.argv
 
 head = sys.argv[1]
-new_commit = sys.argv[3]
+project_path = os.getcwd()
+new_commit   = sys.argv[3]
 
 repo   = git.Repo(os.getcwd())
 commit = repo.commit(new_commit)
@@ -21,9 +24,10 @@ commit = repo.commit(new_commit)
 user_email = commit.author.email
 user_name  = commit.author.name
 
+exit(0)
 
 try:
-    repo = re.search('([a-zA-Z]+[-_\.a-zA-Z0-9]+)\/([a-zA-Z]+[-_\.a-zA-Z0-9]+)\.git$',a).groups()
+    repo = re.search('([a-zA-Z]+[-_\.a-zA-Z0-9]+)\/([a-zA-Z]+[-_\.a-zA-Z0-9]+)\.git$',project_path).groups()
     repo_owner = repo[0]
     repo_name  = repo[1]
     
@@ -32,23 +36,25 @@ try:
     except Repo.DoesNotExist:
         sys.exit('[Error] the git project not exits, please visit http://www.gitpower.com')
 
-
-    head = re.search('heads/(.*)',a).groups()[0]
+    head = re.search('heads/(.*)',head).groups()[0]
     try:
         permission = BranchPermission.objects.get(repo=repo, branch=head)
-        if permission.users.all.count():
+        if permission.users.all().count():
 
             try:
                 user = User.objects.get(email=user_email, username=user_name)
             except User.DoesNotExist:
                 
-                sys.exit("[Error] %(username)s(%(email)s) not gitpower's member, please visit http://help.gitpower.com")%{
-                    "username" : user_name,
-                    "email" : user_email
-                }
+                sys.exit("[Error] %(username)s(%(email)s) not gitpower's member, please visit http://help.gitpower.com")%dict(
+                    username=user_name,
+                    email=user_email
+                )
 
             if not user in permission.users.all():
-                sys.exit('[Access Error] You have not access to push this branch')
+                sys.exit('[Access Error] %(username)s(%(email)s) have not access to push this branch, please visit http://help.gitpower.com')%(
+		    username=user_name,
+                    email=user_email
+		)
 
     except BranchPermission.DoesNotExist:
         pass
