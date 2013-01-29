@@ -1,6 +1,7 @@
 from Depot.controllers.admin.viewOption import *
 from Depot.controllers.admin.viewServices import *
 from Depot.controllers.admin.viewMembers import *
+from Depot.controllers.admin.viewBranchPermission import *
 from Depot.models import *
 import inspect, os, sys
 

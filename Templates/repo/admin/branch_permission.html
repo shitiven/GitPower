@@ -1,0 +1,138 @@
+{%extends "sample.html"%}
+{%load custom%}
+{%load repo%}
+{%block h1_title%}
+  {%include "repo/repo_head.html"%}
+{%endblock%}
+
+{%block container%}
+    <div class="container-fluid" style="margin-top:30px;">
+      <div class="row-fluid">
+        <div class="span3">
+            {%include "repo/admin/sidebar.html" with repo_admin_page="permission"%}
+        </div>
+        <div class="span9">
+            <div class="boxed-group flush">
+                <h3>
+                    分支权限
+                </h3>
+                <div class="boxed-group-inner boxed-group-inner-nopadding">
+                    <table class="table">
+                        <tbody>
+                            {%for branch in git_repo.branches%}
+                            <tr>
+                                <td class="table-td-header-block">{{branch}}</td>
+                                <td>
+                                    <div class="branch-permisson-list">
+                                    {%if repo|branch_permission_users:branch%}
+                                        {%for user in repo|branch_permission_users:branch%}
+                                        <form action="{%url repo_branch_permission_remove repo.owner.username repo.name%}" method="POST">
+                                        <div class="branch-permisson-user">
+                                        <img src="{{user|user_profile:'avatar_small'}}" /> {{user|user_profile:'display_name'}} ({{user.username}})
+                                        <input type="hidden" value="{{user.username}}" name="username"/>
+                                        <input type="hidden" value="{{branch}}" name="branch"/>
+                                        <button class="btn btn-link remove-btn">移除</button>
+                                        {%csrf_token%}
+                                        </form>
+                                        </div>
+                                        {%endfor%}
+                                    {%else%}
+                                        所有项目成员
+                                    {%endif%}
+                                    </div>
+                                </td>
+                            </tr>
+                            {%endfor%}
+                        </tbody>
+                    </table>
+                    <div class="alert alert-info">
+                        <p>分支权限用于某些特殊的分支只能有指定人员进行push操作!</p>
+                        <form method="POST" id="permissionForm" action="{%url repo_branch_permission repo.owner.username repo.name%}">
+                        <div class="btn-group" style="float:left">
+                          <a class="btn"> 
+                            <span class="mini-icon mini-icon-tree"></span>选择分支
+                          </a>
+                          <a class="btn dropdown-toggle" data-toggle="dropdown-filter" href="#">
+                            <span class="caret"></span>
+                          </a>
+                          <div class="dropdown-menu filter-context-panel js-filter-branch"></div> 
+                          <input name="branch" type="hidden" />
+                        </div>
+
+                        <div class="btn-group" style="float:left;">
+                          <a class="btn">选择成员</a>
+                          <a class="btn dropdown-toggle" data-toggle="dropdown-filter" href="#">
+                            <span class="caret"></span>
+                          </a>
+                          <div class="dropdown-menu filter-context-panel js-filter-member"></div> 
+                          <input type="hidden" name="member" />
+                        </div>
+                        {%csrf_token%}
+                        <div style="clear:both"></div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+{%endblock%}
+{%block script%}
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        var members = [];
+        {%for member in repo.team_writers%}
+          members.push({
+            "name" : "{{member|user_profile:'display_name'}}"+"({{member.username}})",
+            "attributes" : {
+              "username" : "{{member.username}}"
+            }
+          });
+        {%endfor%}
+
+        var owners_pannel = new DropDownFilterPannel();
+        owners_pannel.create($(".js-filter-member"), members, {
+          "title" : "Filer member",
+          "filter_input_placeholder" : "Filter",
+          "filter_from_attribute" : "username",
+          "pannel_height" : 100,
+          "click_handler" : function(el){
+            $('input[name="member"]').val(el.attr("data-username"));
+            if ($('input[name="member"]').val().length>0 && $('input[name="branch"]').val().length>0){
+                $("#permissionForm").submit()
+            }
+          }
+        });
+
+        var branches = [];
+        {%for branch in git_repo.branches%}
+            branches.push({
+                "name" : "{{branch}}",
+                "attributes" : {
+                    "value" : "{{branch}}"
+                }
+            })
+        {%endfor%}
+        {%for tag in git_repo.tags%}
+            //branches.push("{{tag}}")
+        {%endfor%}
+
+        var head_pannel = new DropDownFilterPannel();
+        head_pannel.create($(".js-filter-branch"), branches, {
+          "title" : "Filer branch",
+          "filter_input_placeholder" : "Filter",
+          "filter_from_attribute" : "value",
+          "pannel_height" : 100,
+          "click_handler" : function(el){
+            $('input[name="branch"]').val(el.attr("data-value"));
+            if ($('input[name="member"]').val().length>0 && $('input[name="branch"]').val().length>0){
+                $("#permissionForm").submit()
+            }
+          }
+        });
+
+    });
+</script>
+{%endblock%}

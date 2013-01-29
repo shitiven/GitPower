@@ -4,7 +4,7 @@ from django import forms
 from django.forms.widgets import RadioSelect
 
 from Common import regular
-from Depot.models  import Repo, DeployService
+from Depot.models  import Repo, DeployService, BranchPermission
 from Common.gitolite import get_mac_address
 
 import re
