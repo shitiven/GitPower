@@ -24,7 +24,8 @@
                     <td>
                       <span class="label label-important user-type">管理员</span>
                       <a href="/{{owner.username}}" target="_blank">
-                        {{owner|user_profile:"display_name"}} ({{owner.username}})
+                        111
+			{{owner|user_profile:"display_name"}}({{owner.username})
                       </a>
                     </td>
                   </tr>
@@ -34,7 +35,7 @@
                   <tr>
                     <td>
                       <span class="label label-info user-type">开发者</span>
-                      <a href="/{{owner}}" target="_blank">{{owner|user_profile:"display_name"}} ({{owner.username}})</a>
+                      <a href="/{{owner.username}}" target="_blank">{{owner|user_profile:"display_name"}} ({{owner.username}})</a>
                     </td>
                   </tr>
               {%endfor%}
@@ -66,7 +67,7 @@
                       {%csrf_token%}
 
                       <span class="label label-important user-type">管理员</span>
-                      <a href="/{{owner}}" target="_blank">{{owner.first_name}}</a>
+                      <a href="/{{owner.username}}" target="_blank">{{owner|user_profile:"display_name"}}({{owner.username}})</a>
                       </form>
                     </td>
                   </tr>
@@ -80,7 +81,7 @@
                       <input type="hidden" value="{{developer.username}}" name="username"/>
                       {%csrf_token%}
                       <span class="label label-info user-type">开发者</span>
-                      <a href="/{{owner}}" target="_blank">{{developer.first_name}}</a>
+                      <a href="/{{developer.username}}" target="_blank">{{developer|user_profile:"display_name"}}({{owner.username}})</a>
                       </form>
                     </td>
                   </tr>
