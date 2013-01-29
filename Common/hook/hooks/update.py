@@ -12,8 +12,6 @@ from Common import User
 from Depot.models import BranchPermission, Repo
 import os, git, re
 
-print sys.argv
-
 head = sys.argv[1]
 project_path = os.getcwd()
 new_commit   = sys.argv[3]
@@ -23,8 +21,6 @@ commit = repo.commit(new_commit)
 
 user_email = commit.author.email
 user_name  = commit.author.name
-
-exit(0)
 
 try:
     repo = re.search('([a-zA-Z]+[-_\.a-zA-Z0-9]+)\/([a-zA-Z]+[-_\.a-zA-Z0-9]+)\.git$',project_path).groups()
@@ -51,7 +47,7 @@ try:
                 )
 
             if not user in permission.users.all():
-                sys.exit('[Access Error] %(username)s(%(email)s) have not access to push this branch, please visit http://help.gitpower.com')%(
+                sys.exit('[Access Error] %(username)s(%(email)s) have not access to push this branch, please visit http://help.gitpower.com')%dict(
 		    username=user_name,
                     email=user_email
 		)
