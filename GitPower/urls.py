@@ -11,6 +11,8 @@ from Depot import (
     repo_service_add,
     repo_service_remove,
     repo_services_filter,
+    branch_permission,
+    branch_permission_remove
 )
 
 from Issues import (
@@ -53,6 +55,8 @@ urlpatterns = patterns('',
     url(r'^(\w+)/([-_\.a-zA-Z0-9]+)/pulls/(\w+)$', your_pulls, name = "your_pulls"),
     url(r'^(\w+)/([-_\.a-zA-Z0-9]+)/pull/(\d+)$', pull_item, name = "pull"),
 
+    url(r'^(\w+)/([-_\.a-zA-Z0-9]+)/admin/branch/permission/remove$', branch_permission_remove, name = "repo_branch_permission_remove"),
+    url(r'^(\w+)/([-_\.a-zA-Z0-9]+)/admin/branch/permission$', branch_permission, name = "repo_branch_permission"),
     url(r'^(\w+)/([-_\.a-zA-Z0-9]+)/admin/members/remove$', repo_admin_members_remove, name = "repo_admin_members_remove"),
     url(r'^(\w+)/([-_\.a-zA-Z0-9]+)/admin/members$', repo_admin_members, name = "repo_admin_members"),
     url(r'^(\w+)/([-_\.a-zA-Z0-9]+)/admin/rename$', repo_rename, name = "repo_rename"),

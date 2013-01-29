@@ -42,39 +42,48 @@ class Repo(models.Model):
         writers.extend(self.allowners)
         return list(set(writers))
 
+
     @property 
     def team_readers(self):
         readers = self.team_writers
         readers.extend(self.allreporters)
         return list(set(readers))
 
+
     @property
     def team_owners(self):
         return list(self.owner.get_profile().owners.all())
+
 
     @property 
     def team_developers(self):
         return list(self.owner.get_profile().members.all())
 
+
     @property 
     def team_reporters(self):
         return list(self.owner.get_profile().reporters.all())
+
 
     @property
     def is_team_owner(self):
         return self.owner.get_profile().is_team
 
+
     @property 
     def repo_owners(self):
         return list(self.managers.all())
+
 
     @property 
     def repo_developers(self):
         return list(self.developers.all())
 
+
     @property 
     def repo_reporters(self):
         return list(self.reporters.all())
+
 
     @property
     def alldevelopers(self):
@@ -83,12 +92,14 @@ class Repo(models.Model):
         if members is None:return []
         return list(set(members))
 
+
     @property 
     def allreporters(self):
         reporters = list(self.owner.get_profile().reporters.all())
         reporters.extend(self.repo_reporters)
         if reporters is None:return []
         return list(set(reporters))
+
 
     @property 
     def allowners(self):
@@ -100,10 +111,12 @@ class Repo(models.Model):
         if owners is None:return []
         return list(set(owners))
 
+
     def repo(self):
         '''return gitPython init project'''
 
         return git.Repo(self.repo_path())
+
 
     def repo_path(self):
         '''return git project working dir'''
@@ -111,6 +124,7 @@ class Repo(models.Model):
         owner_name = self.owner.username
         repo_name  = self.name
         return "%s/%s/%s.git"%(REPOS_PATH, owner_name, repo_name)
+
 
     def create_split_conf(self):
         '''create gitolite.conf-compiled.pm, this is the gitolite rules'''
@@ -252,5 +266,17 @@ def repo_services_change(sender, instance, action, reverse, model, pk_set, **kwa
     if action == "post_remove":
         create_rules(instance)
                 
-            
+
+class BranchPermission(models.Model):
+    repo   = models.ForeignKey(Repo, unique=True)
+    branch = models.CharField(max_length=50)
+    users  = models.ManyToManyField(User)   
+
+
+    class Meta:
+        unique_together = ("repo", "branch")
+
+
+    def has_permission(self, user):
+        print user
 

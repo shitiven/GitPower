@@ -25,6 +25,7 @@ class RequestMiddelWare(object):
         else:
             raise PermissionDenied()
 
+        request.repo = repo
         request.context = {
             "repo" : repo
         }

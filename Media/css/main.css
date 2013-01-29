@@ -669,6 +669,10 @@ table.pull_list a.commit-msg{
 .boxed-group .boxed-group-inner-nopadding table{
   margin: 0
 }
+.boxed-group .boxed-group-inner-nopadding .alert{
+  border-radius: 0;
+  margin:0;
+}
 .boxed-group .list-browser-filterbar .list-browser-filter-tabs {
   display: block;
   float: left;
@@ -1139,4 +1143,15 @@ h5 {
 h5 span{
     font-weight: normal;
     display: block;
+}
+table .table-td-header-block{
+  background-color: #efffff;
+  width: 20%;
+  font-weight: bold;
+  border-right: 1px solid #dddddd;
+  text-align: right;
+  vertical-align:middle;
+}
+.branch-permisson-user{
+  position: relative;
 }

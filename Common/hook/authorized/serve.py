@@ -20,6 +20,7 @@ COMMANDS_WRITE = [
 
 username = sys.argv[1]
 
+
 def serve(command):
     verb, args = command.split(None, 1)
     if verb == "git":
