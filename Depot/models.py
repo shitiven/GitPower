@@ -128,7 +128,7 @@ class Repo(models.Model):
 
     def create_split_conf(self):
         '''create gitolite.conf-compiled.pm, this is the gitolite rules'''
-	return
+        return
         conf_path = "%s/conf/gitolite.conf-compiled.pm"%GITLOTE_PATH
         conf_file = open(conf_path, "w")
 
@@ -161,9 +161,9 @@ class Repo(models.Model):
         repo = git.Repo.init(repo_path, bare = True)
 
         #link the project's hooks to the default hooks
-	os.popen('ln -s %s/common.py %s/hooks/common.py'%(settings.GIT_HOOKS_DIR, repo_path))
-        os.popen('ln -s %s/post-receive %s/hooks/post-receive.py'%(settings.GIT_HOOKS_DIR, repo_path))
-        os.popen('ln -s %s/post-update %s/hooks/post-update.py'%(settings.GIT_HOOKS_DIR, repo_path))
+        os.popen('ln -s %s/common.py %s/hooks/common.py'%(settings.GIT_HOOKS_DIR, repo_path))
+        os.popen('ln -s %s/post-update %s/hooks/post-update'%(settings.GIT_HOOKS_DIR, repo_path))
+        os.popen('ln -s %s/update %s/hooks/update'%(settings.GIT_HOOKS_DIR, repo_path))
 
         #clone project to tmp folder
         cl_path = '/tmp/%s%s'%(self.name, time.time())
@@ -175,10 +175,13 @@ class Repo(models.Model):
             os.popen("echo README >> %s/README.md"%cl_path)
 
             if self.gitignore is not None:
-                gitignore   = open("%s/gitignores/%s"%(settings.TEMPLATE_DIRS[0], self.gitignore))
-                gitigonre_f = open("%s/.gitignore"%cl_path,"w")
-                gitigonre_f.write(gitignore.read())
-                gitigonre_f.close()
+                try:
+                    gitignore   = open("%s/gitignores/%s"%(settings.TEMPLATE_DIRS[0], self.gitignore))
+                    gitigonre_f = open("%s/.gitignore"%cl_path,"w")
+                    gitigonre_f.write(gitignore.read())
+                    gitigonre_f.close()
+                except:
+                    pass
 
             cl_repo.git.execute(['git', 'add', '*'])
             cl_repo.git.execute(['git', 'commit', '--author=%s <%s>'%(self.owner.username, self.owner.email), '-v', '-a', '-m', 'init'])        
