@@ -7,8 +7,8 @@ from Account.models import SSHKey
 
 @csrf_protect
 def index(request):
-    repos = []
-    repos_len = 0
+
+    current_profile = None
     if request.user.is_authenticated():
         template = "index_login.html"
         current_profile  = request.user.get_profile()
