@@ -1,6 +1,8 @@
-django==1.4.3
+django==1.4.1
 PIL
 pygments
 mysql-python==1.2.4
 GitPython
 Django403Handler
+markdown
+django-pipeline==1.2.24
