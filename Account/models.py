@@ -32,8 +32,8 @@ class InviteCode(models.Model):
     def render_code():
         hexdigest = hashlib.md5("incode_code_%s"%str(time.time())).hexdigest()
         code = []
-        for i in range(1,10):
-            code.append(random.randint(0,32))
+        for i in range(0,10):
+            code.append(hexdigest[random.randint(0,32)])
         return "".join(code)
 
     code = models.CharField(u'邀请码', max_length=30, default=render_code, unique=True)
