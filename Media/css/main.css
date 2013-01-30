@@ -1163,9 +1163,12 @@ table .table-td-header-block{
   margin: 0;
   padding: 0;
 }
-.repo-listing li.source{
+
+.repo-listing li{
   list-style: none;
   margin-bottom: 5px;
-  border-bottom: 1px solid #E5E5E5;
   padding: 6px 10px 10px 10px;
+}
+.repo-listing li.source{
+  border-bottom: 1px solid #E5E5E5;
 }
