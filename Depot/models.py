@@ -175,7 +175,7 @@ class Repo(models.Model):
             os.popen("echo README >> %s/README.md"%cl_path)
 
             if self.gitignore is not None:
-                gitignore   = open("%s/Templates/gitignores/%s"%(os.getcwd(), self.gitignore))
+                gitignore   = open("%s/gitignores/%s"%(settings.TEMPLATE_DIRS[0], self.gitignore))
                 gitigonre_f = open("%s/.gitignore"%cl_path,"w")
                 gitigonre_f.write(gitignore.read())
                 gitigonre_f.close()
