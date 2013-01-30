@@ -53,19 +53,22 @@ MEDIA_URL = ''
 # Example: "/home/media/media.lawrence.com/static/"
 STATIC_ROOT = ''
 
-# URL prefix for static files.
-# Example: "http://media.lawrence.com/static/"
-STATIC_URL = 'http://42.120.17.216/'
-
 GIT_HOOKS_DIR = "%s/.gitpower/hooks"%os.getenv("HOME")
 
 DATE_INPUT_FORMAT = '%Y-%m-%d'
 
-#the app visit url
-APP_URL="http://localhost:8000/assets"
-
 #the app domain
-APP_DOMAIN = "gitpower.com"
+APP_DOMAIN = "127.0.0.1:8000"
+#the app visit url
+APP_URL = "http://" + APP_DOMAIN
+
+# URL prefix for static files.
+# Example: "http://media.lawrence.com/static/"
+STATIC_URL = APP_URL + '/assets/'
+
+GIT_HOOKS_DIR = "%s/.gitpower/hooks"%os.getenv("HOME")
+
+DATE_INPUT_FORMAT = '%Y-%m-%d'
 
 #the gitlote bin path default is {home}/.gitlite
 GITLOTE_PATH = "%s/.gitolite"%os.getenv("HOME")
