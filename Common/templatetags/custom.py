@@ -20,10 +20,11 @@ register = template.Library()
 
 @register.simple_tag
 def assets():
+
   if settings.DEBUG:
-    return settings.APP_URL
+    return re.sub("\/$","",settings.MEDIA_URL)
   else:
-    return settings.STATIC_URL
+    return re.sub("\/$","",settings.STATIC_URL)
 
 
 @register.simple_tag
