@@ -1,3 +1,4 @@
+conf.py
 *.py[co]
 *.pyc
 # Packages
