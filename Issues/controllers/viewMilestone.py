@@ -7,7 +7,7 @@ from Issues.forms import MileStoneForm
 from Issues.models import MileStone
 import datetime
 
-@repo_required
+
 def milestones(request, username, repo_name):
     '''milstones view'''
 
@@ -22,8 +22,6 @@ def milestones(request, username, repo_name):
     return render("issues/milestones.html", request, context = context)
 
 
-@repo_required
-@repo_access_required("owner")
 def delete_milestone(request, username, repo_name):
     '''delete milestone'''
 
@@ -38,8 +36,6 @@ def delete_milestone(request, username, repo_name):
     return HttpResponseRedirect(reverse("milestones", args = [request.repo.owner.username, request.repo.name]))
 
 
-@repo_required
-@repo_access_required("owner")
 def edit_milestone(request, username, repo_name, milestone_id):
     '''edit milestone'''
 
@@ -82,8 +78,6 @@ def edit_milestone(request, username, repo_name, milestone_id):
     return render("issues/milestone_form.html", request, context = context) 
 
 
-@repo_required
-@repo_access_required("owner")
 @csrf_protect
 def create_milestone(request, username, repo_name):
     '''create milestone for some project'''

@@ -5,7 +5,7 @@ import profile.views as profile
 urlpatterns = patterns('',
     url(r'index$',profile.index),
     url(r'filter$',profile.filter_user),
-    url(r'login', profile.login_user),
+    url(r'login', profile.login_user, name="login_user"),
     url(r'logout', profile.login_out),
     url(r'signup', profile.signup),
     url(r'validate_code', profile.user_to_active, name="validate_code"),
