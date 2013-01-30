@@ -36,8 +36,17 @@ from Issues import (
 
 from Pull.views import pull_new, pulls, pull_item, your_pulls
 import Account.profile.views as profile
+import GitPower.settings as settings
 
-urlpatterns = patterns('',
+
+urlpatterns = patterns('', )
+
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        url(r'^assets/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+    )
+
+urlpatterns += patterns('',
 
     url(r'^$', index, name = "index"),
     url(r'^accounts/', include('Account.urls')),

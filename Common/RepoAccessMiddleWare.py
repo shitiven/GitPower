@@ -81,6 +81,7 @@ class RepoAccessMiddleWare(object):
         if re.search("^/repo/.*", request.path): return
         if re.search("^/pull/.*", request.path): return
         if re.search("^/service/.*", request.path): return
+        if re.search("^/assets/.*", request.path): return
 
 
         #如果为项目URL则进行全局管理
