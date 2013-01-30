@@ -8,12 +8,14 @@ SCRIPT_PATH = "/var/openssh/authorized/serve.py"
 
 pubkey = sys.stdin.readline()
 
-log(pubkey)
+try:
+    pubkey = re.match("(^ssh-(?:dss|rsa) [A-Za-z0-9+\/]+)", pubkey).group()
+except:
+    sys.exit(1)
 
 #if not re.match('^ssh-(?:dss|rsa) [A-Za-z0-9+\/]+$', pubkey):
 #    log("[ERROR] invalide key")
 #    exit("[ERROR] invalide key")
-
 
 try:
     sshkey_objects = filter_users_bykey(pubkey)

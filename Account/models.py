@@ -245,7 +245,7 @@ class SSHKey(models.Model):
         #create pub file
         filename = "%s_%s.pub"%(self.user.username, self.title)
         keypath  = "%s/keydir/%s"%(settings.GITLOTE_PATH, filename)
-	self.content  = re.match("(^ssh-(?:dss|rsa) [A-Za-z0-9+\/]+)",self.content).group()	
+        self.content  = re.match("(^ssh-(?:dss|rsa) [A-Za-z0-9+\/]+)",self.content).group() 
 
         super(SSHKey, self).save(*args, **kwargs)
         renderAuthorized(SSHKey.objects.all())
