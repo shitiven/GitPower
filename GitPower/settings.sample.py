@@ -1,7 +1,7 @@
 # Django settings for GitPower project.
 import os
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -13,9 +13,9 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'gitpower',                      # Or path to database file if using sqlite3.
-        'USER': 'username',                      # Not used with sqlite3.
-        'PASSWORD': 'password',                  # Not used with sqlite3.
+        'NAME': 'gitp',                      # Or path to database file if using sqlite3.
+        'USER': 'root',                      # Not used with sqlite3.
+        'PASSWORD': '21345',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
@@ -94,7 +94,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'Common.middleware.RequestMiddelWare',
+    'Common.RepoAccessMiddleWare.RepoAccessMiddleWare',
     'd403handler.middleware.D403Middleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -172,16 +172,20 @@ LOGGING = {
     }
 }
 
+GIT_HOOKS_DIR = "/home/git/.gitpower/hooks"
+
+DATE_INPUT_FORMAT = '%Y-%m-%d'
+
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 #profile module
 AUTH_PROFILE_MODULE = 'Account.UserProfile'
 
 #the app visit url
-APP_URL = "http://localhost:8000"
+APP_URL="http://www.gitpower.com"
 
 #the app domain
-APP_DOMIAN = "gitpower.com"
+APP_DOMAIN = "gitpower.com"
 
 #the gitlote bin path default is {home}/.gitlite
 GITLOTE_PATH = "%s/.gitolite"%os.getenv("HOME")
@@ -205,3 +209,5 @@ EMAIL_HOST = 'smtp.exmail.qq.com'
 EMAIL_HOST_USER = 'service@gitpower.com'
 EMAIL_HOST_PASSWORD = 'sdhzff88'
 EMAIL_PORT = 25
+
+SITE_PUBLIC = True

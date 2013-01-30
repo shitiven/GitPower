@@ -4,7 +4,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.db.models import Q
-from django.core.mail import send_mail
 from Account.models import *
 from Account.profile.forms import UserForm
 from Depot.models import *
@@ -97,9 +96,6 @@ def user_to_active(request):
                 "user_email":request.user.email
             }
             active_url = settings.APP_URL+"/accounts/user_active?"+urllib.urlencode(active_params)
-
-            mail_body  = u'请点击以下链接进行激活: <a href="%s">%s</a>'%(active_url, active_url)
-            send_mail('GitPower激活邮件',mail_body, 'service@gitpower.com', [request.user.email])
 
             invite_code.used = True
             invite_code.user = request.user
