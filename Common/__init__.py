@@ -12,6 +12,7 @@ from django.core.context_processors import csrf
 from django.views.decorators.csrf import csrf_protect
 from django.template import RequestContext, loader
 from django.core.exceptions import ValidationError
+from mailserver import MailServer
 
 import inspect, os, sys, re, json
 
