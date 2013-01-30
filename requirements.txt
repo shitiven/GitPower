@@ -1,0 +1,6 @@
+django==1.4.3
+PIL
+pygments
+mysql-python==1.2.4
+GitPython
+Django403Handler
