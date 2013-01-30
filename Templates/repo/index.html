@@ -14,12 +14,12 @@ touch README.md
 git init
 git add README.md
 git commit -m "first commit"
-git remote add origin git@assets.m.etao.net:{{repo.owner.username}}/{{repo.name}}.git
+git remote add origin git@{%app_domain%}:{{repo.owner.username}}/{{repo.name}}.git
 git push -u origin master
 </pre>
 <h3>对已存在的项目请使用以下命令</h3>
 <pre class="_code code_padding">
-git remote add origin git@assets.m.etao.net:{{repo.owner.username}}/{{repo.name}}.git
+git remote add origin git@{%app_domain%}:{{repo.owner.username}}/{{repo.name}}.git
 git push -u origin master
 </pre>
 {%else%}
