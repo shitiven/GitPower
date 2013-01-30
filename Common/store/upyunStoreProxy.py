@@ -20,7 +20,7 @@ class YPStorage(Storage):
             base_url = settings.IMAGE_HOST
 
         self.base_url = base_url
-        self.upyun = UpYun('gitpower','gitpower','gitpower334400')
+        self.upyun = UpYun(settings.STORE_BUCKET,settings.STORE_USER,settings.STORE_PASSWORD)
 
     def _open(self, name, mode = "rb"):
 

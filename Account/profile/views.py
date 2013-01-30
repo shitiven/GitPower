@@ -48,6 +48,7 @@ def filter_user(request):
 
     return HttpResponse(json.dumps(result))
 
+
 @csrf_protect
 def signup(request):
 
@@ -95,7 +96,9 @@ def user_to_active(request):
                 "invite_code":invite_code.code,
                 "user_email":request.user.email
             }
-            active_url = settings.APP_URL+"/accounts/user_active?"+urllib.urlencode(active_params)
+            active_url  = settings.APP_URL+"/accounts/user_active?"+urllib.urlencode(active_params)
+            mail_server = MailServer()
+            mail_server.active_mail(request.user.email, active_url)
 
             invite_code.used = True
             invite_code.user = request.user

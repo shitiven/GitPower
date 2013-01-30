@@ -20,20 +20,26 @@ register = template.Library()
 
 @register.simple_tag
 def assets():
-	return settings.STATIC_URL
+  if settings.DEBUG:
+    return settings.APP_URL
+  else:
+    return settings.STATIC_URL
+
 
 @register.simple_tag
 def app_domain():
   return settings.APP_DOMAIN
 
+
 @register.filter
 def is_not_None(val):
     return val is not None
 
+
 @register.filter
 def owner_teams(owner):
-	teams = UserProfile.objects.filter(owners__in = [owner])
-	return teams 
+  teams = UserProfile.objects.filter(owners__in = [owner])
+  return teams 
  
 @register.filter 
 def highlight_code(code, lang): 
