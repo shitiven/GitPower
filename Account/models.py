@@ -9,7 +9,7 @@ from Common import ValidationError, regular
 
 import Pull, Depot
 import GitPower.settings as settings
-import datetime, os, re, time, hashlib, urllib
+import datetime, os, re, time, hashlib, urllib, random
 import Common.gitolite as gitolite
 
 
@@ -30,7 +30,11 @@ class InviteCode(models.Model):
     '''Invite Code'''
 
     def render_code():
-        return hashlib.md5("incode_code_%s"%str(time.time())).hexdigest()[:10]
+        hexdigest = hashlib.md5("incode_code_%s"%str(time.time())).hexdigest()
+        code = []
+        for i in range(1,10):
+            code.append(random.randint(0,32))
+        return "".join(code)
 
     code = models.CharField(u'邀请码', max_length=30, default=render_code, unique=True)
     used = models.BooleanField(u'已使用')
