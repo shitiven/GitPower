@@ -33,19 +33,6 @@
       font-size: 16px;
       color: #52595D;
     }
-    ul#repo_listing a{
-      border-bottom: 1px solid #E5E5E5;
-      padding: 6px 10px 5px 10px;
-      display: block;
-    }
-    ul#repo_listing{
-      margin: 0;
-      padding: 0;
-    }
-    ul#repo_listing li{
-      list-style: none;
-      margin-bottom: 5px;
-    }
     #your_repos h2 em{
       font-weight: normal;
       font-style: normal;
@@ -106,22 +93,35 @@
       </ul>
     </div>
     <div class="span5">
-      <div class="repos" id="your_repos">
-          <div class="top-bar">
-            <h2>我的项目 <em>({{rlen}})</em></h2>
-          </div>
-          <ul id="repo_listing">
-            {%for repo in repos%}
-            <li class="source">
-              <a href="/{{repo.owner.username}}/{{repo.name}}">
-                {{repo.owner.username}} / <strong>{{repo.name}}</strong>
-              </a>
-            </li>
-            {%endfor%}
-              <li style="text-align:right"><a style="border-bottom:none;" href="/{{request.user}}">查看所有项目</a></li>
-          </ul>
-        <div class="bottom-bar"></div>
-      </div>
+          <div class="boxed-group">
+            <!--h2>我的项目 <em>({{rlen}})</em></h2-->
+            <div class="list-browser-filterbar">
+              <ul class="list-browser-filter-tabs">
+              <li>
+                <a href="#" data-filter="open" class="filter-tab selected">
+                  我管理的项目 ({{current_profile.repos|length}})
+                </a>
+              </li>
+              <li>
+                <a href="{%url profile_index current_profile.user.username%}?tab=joined_projects" data-filter="closed" class="filter-tab ">
+                  我参与的项目 ({{current_profile.joined_projects|length}})
+                </a>                          
+              </li>
+              </ul>
+            </div>
+            <div class="boxed-group-inner">
+              <ul class="repo-listing">
+                {%for repo in current_profile.repos%}
+                <li class="source">
+                  <a href="/{{repo.owner.username}}/{{repo.name}}">
+                    {{repo.owner.username}} / <strong>{{repo.name}}</strong>
+                  </a>
+                </li>
+                {%endfor%}
+                  <li style="text-align:right"><a style="border-bottom:none;" href="/{{request.user}}">查看所有项目</a></li>
+              </ul>
+            </div>
+        </div>
     </div>
   </div>
 </div>

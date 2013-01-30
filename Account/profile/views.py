@@ -14,21 +14,21 @@ import json, urllib
 
 
 def index(request, username):
-    current_user  = get_object_or_404(User, username = username)
-    repos = []
-
-    teams = UserProfile.objects.filter(owners__in = [current_user])
-    for team in teams:
-        repos.extend(Repo.objects.filter(owner = team.user))
-
-    repos.extend(Repo.objects.filter(owner = current_user))
-
+    current_user    = get_object_or_404(User, username = username)
     current_profile = current_user.get_profile()
 
+    profile_index = request.GET.get("tab", "manage_projects")
+    if profile_index == "joined_projects":
+        repos = current_profile.joined_repos
+    else:
+        repos  = current_profile.repos
+
     return render_to_response("user/index.html", context_instance  = RequestContext(request,{
-                "current_user"  : current_user,
+                "current_user"    : current_user,
+                "current_profile" : current_profile,
                 "repos" : repos,
-                "is_team" : current_profile.is_team
+                "is_team" : current_profile.is_team,
+                "profile_index" : profile_index
             }))
 
 
@@ -170,4 +170,3 @@ def login_user(request):
     return  render("login.html", request, context = {
 
     })
-

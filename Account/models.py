@@ -114,7 +114,7 @@ class UserProfile(models.Model):
 
     @property
     def repos(self):
-        '''get user's all project'''
+        '''get user's all mamanage projects'''
         
         repos = []
         teams = UserProfile.objects.filter(owners__in = [self.user])
@@ -122,7 +122,18 @@ class UserProfile(models.Model):
             repos.extend(Depot.Repo.objects.filter(owner = team.user))
 
         repos.extend(Depot.Repo.objects.filter(owner = self.user))
+        repos.extend(Depot.Repo.objects.filter(managers__in = [self.user]))
+        return repos
 
+
+    @property
+    def joined_repos(self):
+        '''get user's all joined projects'''
+        repos = []
+        teams = UserProfile.objects.filter(members__in = [self.user])
+        for team in teams:
+            repos.extend(Depot.Repo.objects.filter(owner = team.user))
+        repos.extend(Depot.Repo.objects.filter(developers__in = [self.user]))
         return repos
 
 

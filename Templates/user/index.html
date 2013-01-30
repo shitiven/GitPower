@@ -39,26 +39,50 @@
             </div>
         </div>
         <div class="span9">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>项目</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {%for repo in repos%}
-                    <tr>
-                      <td>
-                        <h5>
-                            <a href="#"><a href="/{{repo.owner.username}}/{{repo.name}}">{{repo.name}}</a>
-                            <span>{{repo.des}}</span>
-                        </h5>
-                      </td>
-                    </tr>
-                    {%endfor%}
-                </tbody>
-            </table>
+            <ul class="nav nav-tabs no-margin">
 
+              {%if profile_index == "manage_projects"%}
+              <li class="active">
+                <a href="#">
+                    管理的项目
+                    <span class="badge">{{current_profile.repos|length}}</span>
+                </a>
+              </li>
+              {%else%}
+              <li>
+                <a href="{%url profile_index current_user.username%}">
+                    管理的项目
+                    <span class="badge">{{current_profile.repos|length}}</span>
+                </a>
+              </li>
+              {%endif%}
+
+              {%if profile_index == "joined_projects"%}
+              <li class="active">
+                <a href="#">
+                    参与的项目
+                    <span class="badge">{{current_profile.joined_repos|length}}</span>
+                </a>
+              </li>
+              {%else%}
+              <li>
+                <a href="{%url profile_index current_user.username %}?tab=joined_projects">
+                    参与的项目
+                    <span class="badge">{{current_profile.joined_repos|length}}</span>
+                </a>
+              </li>
+              {%endif%}
+
+            </ul>
+            
+            <ul class="repo-listing">
+            {%for repo in repos%}
+            <li>
+                <h4><a href="/{{repo.owner.username}}/{{repo.name}}">{{repo.owner.username}} / {{repo.name}}</a></h4>
+                <span>{{repo.des}}</span>
+            </li>
+            {%endfor%}
+            </ul>
         </div>
       </div>
     </div>

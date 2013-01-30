@@ -87,6 +87,6 @@ urlpatterns = patterns('',
     url(r'^(\w+)/([-_\.a-zA-Z0-9]+)/issues$', issues, name = "issues"),
 
     url(r'^(\w+)/([-_\.a-zA-Z0-9]+)$', repo_index, name = "repo_index"),
-    url(r'^(\w+)$', profile.index),
+    url(r'^(\w+)$', profile.index, name="profile_index"),
 
 )

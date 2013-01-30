@@ -36,6 +36,7 @@ class Repo(models.Model):
     class Meta:
         unique_together = ("name", "owner",)
 
+
     @property
     def team_writers(self):
         writers = self.alldevelopers

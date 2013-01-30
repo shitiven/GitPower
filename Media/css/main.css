@@ -4,6 +4,9 @@ h3.page_title{
 	padding:10px;
 	color:#666;
 }
+.no-margin{
+  margin: 0;
+}
 .title-link-btn{
   font-size: 12px;
   font-weight: normal;
@@ -1155,4 +1158,15 @@ table .table-td-header-block{
 .branch-permisson-user{
   position: relative;
   margin-bottom: 10px;
+}
+.repo-listing{
+  margin: 0;
+  padding: 0;
+}
+.repo-listing li{
+  list-style: none;
+  margin-bottom: 5px;
+  border-bottom: 1px solid #E5E5E5;
+  padding: 6px 10px 10px 10px;
+
 }

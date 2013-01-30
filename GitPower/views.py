@@ -11,10 +11,7 @@ def index(request):
     repos_len = 0
     if request.user.is_authenticated():
         template = "index_login.html"
-        profile  = request.user.get_profile()
-        repos = profile.repos
-        repos_len = repos.__len__()
-        repos = repos[:10]
+        current_profile  = request.user.get_profile()
     else:
         template = "index_nologin.html"
 
@@ -24,8 +21,7 @@ def index(request):
         sshkeys_len = 1
 
     return render_to_response(template,context_instance  = RequestContext(request,{
-           "repos" : repos,
-           "rlen"  : repos_len,
+           "current_profile" : current_profile,
            "sshkeys_len" : sshkeys_len
     }))
 
