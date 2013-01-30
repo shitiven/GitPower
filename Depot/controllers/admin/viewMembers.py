@@ -3,6 +3,7 @@
 from Common import *
 from Depot.decorators import repo_access_required
 
+
 @repo_access_required("owner")
 @csrf_protect
 def repo_admin_members_remove(request, ownername, repo_name):
