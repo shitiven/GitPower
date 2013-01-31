@@ -34,7 +34,8 @@
   padding:0;
 }
 
-
+.alert { font-size:12px; padding:5px 25px 4px 10px;}
+.alert .close { top:-3px; }
 h3.page_title{
 	margin:30px 0 30px 0;
 	border-bottom: 1px solid #ddd;
