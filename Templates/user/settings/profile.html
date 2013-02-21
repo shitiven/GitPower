@@ -22,7 +22,7 @@
                   </p>
                   <p>
                     <label for="title">网站</label>
-                    <input type="text" class="input" name="website" value='{{user|user_profile:"website"|default:""}}' />
+                    <input type="text" class="input span8" name="website" value='{{user|user_profile:"website"|default:""}}' />
                   </p>
                   <p>
                     <label for="title">公司</label>
@@ -43,7 +43,7 @@
           <div class="boxed-group">
               <h3>头像 
                 <span class="meta">默认使用
-                  <a href="https://cn.gravatar.com/" target="_blank">gavatar</a>头像
+                  <a href="https://cn.gravatar.com/" target="_blank">Gavatar</a> 头像
                 </span>
               </h3>
               <div class="boxed-group-inner">
@@ -53,9 +53,10 @@
                       <img src='{{user|user_profile:"avatar_normal"}}' />
                       <img src='{{user|user_profile:"avatar_small"}}' />
                   </div>
-                  <!--div class="control-group avatar_file">
-                      <input type="file" class="input" />
-                  </div-->
+                  
+                  <div class="control-group avatar_file">
+                    <a href="https://cn.gravatar.com/" target="_blank" class="btn">修改头像</a>
+                  </div>
                   {%csrf_token%}
                 </form>
               </div>
