@@ -70,8 +70,7 @@ class UserProfile(models.Model):
 
 
     def gavatar(self, params):
-        avatar_url = "http://www.gravatar.com/avatar/"
-        avatar_url = avatar_url + hashlib.md5(self.user.email.lower()).hexdigest() + "?"
+        avatar_url = settings.GRAVATAR_URL + hashlib.md5(self.user.email.lower()).hexdigest() + "?"
         return avatar_url + urllib.urlencode(params)
 
 
