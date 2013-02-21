@@ -85,15 +85,9 @@
         <li><a href="/{{request.user}}">我的主页</a></li>
       </ul>
 
-      <h4 style="margin-top:20px">更新日志</h4>
-      <ul>
-        <li><a href="/xuning/GitPower/tree/gp-pages/Readme/gp-pages.md">gp-pages</a> 
-          <small><cite>2012.10.15</cite></small>
-        </li>
-      </ul>
     </div>
     <div class="span5">
-          <div class="boxed-group">
+          <div class="boxed-group no-padding">
             <!--h2>我的项目 <em>({{rlen}})</em></h2-->
             <div class="list-browser-filterbar">
               <ul class="list-browser-filter-tabs">
@@ -109,7 +103,7 @@
               </li>
               </ul>
             </div>
-            <div class="boxed-group-inner">
+            <div class="boxed-group-inner no-padding">
               <ul class="repo-listing">
                 {%for repo in current_profile.repos%}
                 <li class="source">
