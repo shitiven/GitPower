@@ -15,9 +15,7 @@
                     <li class="active"><a href="#">进行中的里程碑</a></li>
                     <li><a href="#">已结束的里程碑</a></li>
                 </ul>
-                <span class="btn btn-large btn-block">
-                    <a href="{%url create_milestone repo.owner.username repo.name%}">创建里程碑</a>
-                </span>
+                <a href="{%url create_milestone repo.owner.username repo.name%}" class="btn btn-block">创建里程碑</a>
             </div>
             <div class="span9">  
                 <div class="boxed-group flush">

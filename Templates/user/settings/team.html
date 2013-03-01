@@ -13,15 +13,15 @@
         </div>
         <div class="span9">
             <div class="boxed-group">
-                <h3>添加Team</h3>
+                <h3>创建团队</h3>
                 <div class="boxed-group-inner">
                 <form class="form-horizontal" action="/accounts/settings/team" method="POST">
-                  <label for="title">Team名称</label>
+                  <label for="title">名称</label>
                   <p>
                     {{form.name}}    
                   </p>
                   <p>
-                      <button type="submit" class="btn">添加</button>
+                      <button type="submit" class="btn btn-primary">创建</button>
                   </p>
                   </div>
                   {%csrf_token%}

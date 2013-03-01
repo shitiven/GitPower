@@ -5,9 +5,18 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <title>GitPower</title>
+<<<<<<< HEAD
     
     {% compressed_css 'master' %}
 
+=======
+    <link rel="shortcut icon" href="{%assets%}/img/favicon.ico" />
+    <link href="{%assets%}/css/bootstrap.css" rel="stylesheet">
+    <link href="{%assets%}/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="{%assets%}/css/jquery.ui.css" rel="stylesheet">
+    <link href="{%assets%}/css/main.css?11" rel="stylesheet">
+    <link href="{%assets%}/css/icon.css" rel="stylesheet">
+>>>>>>> new_ui
     <style type="text/css">
       #projectFitlerBox{
         position: absolute;
@@ -54,34 +63,32 @@
   <body data-spy="scroll" data-target=".bs-docs-sidebar">
     <div class="navbar navbar-static-top">
       <div class="navbar-inner">
-        <div class="inner-box"  style="width:920px;margin:0 auto;">
+        <div class="inner-box container">
           <a class="brand" href="/">GitPower</a>
+          <div class="divider-vertical"></div>
           <form class="navbar-search pull-left" action="">
-              <input type="text" class="input-large filter_propject" placeholder="查询项目">
+              <input type="text" class="input-large search-input filter_propject" placeholder="搜索项目">
           </form>
-          <ul class="nav pull-right">
-             {% if request.user.is_authenticated%}
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <img src='{{request.user|user_profile:"avatar_small"}}' class="img-circle" width="20" height="20" />
-                  <strong>{{request.user.username}}</strong>
-                  <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a href="/accounts/settings">个人设置</a></li>
-                  <li><a href="/accounts/logout">登出系统</a></li>
-                </ul>
-              </li>
-             <li class="divider-vertical"></li>
-             <li><a href="/repo/add"><i class="icon-plus"></i> 添加项目</a></li>
-             {%else%}
-             <li><a href="/accounts/login">登录</a></li>
-             {%endif%}
+          <ul id="userbar" class="nav pull-right">
+            <li class="divider-vertical"></li>
+            {% if request.user.is_authenticated%}
+            <li>
+              <a href="#">
+                <img src='{{request.user|user_profile:"avatar_small"}}' class="img-circle" width="20" height="20" />
+                <strong>{{request.user.username}}</strong>
+              </a>
+            </li>
+            <li><a href="{% url repo_add %}"><span class="mini-icon mini-icon-create"></span></a></li>
+            <li><a href="/accounts/settings"><span class="mini-icon mini-icon-account-settings"></span></a></li>
+            <li><a href="/accounts/logout"><span class="mini-icon mini-icon-logout"></span></a></li>
+            {%else%}
+            <li><a href="/accounts/login">登录</a></li>
+            {%endif%}
           </ul>
         </div>
       </div>
     </div>
-    <div class="container" style="width:920px;margin:0 auto">
+    <div class="container">
 
         {%block h1_title%}<h1 class="page_title"></h1>{%endblock%}
 

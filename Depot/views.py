@@ -168,7 +168,7 @@ def add_repo(request):
     sshkeys_len = SSHKey.objects.filter(user = request.user).count()
     if sshkeys_len < 1:
         return render_to_response("error.html", context_instance  = RequestContext(request,{
-                "error" : '在添加项目前，请先添加你的ssh key <a href="/accounts/settings/sshkey">点击添加</a>'
+                "error" : '在创建项目前，请先添加你的 SSH key，<a href="/accounts/settings/sshkey">点击这里</a> 添加。'
         }))
 
     if request.method == "POST":

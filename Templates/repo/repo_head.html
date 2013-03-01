@@ -38,13 +38,13 @@
         {%if current_block == "pull"%}
         <li  class="active">
           <a href="#">
-           合并请求 <span class="counter">{{repo|get_pull_length}}</span>
+           Pull Requests <span class="counter">{{repo|get_pull_length}}</span>
           </a>
         </li>
         {%else%}
         <li>
           <a href="{%url pulls repo.owner.username repo.name%}">
-            合并请求 <span class="counter">{{repo|get_pull_length}}</span>
+            Pull Requests <span class="counter">{{repo|get_pull_length}}</span>
           </a>
         </li>
         {%endif%}
@@ -52,13 +52,13 @@
         {%if current_block == "issues"%}
         <li class="active">
           <a href="#">
-            工单 <span class="counter">{{repo|issues_numbers:"opened"}}</span>
+            Issues <span class="counter">{{repo|issues_numbers:"opened"}}</span>
           </a>
         </li>
         {%else%}
         <li>
           <a href="{% url issues repo.owner.username repo.name %}">
-            工单
+            Issues
             <span class="counter">{{repo|issues_numbers:"opened"}}</span>
           </a>
         </li>
@@ -66,10 +66,10 @@
 
         {%if current_block == "admin"%}
         <li class="active">
-          <a href="{% url repo_admin repo.owner.username repo.name %}">配置管理</a>
+          <a href="{% url repo_admin repo.owner.username repo.name %}">设置</a>
         </li>
         {%else%}
-        <li><a href="{% url repo_admin repo.owner.username repo.name %}">配置管理</a></li>
+        <li><a href="{% url repo_admin repo.owner.username repo.name %}">设置</a></li>
         {%endif%}
 
       </ul>

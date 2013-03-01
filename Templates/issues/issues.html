@@ -98,26 +98,22 @@
                         <li>
                           {%if state == "opened"%}
                           <a href="#" data-filter="open" class="filter-tab selected">
-                            {{opened_number}}
-                            open issues
+                            进行中 ({{opened_number}})
                           </a>
                           {%else%}
                             <a href="{{issues_path}}?state=opened&{{query|issues_path_params:"state"}}" data-filter="open" class="filter-tab">
-                            {{opened_number}}
-                            open issues
+                            进行中 ({{opened_number}})
                           </a>
                           {%endif%}
                         </li>
                         <li>
                           {%if state == "closed"%}
                           <a href="#" data-filter="closed" class="filter-tab selected">
-                            {{closed_number}}
-                            closed issues
+                            已关闭 ({{closed_number}})
                           </a>
                           {%else%}
                           <a href="{{issues_path}}?state=closed&{{query|issues_path_params:"state"}}" data-filter="closed" class="filter-tab ">
-                            {{closed_number}}
-                            closed issues
+                            已关闭 ({{closed_number}})
                           </a>                          
                           {%endif%}
                         </li>
@@ -137,15 +133,15 @@
                             <span class="caret" style="color:#fff"></span>
                           </a>
                           {%else%}
-                          <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                              Labels
+                          <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
+                            标签
                             <span class="caret"></span>
                           </a>
                           {%endif%}
                           <ul class="dropdown-menu color-label-list" style="padding:8px">
                             {%if filter_label%}
                             <li class="js-color-label-filter">
-                              <a href="{{issues_path}}?{{query|issues_path_params:"label"}}">All</a>
+                              <a href="{{issues_path}}?{{query|issues_path_params:"label"}}">全部</a>
                             </li>
                             {%endif%}
                             {%for label in repo|issue_labels%}
@@ -163,8 +159,8 @@
                           </ul>
                         </div>
                         <div class="btn-group">
-                          <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                            {{ assigner.first_name|default:"Assignee"}}
+                          <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
+                            {{ assigner.first_name|default:"指派"}}
                             <span class="caret"></span>
                           </a>
                           <ul class="dropdown-menu">
@@ -188,8 +184,8 @@
                         </div>
                         <div class="btn-group">
 
-                          <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                            {{ milestone|default:"Milestone"}}
+                          <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
+                            {{ milestone|default:"里程碑"}}
 
                             <span class="caret"></span>
 

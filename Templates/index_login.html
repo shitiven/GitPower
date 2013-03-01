@@ -55,7 +55,7 @@
       {%if request.user.is_active%}
         {%if sshkeys_len < 1%}
         <div class="alert alert-error">
-          你尚未添加ssh key, 请<a href="/accounts/settings/sshkey">点击添加</a>
+          你尚未添加 SSH Key 信息, 请 <a href="/accounts/settings/sshkey">点击这里</a> 添加。
         </div>
         {%endif%}
         
@@ -79,9 +79,9 @@
       {%endif%}
       <h4 style="margin-top:20px">快捷入口</h4>
       <ul>
-        <li><a href="/accounts/settings/sshkey">公钥管理</a></li>
-        <li><a href="/accounts/settings/team">添加Team</a></li>
-        <li><a href="/repo/add">项目创建</a></li>
+        <li><a href="/accounts/settings/sshkey">SSH Keys 管理</a></li>
+        <li><a href="/accounts/settings/team">创建团队</a></li>
+        <li><a href="/repo/add">创建项目</a></li>
         <li><a href="/{{request.user}}">我的主页</a></li>
       </ul>
 
