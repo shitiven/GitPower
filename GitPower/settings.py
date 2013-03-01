@@ -1,5 +1,8 @@
 # Django settings for GitPower project.
-import os
+
+#import conf
+from conf import *
+import os, time
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -76,6 +79,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.markup',
+    'pipeline',
     'Common',
     'Pull',
     'Service',
@@ -129,5 +133,39 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 #profile module
 AUTH_PROFILE_MODULE = 'Account.UserProfile'
 
-#import conf
-from conf import *
+#static files config
+STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
+
+STATICFILES_DIRS = (
+    ('css', os.path.join(STATIC_ROOT, 'css')),
+    ('js', os.path.join(STATIC_ROOT, 'js')),
+)
+
+PIPELINE = True
+
+
+PIPELINE_CSS = {
+    'master' : {
+        'source_filenames' : {
+            'css/bootstrap.css',  
+            'css/bootstrap-responsive.css',
+            'css/main.css',
+            'css/icon.css',
+            'css/jquery.ui.css',
+        },
+        'output_filename' : 'css/master.min.css',
+    },
+}
+
+PIPELINE_JS = {
+    'master' : {
+        'source_filenames' : {
+            'js/jquery.js', 
+            'js/bootstrap.js',
+            'js/markdown.js',
+            'js/main.js',
+        },
+        'output_filename' : 'js/master.min.js',
+    },
+}
+

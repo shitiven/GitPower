@@ -1,14 +1,13 @@
 {%load custom%}
+{% load compressed %}
 <!DOCTYPE html>
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <title>GitPower</title>
-    <link href="{%assets%}/css/bootstrap.css" rel="stylesheet">
-    <link href="{%assets%}/css/bootstrap-responsive.min.css" rel="stylesheet">
-    <link href="{%assets%}/css/jquery.ui.css" rel="stylesheet">
-    <link href="{%assets%}/css/main.css?11" rel="stylesheet">
-    <link href="{%assets%}/css/icon.css" rel="stylesheet">
+    
+    {% compressed_css 'master' %}
+
     <style type="text/css">
       #projectFitlerBox{
         position: absolute;
@@ -48,12 +47,9 @@
       }
     </style>
     {%block style%}{%endblock%}
-    <script src="{%assets%}/js/jquery.js"></script>
-    <script src="{%assets%}/js/jquery_ui.js"></script>
-    <script src="{%assets%}/js/jquery.clipboard.min.js"></script>
-    <script src="{%assets%}/js/bootstrap.min.js?111"></script>
-    <script src="{%assets%}/js/markdown.js"></script>
-    <script src="{%assets%}/js/main.js"></script>
+    
+    {% compressed_js 'master' %}
+
   </head>
   <body data-spy="scroll" data-target=".bs-docs-sidebar">
     <div class="navbar navbar-static-top">

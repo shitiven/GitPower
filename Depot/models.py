@@ -14,7 +14,6 @@ import Common.gitolite as gitolite
 
 
 REPOS_PATH   = settings.REPOS_PATH
-GITLOTE_PATH = settings.GITLOTE_PATH
 
 
 class Repo(models.Model):
@@ -221,55 +220,6 @@ class Repo(models.Model):
         os.popen("rm -rf %s"%self.repo_path())
 
         super(Repo, self).delete(*args, **kwargs)
-
-
-@receiver(m2m_changed, sender = Repo.managers.through)
-def repo_managers_change(sender, instance, action, reverse, model, pk_set, **kwargs):
-    sshkey = SSHKey()
-    sshkey.create_access_conf(instance)
-
-@receiver(m2m_changed, sender = Repo.developers.through)
-def repo_developers_change(sender, instance, action, reverse, model, pk_set, **kwargs):
-    sshkey = SSHKey()
-    sshkey.create_access_conf(instance)
-
-
-@receiver(m2m_changed, sender = Repo.services.through)
-def repo_services_change(sender, instance, action, reverse, model, pk_set, **kwargs):
-    '''when the service add or remove to create gitolite access file'''
-
-
-    def create_rules(repo):
-        rules = sshkey.get_project_rules(repo)
-        for service in repo.services.all():
-            filename = "delolyservice_%s"%str(service.id)
-            if service.needwrite:
-                rules.append("'%s'=>[[%s,'RW+','refs/.*']]"%(filename, str(rules.__len__()+1)))
-            else:
-                rules.append("'%s'=>[[%s,'R','refs/.*']]"%(filename, str(rules.__len__()+1)))
-        
-        gitolite.create_access_conf(instance, rules)
-
-
-    sshkey = SSHKey()
-
-    if action == "post_add":
-        for pk in pk_set:
-            service = DeployService.objects.get(id = pk)
-
-            #create pub file
-            filename = "delolyservice_%s"%str(pk)
-            keypath  = "%s/keydir/%s.pub"%(settings.GITLOTE_PATH, filename)
-            gitolite.create_sshkey_file(keypath, service.deploy_key)
-            
-            #recreate project access file
-            gitolite.append_authorized_key(filename, service.deploy_key)
-        
-        create_rules(instance)
-
-
-    if action == "post_remove":
-        create_rules(instance)
                 
 
 class BranchPermission(models.Model):
