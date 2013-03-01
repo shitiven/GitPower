@@ -146,25 +146,25 @@ PIPELINE = True
 
 PIPELINE_CSS = {
     'master' : {
-        'source_filenames' : {
+        'source_filenames' : (
             'css/bootstrap.css',  
             'css/bootstrap-responsive.css',
             'css/main.css',
             'css/icon.css',
             'css/jquery.ui.css',
-        },
+        ),
         'output_filename' : 'css/master.min.css',
     },
 }
 
 PIPELINE_JS = {
     'master' : {
-        'source_filenames' : {
+        'source_filenames' : (
             'js/jquery.js', 
             'js/bootstrap.js',
             'js/markdown.js',
             'js/main.js',
-        },
+        ),
         'output_filename' : 'js/master.min.js',
     },
 }
