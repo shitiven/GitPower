@@ -10,6 +10,7 @@ from Depot.models import *
 from Common import *
 
 import json, urllib
+from ldap_auth import ldap_user
 
 
 def index(request, username):
@@ -60,7 +61,12 @@ def signup(request):
             email    = form.cleaned_data["email"]
 
             user = User.objects.create_user(username, email=email, password=password)
-            user.is_active = False
+            
+            if not settings.SITE_PUBLIC:
+                user.is_active = False
+            else:
+                user.is_active = True
+
             user.save()
 
             user = authenticate(username=username, password=password)
@@ -146,19 +152,27 @@ def login_out(request):
 @csrf_protect
 def login_user(request):
 
-    if request.method == "POST":
-        username = request.POST.get("username", None)
-        password = request.POST.get("password", None)
+    def login_with_db(username, password):
 
         if re.match("^(.*)@(.*)$", username):
             try:
                 user = User.objects.get(email=username)
                 username = user.username
             except User.DoesNotExist:
-                messages.error(request, "用户不存在")
-                return HttpResponseRedirect("/")
+                return None
 
-        user = authenticate(username=username, password=password)
+        return authenticate(username=username, password=password)
+
+
+    if request.method == "POST":
+        username = request.POST.get("username", None)
+        password = request.POST.get("password", None)
+
+        if settings.LDAP_SERVER:
+            user = ldap_user(username, password)
+        else:
+            user = login_with_db(username, password)
+
         if user is not None:
             login(request, user)
             messages.success(request, "登录成功")

@@ -80,13 +80,12 @@ REPOS_PATH = "%s/repositories"%os.getenv("HOME")
 #git bin path
 GIT_PATH = "/usr/bin/git"
 
-DEFAULT_FILE_STORAGE = 'Common.store.YPStorage'
+#set storage
+#DEFAULT_FILE_STORAGE = 'Common.store.YPStorage'
+#STORE_BUCKET = ''
+#STORE_USER  = ''
+#STORE_PASSWORD = ''
 
-STORE_BUCKET = ''
-
-STORE_USER  = ''
-
-STORE_PASSWORD = ''
 
 EMAIL_USE_TLS = False
 EMAIL_HOST = 'SMTP HOST'
@@ -94,7 +93,15 @@ EMAIL_HOST_USER = 'SMTP USER'
 EMAIL_HOST_PASSWORD = 'SMTP PASSWORD'
 EMAIL_PORT = 25
 
+#set site is public for every one
 SITE_PUBLIC = True
+
+#set ldap auth server 
+LDAP_SERVER = None
+LDAP_BASE   = (
+	"dc=ldap,  dc=com, dc=cn",
+	"dc=ldap1, dc=com, dc=cn"
+)
 
 # 允许你配置自定义的 Gravatar 主机地址用于头像展示（可以自己创建一个反响代理 Gravatar 主机，这样做了 cache 以后可以提高速度）
 GRAVATAR_URL = "http://www.gravatar.com/avatar/"

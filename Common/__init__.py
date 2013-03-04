@@ -14,6 +14,7 @@ from django.template import RequestContext, loader
 from django.core.exceptions import ValidationError
 from mailserver import MailServer
 
+import GitPower.settings as settings
 import inspect, os, sys, re, json
 
 #the form regular
