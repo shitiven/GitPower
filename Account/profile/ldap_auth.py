@@ -56,17 +56,17 @@ def ldap_user(username, password):
 
             user = User.objects.create_user(username, mail, password)
             user.is_active = True
-            try:
-                user.first_name = result_data[0][1]['displayName'][0]
-            except:
-                pass
-
-            try:
-                user.last_name = result_data[0][1]['displayName'][0]
-            except:
-                pass
-
             user.save()
+
+        try:
+            profile = user.get_profile()
+            if not profile.nickname:
+                profile.nickname = result_data[0][1]['displayName'][0]
+                profile.save()
+
+        except Exception,e:
+            pass
+
         return authenticate(username=username, password=password)
 
     except Exception as e:
