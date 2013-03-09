@@ -64,7 +64,7 @@
             <li class="divider-vertical"></li>
             {% if request.user.is_authenticated%}
             <li>
-              <a href="#">
+              <a href="/{{request.user}}">
                 <img src='{{request.user|user_profile:"avatar_small"}}' class="img-circle" width="20" height="20" />
                 <strong>{{request.user.username}}</strong>
               </a>
