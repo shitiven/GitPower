@@ -139,6 +139,7 @@ p.meta{
   color:red;
 }
 .messages{
+  width:500px;
   margin: 10px auto 0 auto;
 }
 .ui-dialog-titlebar{
