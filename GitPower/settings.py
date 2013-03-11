@@ -161,6 +161,7 @@ PIPELINE_JS = {
     'master' : {
         'source_filenames' : (
             'js/jquery.js', 
+            'js/jquery-ui.js',
             'js/bootstrap.js',
             'js/markdown.js',
             'js/main.js',
