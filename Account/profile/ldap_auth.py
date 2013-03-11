@@ -28,6 +28,7 @@ def ldap_user(username, password):
             return result_data
 
         except Exception as e:
+            print str(e)
             return None 
 
     ldap_user = username
@@ -35,7 +36,7 @@ def ldap_user(username, password):
 
     result_data = None
     for base in settings.LDAP_BASE:
-        result_data  = filter_ladp(username, password, base)
+        result_data = filter_ladp(ldap_user, password, base)
         if result_data:break
 
     try:
