@@ -65,7 +65,7 @@
             {{element.path|gener_args:branch|last_commit:git_repo|last_commit_age}}
             </span>
            </td>
-           <td>
+           <td class="message">
               {%autoescape off%}
               {{element.path|gener_args:branch|last_commit:git_repo|last_commit_message}}
               {%endautoescape%}

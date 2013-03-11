@@ -163,6 +163,9 @@ p.meta{
 .tree-browser{
   background: #F8F8F8
 }
+.tree-browser td{
+  vertical-align: middle;
+}
 .tree-browser .file{
   background: url(../img/file.png) 5px 50% no-repeat;
   padding-left:25px;
@@ -200,6 +203,9 @@ p.meta{
 .tree-browser .last-commit-meta{
   background-color: #fff;
   padding: 3px 8px;
+}
+.tree-browser .message{
+  max-width: 200px;
 }
 #readme{
   padding: 3px;
