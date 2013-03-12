@@ -155,11 +155,9 @@ def login_user(request):
     def login_with_db(username, password):
 
         if re.match("^(.*)@(.*)$", username):
-            try:
-                user = User.objects.get(email=username)
-                username = user.username
-            except User.DoesNotExist:
-                return None
+            user = User.objects.filter(email=username)
+            if user.count() < 1:return None
+            username = user[0].username
 
         return authenticate(username=username, password=password)
 
