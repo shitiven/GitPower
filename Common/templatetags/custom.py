@@ -294,7 +294,6 @@ def diff2html(diff):
   a = a_blob_lines
   b = b_blob_lines
   sm= difflib.SequenceMatcher(None, b, a)
-  #html = difflib.HtmlDiff().make_file(a_blob_lines,b_blob_lines,a_blob_data,b_blob_data)
   
   html  = show_diff(sm, b,a, init = init, delete = delete)
   return html
