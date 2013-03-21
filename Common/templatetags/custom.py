@@ -239,31 +239,31 @@ def diff2html(diff):
         if op == 'equal':
             for item in a[a1:a2]:
                 if delete == False:
-                  html += '<tr><td class="num"><span>%s</span></td><td class="num"><span>%s</span></td><td><p class="pre-code">&nbsp;&nbsp;%s</p></td></tr>' % (str(p_num), str(c_num), item[1])
+                  html += '<tr><td class="num"><span>%s</span></td><td class="num"><span>%s</span></td><td><p class="pre-code">&nbsp;&nbsp;%s</p></td></tr>' % (str(p_num), str(c_num), item)
                   c_num = c_num + 1
                   p_num = p_num + 1
 
         elif op == 'replace':
             for item in a[a1:a2]:
                 if init == False:
-                  html += '<tr><td class="num"><span>%s</span></td><td class="num"><span></span></td><td><p class="del pre-code">-%s</p></td></tr>' % (str(p_num), item[1])
+                  html += '<tr><td class="num"><span>%s</span></td><td class="num"><span></span></td><td><p class="del pre-code">-%s</p></td></tr>' % (str(p_num), item)
                   p_num = p_num + 1
 
             for item in b[b1:b2]:
                 if delete == False:
-                  html += '<tr><td class="num"><span></span></td><td class="num"><span>%s</span></td><td><p class="add pre-code">+%s</p></td></tr>' % (str(c_num), item[1])
+                  html += '<tr><td class="num"><span></span></td><td class="num"><span>%s</span></td><td><p class="add pre-code">+%s</p></td></tr>' % (str(c_num), item)
                   c_num = c_num + 1
 
         elif op == 'insert':
             for item in b[b1:b2]:
                 if delete == False:
-                  html += '<tr><td class="num"><span></span></td><td class="num"><span>%s</span></td><td><p class="add pre-code">+%s</p></td></tr>' % (str(c_num), item[1])
+                  html += '<tr><td class="num"><span></span></td><td class="num"><span>%s</span></td><td><p class="add pre-code">+%s</p></td></tr>' % (str(c_num), item)
                   c_num = c_num + 1
 
         elif op == 'delete':
             for item in a[a1:a2]:
                 if init == False:
-                  html += '<tr><td class="num"><span>%s</span></td><td class="num"><span></span></td><td><p class="del pre-code">-%s</p></td></tr>' % (str(p_num), item[1])
+                  html += '<tr><td class="num"><span>%s</span></td><td class="num"><span></span></td><td><p class="del pre-code">-%s</p></td></tr>' % (str(p_num), item)
                   p_num = p_num + 1
         else:
             print "<<%s>>" % op
@@ -291,11 +291,11 @@ def diff2html(diff):
 
   a = list(pygments.lex(b_blob_data, lexer))
   b = list(pygments.lex(a_blob_data, lexer))
-
-  sm= difflib.SequenceMatcher(None, a, b)
-  #html = difflib.HtmlDiff().make_file(a_blob_lines,b_blob_lines,a_blob_data,b_blob_data)
+  a = a_blob_lines
+  b = b_blob_lines
+  sm= difflib.SequenceMatcher(None, b, a)
   
-  html  = show_diff(sm, a, b, init = init, delete = delete)
+  html  = show_diff(sm, b,a, init = init, delete = delete)
   return html
 
 
