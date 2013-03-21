@@ -2,9 +2,9 @@
 # -*- coding:utf-8 -*-
 
 from access import filter_users_bykey, log 
-import sys, re
+import sys, re, os
 
-SCRIPT_PATH = "/var/openssh/authorized/serve.py"
+SCRIPT_PATH = "/home/git/.gitpower/authorized/serve.py"
 
 pubkey = sys.stdin.readline()
 
