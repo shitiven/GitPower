@@ -151,7 +151,7 @@ PIPELINE_CSS = {
             'css/bootstrap-responsive.css',
             'css/main.css',
             'css/icon.css',
-            'css/jquery.ui.css',
+            'css/jquery-ui.css',
         ),
         'output_filename' : 'css/master.min.css',
     },

@@ -2,7 +2,6 @@ conf.py
 *.py[co]
 *.pyc
 # Packages
-settings.py[co]
 *.egg
 *.egg-info
 dist
