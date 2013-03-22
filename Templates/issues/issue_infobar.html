@@ -79,8 +79,7 @@
                   
                   <div class="tab-content">
                     <ul class="tab-panel active" id="bt_tab1" style="display: block;">
-                    {%if is_team%}
-                      {%for member in members%}
+                      {%for member in repo.team_writers%}
                       <li>
                         {%if none_issue%}
                         <a class="assigner_assign" href="#" data-assigner="{{member.id}}">
@@ -90,17 +89,10 @@
                           {%if member == issue.assigner%}
                           <span class="mini-icon mini-icon-confirm"></span>
                           {%endif%}
-                          <span class="head-name">{{member.first_name}}</span>
+                          <span class="head-name">{{member.username}} ({{member|user_profile:"display_name"}})</span>
                         </a>
                       </li>
                       {%endfor%}
-                    {%else%}
-                    <li>
-                    <a href="#">
-                        <span class="head-name">没有其他成员可以选择</span>
-                    </a>
-                    </li>
-                    {%endif%}
                     </ul>
                   </div>
 
