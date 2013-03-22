@@ -177,9 +177,10 @@ def last_commit(dic,repo):
 
 @register.filter
 def last_commit_age(commit):
-  date = time.gmtime(commit.committed_date)
-  date = datetime.datetime.fromtimestamp(time.mktime(date))
-  return "[%s] %s"%(str(commit.author.name),timesince(date))
+  date   = time.gmtime(commit.committed_date)
+  date   = datetime.datetime.fromtimestamp(time.mktime(date))
+  author = commit.author.name.encode("utf-8") 
+  return u"[%s] %s"%(author,timesince(date))
 
 
 @register.filter
@@ -289,8 +290,6 @@ def diff2html(diff):
 
   b_blob_lines = b_blob_data.splitlines()
 
-  a = list(pygments.lex(b_blob_data, lexer))
-  b = list(pygments.lex(a_blob_data, lexer))
   a = a_blob_lines
   b = b_blob_lines
   sm= difflib.SequenceMatcher(None, b, a)
