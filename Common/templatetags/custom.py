@@ -53,7 +53,7 @@ def highlight_code(code, lang):
 
 @register.filter
 def arrayIndex(arr, item):
-  print arr, item
+  item = item.encode("utf-8")
   try:
     arr.index(item)
     print True
