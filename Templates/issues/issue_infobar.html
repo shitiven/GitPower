@@ -89,7 +89,7 @@
                           {%if member == issue.assigner%}
                           <span class="mini-icon mini-icon-confirm"></span>
                           {%endif%}
-                          <span class="head-name">{{member.first_name}}</span>
+                          <span class="head-name">{{member.username}} ({{member|user_profile:"display_name"}})</span>
                         </a>
                       </li>
                       {%endfor%}
