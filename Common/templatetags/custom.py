@@ -180,7 +180,7 @@ def last_commit_age(commit):
   date   = time.gmtime(commit.committed_date)
   date   = datetime.datetime.fromtimestamp(time.mktime(date))
   author = commit.author.name.encode("utf-8") 
-  return u"[%s] %s"%(author,timesince(date))
+  return "[%s] %s"%(author,timesince(date))
 
 
 @register.filter
