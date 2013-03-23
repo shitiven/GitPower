@@ -7,19 +7,20 @@
     <div class="control-group">
         <label class="control-label" for="inputEmail">账号</label>
         <div class="controls">
-          <input type="text" id="username" name="username" placeholder="域账号" />
+          <input type="text" id="username" name="username" placeholder="邮箱地址 / 用户名" />
         </div>
     </div>
     <div class="control-group">
         <label class="control-label" for="inputPassword">密码</label>
         <div class="controls">
-          <input type="password" id="password" name="password" placeholder="域密码" />
+          <input type="password" id="password" name="password" placeholder="登录密码" />
         </div>
     </div>
     <div class="control-group">
         <div class="controls">
           <button type="submit" class="btn btn-primary">登录</button> 
-          <span style="margin-left:15px;">请使用公司域账号登录</span>
+          <span style="margin-left:15px;">没有帐号？</span>
+          <a href="/accounts/signup">注册新用户</a>
         </div>
     </div>
     {%csrf_token%}
