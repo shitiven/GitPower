@@ -11,6 +11,7 @@ from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 from Pull.models import PullRequest
 from django.utils.encoding import force_unicode
+from django.utils.html import conditional_escape 
 
 import pygments
 import GitPower.settings as settings
@@ -53,13 +54,10 @@ def highlight_code(code, lang):
 
 @register.filter
 def arrayIndex(arr, item):
-  item = item.encode("utf-8")
   try:
     arr.index(item)
-    print True
     return True
   except:
-    print False
     return False
 
 
@@ -240,31 +238,31 @@ def diff2html(diff):
         if op == 'equal':
             for item in a[a1:a2]:
                 if delete == False:
-                  html += '<tr><td class="num"><span>%s</span></td><td class="num"><span>%s</span></td><td><p class="pre-code">&nbsp;&nbsp;%s</p></td></tr>' % (str(p_num), str(c_num), item)
+                  html += '<tr><td class="num"><span>%s</span></td><td class="num"><span>%s</span></td><td><p class="pre-code">&nbsp;&nbsp;%s</p></td></tr>' % (str(p_num), str(c_num), conditional_escape(item))
                   c_num = c_num + 1
                   p_num = p_num + 1
 
         elif op == 'replace':
             for item in a[a1:a2]:
                 if init == False:
-                  html += '<tr><td class="num"><span>%s</span></td><td class="num"><span></span></td><td><p class="del pre-code">-%s</p></td></tr>' % (str(p_num), item)
+                  html += '<tr><td class="num"><span>%s</span></td><td class="num"><span></span></td><td><p class="del pre-code">-%s</p></td></tr>' % (str(p_num), conditional_escape(item))
                   p_num = p_num + 1
 
             for item in b[b1:b2]:
                 if delete == False:
-                  html += '<tr><td class="num"><span></span></td><td class="num"><span>%s</span></td><td><p class="add pre-code">+%s</p></td></tr>' % (str(c_num), item)
+                  html += '<tr><td class="num"><span></span></td><td class="num"><span>%s</span></td><td><p class="add pre-code">+%s</p></td></tr>' % (str(c_num), conditional_escape(item))
                   c_num = c_num + 1
 
         elif op == 'insert':
             for item in b[b1:b2]:
                 if delete == False:
-                  html += '<tr><td class="num"><span></span></td><td class="num"><span>%s</span></td><td><p class="add pre-code">+%s</p></td></tr>' % (str(c_num), item)
+                  html += '<tr><td class="num"><span></span></td><td class="num"><span>%s</span></td><td><p class="add pre-code">+%s</p></td></tr>' % (str(c_num), conditional_escape(item))
                   c_num = c_num + 1
 
         elif op == 'delete':
             for item in a[a1:a2]:
                 if init == False:
-                  html += '<tr><td class="num"><span>%s</span></td><td class="num"><span></span></td><td><p class="del pre-code">-%s</p></td></tr>' % (str(p_num), item)
+                  html += '<tr><td class="num"><span>%s</span></td><td class="num"><span></span></td><td><p class="del pre-code">-%s</p></td></tr>' % (str(p_num), conditional_escape(item))
                   p_num = p_num + 1
         else:
             print "<<%s>>" % op
