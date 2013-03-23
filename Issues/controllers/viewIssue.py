@@ -128,7 +128,7 @@ def issues_filter(request, submitter=None):
         "opened_number" : issues.filter(state="opened").count(),
         "closed_number" : issues.filter(state="closed").count(),
         "state" : state,
-        "members" : request.repo.owner.get_profile().members.all(),
+        "members" : request.repo.team_writers,
         "milestones" : MileStone.objects.filter(repo=request.repo),
         "milestone" : milestone,
         "assigner" : assigner,

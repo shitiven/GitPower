@@ -160,7 +160,11 @@
                         </div>
                         <div class="btn-group">
                           <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
-                            {{ assigner.first_name|default:"指派"}}
+                            {%if assigner%}
+                                {{assigner|user_profile:"display_name"}}
+                            {%else%}
+                                指派
+                            {%endif%}
                             <span class="caret"></span>
                           </a>
                           <ul class="dropdown-menu">
@@ -175,7 +179,7 @@
                             {%if assigner != member %}
                             <li>
                               <a href="{{issues_path}}?assigner={{member.username}}&{{query|issues_path_params:"assigner"}}">
-                              {{member.first_name}}
+                              {{member|user_profile:"display_name"}}
                               </a>
                             </li>
                             {%endif%}

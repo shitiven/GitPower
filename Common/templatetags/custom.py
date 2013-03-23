@@ -238,7 +238,7 @@ def diff2html(diff):
         if op == 'equal':
             for item in a[a1:a2]:
                 if delete == False:
-                  html += '<tr><td class="num"><span>%s</span></td><td class="num"><span>%s</span></td><td><p class="pre-code">&nbsp;&nbsp;%s</p></td></tr>' % (str(p_num), str(c_num), conditional_escape(item))
+                  html += '<tr class="nochange-hide"><td class="num"><span>%s</span></td><td class="num"><span>%s</span></td><td><p class="pre-code">&nbsp;&nbsp;%s</p></td></tr>' % (str(p_num), str(c_num), conditional_escape(item))
                   c_num = c_num + 1
                   p_num = p_num + 1
 
