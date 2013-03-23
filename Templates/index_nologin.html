@@ -11,18 +11,18 @@
       <p class="lead">GitPower 是一个在线托管软件项目的服务平台，提供开源代码以及私有项目托管，简单方便的团队交流协作工具。</p>
     </div>
     <div class="span4">
-      <form class="singup" class="form-horizontal" action="/accounts/login" method="post">
-        <!--div class="control-group">
-            <input type="text" class="input-singup"  name="email" placeholder="Email" value="{{form.email.value|default:""}}">
-        </div-->
+    <form class="singup" class="form-horizontal" action="/accounts/signup" method="post">
         <div class="control-group">
-            <input type="text" class="input-singup"  name="username" placeholder="域账号" value="{{form.username.value|default:""}}" />
+            <input type="text" class="input-singup"  name="email" placeholder="常用邮箱" value="{{form.email.value|default:""}}">
         </div>
         <div class="control-group">
-            <input type="password" class="input-singup"  name="password" placeholder="域密码" >
+            <input type="text" class="input-singup"  name="username" placeholder="用户名" value="{{form.username.value|default:""}}" />
         </div>
         <div class="control-group">
-            <button class="btn btn-large btn-success" type="submit">马上登录</button>
+            <input type="password" class="input-singup"  name="password" placeholder="登录密码" >
+        </div>
+        <div class="control-group">
+            <button class="btn btn-large btn-success" type="submit">马上注册</button>
         </div>
         {%csrf_token%}
     </form>
