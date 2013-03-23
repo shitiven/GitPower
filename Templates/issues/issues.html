@@ -51,7 +51,7 @@
                     </li>
                     {%endif%}
 
-                    <li><a href="#">指派给你的</a></li>
+                    <li><a href="{{issues_path}}?assigner={{request.user.username}}&{{query|issues_path_params:"assigner"}}">指派给你的</a></li>
                     {%endif%}
                 </ul>
 
