@@ -50,7 +50,7 @@ def issues_submitter_numbers(repo, submitter):
 
 
 @register.filter
-def issues_assigend_to_me_numbers(repo, assigener):
+def issues_assigend_to_me_numbers(repo, assigner):
     return Issue.objects.filter(repo=repo, assigner=assigner).count()
 
 
