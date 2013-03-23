@@ -34,9 +34,7 @@
           </div>
         </div>
         <div class="file diff-file">
-            {%autoescape off%}
-                {{diff|diff2html}}
-            {%endautoescape%}
+            {{diff|diff2html|safe}}
         </div>
     </div>
     {%endfor%}
