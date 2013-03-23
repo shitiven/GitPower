@@ -32,31 +32,38 @@
                     {% if request.user.is_authenticated%}
 
                     {%if issues_page == "submitter"%}
-                    <li class="active">
-                      <a href="#">
-                        <span class="number_right">
-                          {{repo|issues_submitter_numbers:request.user}}
-                        </span>
-                        你创建的
-                      </a>
-                    </li>
-                    {%else%}
-                    <li>
-                      <a href="{%url issues_created_by repo.owner.username repo.name request.user.username%}?{{query|issues_path_params}}">
-                        <span class="number_right">
-                          {{repo|issues_submitter_numbers:request.user}}
-                        </span>
-                        你创建的
-                      </a>
-                    </li>
-                    {%endif%}
+                      <li class="active">
+                        <a href="#">
+                          <span class="number_right">
+                            {{repo|issues_submitter_numbers:request.user}}
+                          </span>
+                          你创建的
+                        </a>
+                      </li>
+                      {%else%}
+                      <li>
+                        <a href="{%url issues_created_by repo.owner.username repo.name request.user.username%}?{{query|issues_path_params}}">
+                          <span class="number_right">
+                            {{repo|issues_submitter_numbers:request.user}}
+                          </span>
+                          你创建的
+                        </a>
+                      </li>
+                      {%endif%}
 
-                    <li><a href="{{issues_path}}?assigner={{request.user.username}}&{{query|issues_path_params:"assigner"}}">
-                      <span class="number_right">
-                        {{repo|issues_assigend_to_me_numbers:request.user}}
-                      </span>
-                      指派给你的
-                    </a></li>
+                      {%if request.user == assigner%}
+                      <li class="active active-low">
+                      {%else%}
+                      <li>
+                      {%endif%}
+                        <a href="{{issues_path}}?assigner={{request.user.username}}&{{query|issues_path_params:"assigner"}}">
+                        <span class="number_right">
+                          {{repo|issues_assigend_to_me_numbers:request.user}}
+                        </span>
+                        指派给你的
+                        </a>
+                      </li>
+
                     {%endif%}
                 </ul>
 
@@ -133,7 +140,7 @@
                         </div-->
                         <div class="btn-group">
                           {%if filter_label%}
-                          <a class="btn dropdown-toggle" style="background:{{filter_label.color}};color:#fff" data-toggle="dropdown" href="#">
+                          <a class="btn dropdown-toggle" style="background:{{filter_label.color}};color:#fff;padding:0 14px;" data-toggle="dropdown" href="#">
                               {{filter_label.name}}
                             <span class="caret" style="color:#fff"></span>
                           </a>

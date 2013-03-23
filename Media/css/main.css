@@ -1227,7 +1227,12 @@ code {
   background-color: #f8f8ff!important;
   color: #444!important;
   padding: 0 .2em!important;
-  border: 1px solid #dedede!important; }
+  border: 1px solid #dedede!important; 
+}
+
+.nav-pills > .active-low > a{
+  background-color:#bbb;
+}
 
 .highlight .c{color:#998;font-style:italic;}
 .highlight .err{color:#a61717;background-color:#e3d2d2;}

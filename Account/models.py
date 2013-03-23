@@ -241,24 +241,14 @@ class SSHKey(models.Model):
         '''delete sshkey and delete the pub file'''
 
         sshkeys = SSHKey.objects.all().exclude(user = self.user, title = self.title)
-        renderAuthorized(sshkeys)
 
         super(SSHKey, self).delete(*args, **kwargs)
         #when sshkey change recreate access file
         
-        self.render_cgl()
-
 
     def save(self, *args, **kwargs):
         '''sshkey model saved'''
 
-        #create pub file
-        filename = "%s_%s.pub"%(self.user.username, self.title)
-        keypath  = "%s/keydir/%s"%(settings.GITLOTE_PATH, filename)
         self.content  = re.match("(^ssh-(?:dss|rsa) [A-Za-z0-9+\/]+)",self.content).group() 
 
         super(SSHKey, self).save(*args, **kwargs)
-        renderAuthorized(SSHKey.objects.all())
-
-        #when sshkey change recreate access file
-        self.render_cgl()
