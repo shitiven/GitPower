@@ -46,7 +46,13 @@ def issues_numbers(repo, state=None):
 
 @register.filter
 def issues_submitter_numbers(repo, submitter):
-    return Issue.objects.filter(repo =repo, submitter=submitter).count()
+    return Issue.objects.filter(repo=repo, submitter=submitter).count()
+
+
+@register.filter
+def issues_assigend_to_me_numbers(repo, assigener):
+    return Issue.objects.filter(repo=repo, assigner=assigner).count()
+
 
 @register.filter
 def issues_path_params(dic, rk=None):

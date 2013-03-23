@@ -51,7 +51,12 @@
                     </li>
                     {%endif%}
 
-                    <li><a href="{{issues_path}}?assigner={{request.user.username}}&{{query|issues_path_params:"assigner"}}">指派给你的</a></li>
+                    <li><a href="{{issues_path}}?assigner={{request.user.username}}&{{query|issues_path_params:"assigner"}}">
+                      <span class="number_right">
+                        {{repo|issues_assigend_to_me_numbers:request.user}}
+                      </span>
+                      指派给你的
+                    </a></li>
                     {%endif%}
                 </ul>
 
