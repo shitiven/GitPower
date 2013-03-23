@@ -62,4 +62,4 @@ try:
 except Exception,e:
     sys.exit("[Error] %s"%str(e))    
 
-os.execvp('/usr/local/bin/git', ['git', 'shell', '-c', serve(cmd)])
+os.execvp('/usr/bin/git', ['git', 'shell', '-c', serve(cmd)])
