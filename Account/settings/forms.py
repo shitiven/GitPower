@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 from django import forms
-import Common.gitolite as gitolite
+from Common import get_mac_address
 from django.contrib.auth.models import User
 from Account.models import UserProfile, SSHKey
 import GitPower.settings as settings
@@ -49,7 +49,7 @@ class SSHkeyForm(forms.ModelForm):
         cleaned_data = super(SSHkeyForm, self).clean()
         content = cleaned_data.get("content")
 
-        keymac = gitolite.get_mac_address(content)
+        keymac = get_mac_address(content)
 
         if keymac is None:
             self._errors["content"] = self.error_class(["格式错误"])

@@ -59,5 +59,23 @@ def render_to_403(*args, **kwargs):
     response = HttpResponseForbidden(loader.render_to_string(*args, **kwargs), **httpresponse_kwargs)  
 
 
+def get_mac_address(content):
+    
+    if content is None: return None
+
+    keypath = "/tmp/.gitolite_%s.pub"%str(time.time())
+    keyfile = open(keypath, 'w')
+    keyfile.write(content)
+    keyfile.close()
+    key_pettern = re.compile("^(\d+)")
+    mac_address = os.popen('ssh-keygen -lf %s'%keypath)
+    mac_address = mac_address.read()
+
+    if key_pettern.search(mac_address) is None:
+        return None
+
+    return mac_address.split(" ")[1]
+
+
 __all__ = [ name for name, obj in locals().items()
             if not (name.startswith('_')) ]

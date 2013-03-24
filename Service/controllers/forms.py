@@ -3,7 +3,7 @@
 from django import forms
 from django.forms.widgets import RadioSelect
 
-from Common.gitolite import get_mac_address
+from Common import get_mac_address
 from Service.models  import DeployService
 
 import re

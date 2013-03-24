@@ -79,6 +79,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.markup',
+    'south',
+    'djcelery',
     'pipeline',
     'Common',
     'Pull',
@@ -87,6 +89,7 @@ INSTALLED_APPS = (
     'Account',
     'NewsFeed',
     'Issues',
+
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:

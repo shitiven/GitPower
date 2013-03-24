@@ -90,6 +90,8 @@ class Issue(models.Model):
     state     = models.CharField(max_length = 10, default = "opened")
     repo      = models.ForeignKey(Repo, related_name="issuse_repo")
     order     = models.IntegerField(max_length = 10)
+    subscribers = models.ManyToManyField(User)    
+
 
     def save(self, *args, **kwargs):
 
@@ -118,6 +120,14 @@ class Issue(models.Model):
     @property
     def is_open(self):
         return self.state == "opened"
+
+
+@receiver(post_save, sender=Issue)
+def IssueSaved(sender, **kwargs):
+    '''send mail to subscribers when issue modified or created'''
+    saved_issue = kwargs["instance"]
+    subscribers = saved_issue.subscribers.all()
+    
 
 
 class Comment(models.Model):

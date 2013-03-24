@@ -1,5 +1,6 @@
 django==1.4.5
 PIL
+South
 pygments
 GitPython
 Django403Handler
@@ -7,3 +8,4 @@ markdown
 django-pipeline==1.3.4
 MySQL-python
 python-ldap
+django-celery-with-redis

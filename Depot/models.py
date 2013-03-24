@@ -2,7 +2,6 @@
 
 from Common import User
 from Common import models
-from Account.models  import SSHKey
 
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
@@ -10,7 +9,7 @@ from Service.models import DeployService
 
 import GitPower.settings as settings
 import datetime, os, git, time
-import Common.gitolite as gitolite
+import Account
 
 
 REPOS_PATH   = settings.REPOS_PATH
@@ -129,24 +128,7 @@ class Repo(models.Model):
     def create_split_conf(self):
         '''create gitolite.conf-compiled.pm, this is the gitolite rules'''
         return
-        conf_path = "%s/conf/gitolite.conf-compiled.pm"%GITLOTE_PATH
-        conf_file = open(conf_path, "w")
-
-        #filter all repos and rewrite the rules
-        repos = Repo.objects.all()
-        conf_file.write("$data_version = '3.0';\n")
-        conf_file.write("%repos = ();\n")
-        conf_file.write("%split_conf = (\n")
-        all_len = repos.__len__()
-        i = 1
-        for repo in repos:
-            if i == all_len:
-                conf_file.write("    '%s/%s' => 1\n"%(repo.owner.username, repo.name))
-            else:
-                conf_file.write("    '%s/%s' => 1,\n"%(repo.owner.username, repo.name))
-            i = i+1
-
-        conf_file.write(");")
+        
 
     def create_repo(self):
         '''create the git project'''
@@ -207,7 +189,7 @@ class Repo(models.Model):
         '''create project and save data to the database'''
 
         self.create_repo()
-        sshkey = SSHKey()
+        sshkey = Account.models.SSHKey()
 
         super(Repo, self).save(*args, **kwargs)
 

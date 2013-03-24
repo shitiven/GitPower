@@ -63,23 +63,6 @@ def create_access_conf(repo, rules):
     conf.close()
 
 
-def get_mac_address(content):
-    
-    if content is None: return None
-
-    keypath = "/tmp/.gitolite_%s.pub"%str(time.time())
-    keyfile = open(keypath, 'w')
-    keyfile.write(content)
-    keyfile.close()
-    key_pettern = re.compile("^(\d+)")
-    mac_address = os.popen('ssh-keygen -lf %s'%keypath)
-    mac_address = mac_address.read()
-
-    if key_pettern.search(mac_address) is None:
-        return None
-
-    return mac_address.split(" ")[1]
-
 def create_sshkey_file(filepath, content):
     return
     keyfile = open(filepath,"w")

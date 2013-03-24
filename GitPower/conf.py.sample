@@ -1,5 +1,5 @@
 # encoding: utf-8
-import os
+import os, djcelery
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -105,3 +105,13 @@ LDAP_BASE   = (
 
 # 允许你配置自定义的 Gravatar 主机地址用于头像展示（可以自己创建一个反响代理 Gravatar 主机，这样做了 cache 以后可以提高速度）
 GRAVATAR_URL = "http://www.gravatar.com/avatar/"
+
+
+# 异步任务
+BROKER_URL = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = "redis"
+CELERY_REDIS_DB = 0
+CELERY_IMPORTS = ("Common.notify", )
+CELERY_SEND_TASK_ERROR_EMAILS = True
+CELERYD_LOG_FILE='/tmp/celery.log'
+djcelery.setup_loader()
