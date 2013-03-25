@@ -1,10 +1,15 @@
-## Installation
+## Installation Guide
 
-#### Install Requirements
-```bash
-sudo pip install -r requirements.txt
+#### Requirements
 
-```
-django-pipline: http://django-pipeline.readthedocs.org/en/latest/
+* Python >= 2.5 && Python <= 2.7
+* The django support database (defalut mysql)
+* [Redis server ](http://redis.io/)
+* [pip tool](https://pypi.python.org/pypi/pip)
+* [sshd-vcs](https://github.com/epriestley/sshd-vcs)
 
-Fre...
+#### Install python requirements
+`sudo pip install -r requirements.txt`
+
+
+

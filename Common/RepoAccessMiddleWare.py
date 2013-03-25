@@ -64,7 +64,7 @@ class RepoAccessMiddleWare(object):
         if not settings.SITE_PUBLIC:
 
             #开启注册、登录、登出可访问
-            if re.match("(^\/$)|(^/accounts/signup)|(^/accounts/login)|(^/accounts/logout)", request.path):
+            if re.match("(^\/$)|(^/accounts/signup)|(^/accounts/login)|(^/accounts/logout)|(^/assets)", request.path):
                 return
 
             #非登录用户全都跳转到登录页面

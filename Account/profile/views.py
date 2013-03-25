@@ -7,6 +7,7 @@ from django.db.models import Q
 from Account.models import *
 from Account.profile.forms import UserForm
 from Depot.models import *
+from Common.tasks.notify import notify_active
 from Common import *
 
 import json, urllib
@@ -103,8 +104,7 @@ def user_to_active(request):
                 "user_email":request.user.email
             }
             active_url  = settings.APP_URL+"/accounts/user_active?"+urllib.urlencode(active_params)
-            mail_server = MailServer()
-            mail_server.active_mail(request.user.email, active_url)
+            notify_active.delay(request.user.email, active_url)
 
             invite_code.used = True
             invite_code.user = request.user

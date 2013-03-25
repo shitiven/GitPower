@@ -141,7 +141,7 @@ case "$1" in
     ;;
 
     *)
-        echo "Usage: /etc/init.d/celeryd {start|stop|restart|try-restart|kill}"
+        echo "Usage: ./celeryd {start|stop|restart|try-restart|kill}"
         exit 1
     ;;
 esac
