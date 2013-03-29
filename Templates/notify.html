@@ -1,0 +1,39 @@
+<div class="subscription">
+    <span class="mega-icon mega-icon-notifications"></span>
+    <div class="subscription-body">
+    {%if watching%}
+
+        {%if watch_repo%}
+        <a class="btn" href="{%url notify repo.owner.username repo.name%}?{{watch_param}}&next_url={{request.path}}&ignore=True">
+        {%else%}
+        <a class="btn" href="{%url notify repo.owner.username repo.name%}?{{watch_param}}&next_url={{request.path}}">
+        {%endif%}
+
+            <span class="mini-icon mini-icon-unwatch"></span>
+            取消订阅
+        </a>
+        <span class="meta">
+            {%if watch_repo%}
+            您已订阅了该项目，所有变动都会通过邮件通知
+            {%else%}
+            您已订阅了该事件，所有变动都会通过邮件通知
+            {%endif%}
+        </span>
+
+    {%else%}
+
+        <a class="btn" href="{%url notify repo.owner.username repo.name%}?{{watch_param}}&next_url={{request.path}}">
+            <span class="mini-icon mini-icon-unwatch"></span>
+            订阅通知
+        </a>
+
+        <span class="meta">
+            {%if watch_repo%}
+            你已订阅了整个项目，但取消了事件的变更通知
+            {%else%}
+            订阅通知后，所有的变更都会通过邮件通知
+            {%endif%}
+        </span>
+    {%endif%}
+    </div>
+</div>

@@ -715,6 +715,19 @@ table.pull_list a.commit-msg{
   font-size: 13px;
   padding:15px;
 }
+.boxed-group .boxed-group-inner h4 {
+  margin:0 0 5px 0;
+  font-size: 14px;
+  color: #000;
+}
+
+.boxed-group .boxed-group-inner .boxed-group-inner-item{
+  border-bottom: 1px solid #ddd;
+  padding:15px 10px;
+}
+.boxed-group .boxed-group-inner form{
+  margin: 0;
+}
 .boxed-group .boxed-group-inner-nopadding{
   padding:0;
 }
@@ -918,6 +931,14 @@ table.issues-list tr.list-browser-item{
   position: absolute;
   left:0;
   top:0;
+}
+.discussion .label-issue-state{
+  position: absolute;
+  left:0;
+  top: 0;
+  width:45px;
+  text-align: center;
+  line-height: 22px;
 }
 .discussion-bubble{
   margin-left: 60px;
@@ -1232,6 +1253,32 @@ code {
 
 .nav-pills > .active-low > a{
   background-color:#bbb;
+}
+
+.subscription{
+  clear: both;
+  margin-top:40px;
+  padding:10px;
+  border: 1px solid #efefef;
+  border-radius: 5px;
+  position: relative;
+}
+
+.subscription .mega-icon-notifications{
+  color: #ddd;
+}
+
+.subscription .btn-group{
+  display: inline-block;
+}
+.subscription .subscription-body{
+  position: absolute;
+  left: 60px;
+  top:12px;
+}
+.subscription .meta{
+  color:#999;
+  padding-left:20px;
 }
 
 .highlight .c{color:#998;font-style:italic;}

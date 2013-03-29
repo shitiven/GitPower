@@ -5,6 +5,7 @@ from Depot import (
     repo_admin, 
     repo_admin_members,
     repo_admin_members_remove,
+    repo_admin_competence,
     repo_rename, 
     repo_delete,
     repo_services,
@@ -74,6 +75,7 @@ urlpatterns += patterns('',
     url(r'^(\w+)/([-_\.a-zA-Z0-9]+)/admin/services/filter$', repo_services_filter, name = "repo_services_filter"),
     url(r'^(\w+)/([-_\.a-zA-Z0-9]+)/admin/services/add$', repo_service_add, name = "repo_service_add"),
     url(r'^(\w+)/([-_\.a-zA-Z0-9]+)/admin/services/remove$', repo_service_remove, name = "repo_service_remove"),
+    url(r'^(\w+)/([-_\.a-zA-Z0-9]+)/admin/competence$', repo_admin_competence, name = "repo_admin_competence"),
     url(r'^(\w+)/([-_\.a-zA-Z0-9]+)/admin$', repo_admin, name = "repo_admin"),
 
     url(r'^(\w+)/([-_\.a-zA-Z0-9]+)/issues/label/edit$', edit_labels, name = "edit_labels"),
@@ -94,7 +96,8 @@ urlpatterns += patterns('',
     url(r'^(\w+)/([-_\.a-zA-Z0-9]+)/issues/(\d+)$', issue, name = "issue"),
     url(r'^(\w+)/([-_\.a-zA-Z0-9]+)/issues/issues_created_by/(\w+)$', issues_created_by, name = "issues_created_by"),
     url(r'^(\w+)/([-_\.a-zA-Z0-9]+)/issues$', issues, name = "issues"),
-
+    url(r'^(\w+)/([-_\.a-zA-Z0-9]+)/notify$', notify, name="notify"),
+    
     url(r'^(\w+)/([-_\.a-zA-Z0-9]+)$', repo_index, name = "repo_index"),
     url(r'^(\w+)$', profile.index, name="profile_index"),
 

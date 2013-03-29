@@ -1,6 +1,8 @@
 # encoding: utf-8
 from celery.task import task
 from django.core.mail import EmailMessage
+from django.conf import settings
+from Common import *
 
 base_template = '''
 <html>
@@ -47,11 +49,97 @@ def notify(subject=None, title=None, action=None, comment=None, to_mails=[]):
 
 
 @task(ignore_result=True)
-def notify_active(to_mail, active_url):
+def account_active(to_mail, active_url):
     subject = u'GitPower激活邮件'
     title   = u'账户激活'
     action  = u'请点击以下链接进行激活: <a href="%(active_url)s">%(active_url)s</a>'%dict(active_url=active_url) 
     to_mails = [to_mail]
 
     notify(subject=subject, title=title, action=action, to_mails=[to_mail])
+
+
+@task(ignore_result=True)
+def issue_comment(comment):
+    '''issue有新评论通知'''
+
+    issue   = comment.issue
+    repo    = issue.repo
+
+    subject = u'note for issue #%s'%issue.id
+    title   = u'%s'%repo.name
+    action  = u'%(author)s left new comment for Issue #%(id)s <a href="%(url)s">%(title)s</a>'%dict(
+            id      = issue.id,
+            author  = comment.submitter,
+            title   = issue.title,
+            url = reverse("issue", args=[repo.owner.username, repo.name, issue.id])
+        )
+
+    notify(subject=subject, title=title, action=action, comment=comment.content, to_mails=comment.subscribers) 
+
+
+@task(ignore_result=True)
+def issue_state_change(comment, state):
+    '''issue状态变更通知'''
+    issue   = comment.issue
+    repo    = issue.repo
+
+    subject = u'note for issue state change'
+    title   = u'%s'%repo.name
+    action  = u'%(author)s %(state)s the Issue #%(id)s <a href="%(url)s">%(title)s</a>'%dict(
+            id      = issue.id,
+            author  = comment.submitter,
+            url     = reverse("issue", args=[repo.owner.username, repo.name, issue.id]),
+            title   = issue.title,
+            state   = state
+        )
+
+    notify(subject=subject, title=title, action=action, to_mails=comment.subscribers) 
+
+
+@task(ignore_result=True)
+def issue_assign(issue):
+    repo    = issue.repo
+    subject = u'note for issue assign to you'
+    title   = u'%s'%repo.name
+    action  = u'You are assigned the Issue #%(id)s <a href="%(url)s">%(title)s</a>'%dict(
+            id    = issue.id,
+            url   = reverse("issue", args=[repo.owner.username, repo.name, issue.id]),
+            title = issue.title
+        )
+    notify(subject=subject, title=title, action=action, to_mails=[issue.assigner.email])
+
+
+@task(ignore_result=True)
+def issue_update(issue):
+    repo    = issue.repo
+    subject = u'note for issue update'
+    title   = u'%s'%repo.name
+    action  = u'updated the Issue #%(id)s <a href="%(url)s">%(title)s</a>'%dict(
+            id    = issue.id,
+            url   = reverse("issue", args=[repo.owner.username, repo.name, issue.id]),
+            title = issue.title
+        )
+    notify(subject=subject, title=title, action=action, to_mails=issue.subscribers_mail)
+
+
+@task(ignore_result=True)
+def repo_manager(repo, to_mails):
+    subject = u'note for be repo manager'
+    title   = u'%s'%repo.name
+    action  = u'you has be the \'<a href="%(url)s">%(repo)s</a>\' project manager'%dict(
+            repo = repo.name,
+            url  = repo.absolute_url
+        )
+    notify(subject=subject, title=title, action=action, to_mails=to_mails)
+
+
+@task(ignore_result=True)
+def repo_manager_remove(repo, to_mails):
+    subject = u'note for remove repo manager'
+    title   = u'%s'%repo.name
+    action  = u'you has remove the \'<a href="%(url)s">%(repo)s</a>\' project manager'%dict(
+            repo = repo.name,
+            url  = repo.absolute_url
+        )
+    notify(subject=subject, title=title, action=action, to_mails=to_mails)
 

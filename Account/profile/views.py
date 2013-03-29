@@ -7,11 +7,12 @@ from django.db.models import Q
 from Account.models import *
 from Account.profile.forms import UserForm
 from Depot.models import *
-from Common.tasks.notify import notify_active
 from Common import *
+from ldap_auth import ldap_user
+
+import Common.tasks.notify as notify
 
 import json, urllib
-from ldap_auth import ldap_user
 
 
 def index(request, username):
@@ -104,7 +105,7 @@ def user_to_active(request):
                 "user_email":request.user.email
             }
             active_url  = settings.APP_URL+"/accounts/user_active?"+urllib.urlencode(active_params)
-            notify_active.delay(request.user.email, active_url)
+            notify.account_active.delay(request.user.email, active_url)
 
             invite_code.used = True
             invite_code.user = request.user

@@ -12,16 +12,37 @@
             {%include "repo/admin/sidebar.html" with repo_admin_page="option"%}
         </div>
         <div class="span9">
+
           <div class="boxed-group flush">
-            <h3>项目名称</h3>
-            <div class="boxed-group-inner">
-              <form class="form-inline" action="{%url repo_rename repo.owner.username, repo.name%}" method="POST">
-                <input type="text" class="input-large" value="{{repo.name}}" name="repo_name"/>
-                <button type="submit" class="btn">重命名</button>
-                {%csrf_token%}
-              </form>
+            <h3>基本配置</h3>
+            <div class="boxed-group-inner no-padding">
+              
+              <div class="boxed-group-inner-item">
+                <h4>项目命名</h4>
+                <form class="form-inline" action="{%url repo_rename repo.owner.username, repo.name%}" method="POST">
+                  <input type="text" class="input-large" value="{{repo.name}}" name="repo_name"/>
+                  <button type="submit" class="btn">重命名</button>
+                  {%csrf_token%}
+                </form>
+              </div>
+
+              <div class="boxed-group-inner-item">
+                <h4>权限设置</h4>
+                <form class="form-inline" action="{%url repo_admin_competence repo.owner.username, repo.name%}" method="POST"> 
+                  {%if repo.is_public%}
+                    当前项目权限为:<strong>公开</strong> 
+                    <button class="btn btn-link" type="submit">将项目设置为私有项目</button>
+                  {%else%}
+                    当前项目权限为:<strong>私有</strong> 
+                    <button class="btn btn-link" type="submit">将项目设置为公开项目</button>
+                    <input type="hidden" name="public" value="1"/>
+                  {%endif%}
+                  {%csrf_token%}
+                </form>
+              </div>
             </div>
           </div>
+
           <div class="boxed-group flush">
             <h3>删除项目</h3>
             <div class="boxed-group-inner">

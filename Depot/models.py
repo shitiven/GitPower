@@ -1,12 +1,12 @@
 # -*- coding:utf-8 -*-
 
-from Common import User
-from Common import models
+from Common import User, models, reverse
 
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 from Service.models import DeployService
 
+import Common.tasks.notify as notify
 import GitPower.settings as settings
 import datetime, os, git, time
 import Account
@@ -26,6 +26,7 @@ class Repo(models.Model):
     managers    = models.ManyToManyField(User, related_name="repo_managers", null=True,blank=True)
     developers  = models.ManyToManyField(User, related_name="repo_developers", null=True, blank=True)
     reporters   = models.ManyToManyField(User, related_name="repo_reporters",null=True, blank=True)
+    subscribers = models.ManyToManyField(User, related_name="repo_subscribers", null=True, blank=True)
     touchreadme = False
     gitignore   = None
     is_edit     = False
@@ -109,6 +110,11 @@ class Repo(models.Model):
 
         if owners is None:return []
         return list(set(owners))
+
+
+    @property 
+    def absolute_url(self):
+        return settings.APP_URL + reverse("repo_index", args=[self.owner.username, self.name])
 
 
     def repo(self):
@@ -202,6 +208,23 @@ class Repo(models.Model):
         os.popen("rm -rf %s"%self.repo_path())
 
         super(Repo, self).delete(*args, **kwargs)
+
+
+@receiver(m2m_changed, sender=Repo.managers.through)
+def handler(sender, instance, action, reverse, model, pk_set, **kwargs):
+    
+    users = User.objects.filter(id__in = pk_set)
+
+    if action == "post_add":
+        for user in users:
+            instance.subscribers.add(user)
+            notify.repo_manager.delay(instance, [user.email])
+
+    else:
+        for user in users:
+            instance.subscribers.remove(user)
+            notify.repo_manager_remove.delay(instance, [user.email])
+
                 
 
 class BranchPermission(models.Model):

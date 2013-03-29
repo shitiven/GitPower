@@ -3,11 +3,21 @@
 <div class="title-actions-bar">
 
   <div class="title-actions-second">
-    <div class="btn-group">
-      <a class="btn" href="{%url pull_new repo.owner.username repo.name %}">
-        <span class="mini-icon mini-icon-pull-request"></span>合并请求
-      </a>
-    </div>
+
+
+    <a class="btn btn-small" href="{%url notify repo.owner.username repo.name%}?next_url={{request.path}}">
+    {%if watch_repo%}
+    <span class="mini-icon mini-icon-unwatch"></span>
+    取消订阅
+    {%else%}
+    <span class="mini-icon mini-icon-watching"></span>
+    订阅通知
+    {%endif%}
+    </a>
+
+    <a class="btn btn-small" href="{%url pull_new repo.owner.username repo.name %}">
+      <span class="mini-icon mini-icon-pull-request"></span>合并请求
+    </a>
   </div>
 
   <div class="title-actions-first">

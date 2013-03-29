@@ -3,6 +3,7 @@
     <div class="milestone">
         {%if issue.milestone %}
             里程碑: {{issue.milestone}}
+            <input type="hidden" name="milestone" value="{{issue.milestone.id}}"/>
         {%else%}
             <span class="assigned_milestone">No milestone</span>
             <input type="hidden" name="milestone" />
@@ -53,6 +54,7 @@
 
         {%if issue.assigner %}
         已指派给 {{issue.assigner}}
+        <input type="hidden" name="assigner" value="{{issue.assigner.id}}" />
         {%else%}
           <span class="assigned_assigner">No one is assigned</span>
           <input type="hidden" name="assigner" />

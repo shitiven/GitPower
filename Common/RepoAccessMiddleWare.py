@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 from Depot.models import Repo
+from Issues.models import Issue
 from django.core.exceptions import PermissionDenied
 from Common import *
 import GitPower.settings as settings
@@ -14,6 +15,33 @@ class RepoAccessMiddleWare(object):
         repo = get_object_or_404(Repo, owner__username=attributes[0], name=attributes[1])
 
         return repo
+
+
+    def watch_notify(self, request):
+
+        watch_data = {}
+
+        if request.user is None:return False
+
+        watch_data["watch_repo"] = [False, True][request.user in request.repo.subscribers.all()]
+
+        issue_parttern = re.compile('^/\w+/[-_\.a-zA-Z0-9]+/issues/(\d+)')
+        if issue_parttern.search(request.path):
+            issue_id = issue_parttern.search(request.path).groups()[0]
+            issues   = Issue.objects.filter(id=issue_id, subscribers__in=[request.user])
+            ignores  = Issue.objects.filter(id=issue_id, ignores__in=[request.user])
+
+            if issues.count() or watch_data["watch_repo"]:
+                watch_data["watch_issue"]  = True
+            
+            if ignores.count():
+                watch_data["watch_issue"]  = False
+
+            watch_data["watch_param"] = "issue="+issue_id
+
+
+        return watch_data
+
 
     def manange_repo(self, request):
 
@@ -38,13 +66,14 @@ class RepoAccessMiddleWare(object):
             if request.user not in repo.allowners:
                 if request.user.is_authenticated():raise PermissionDenied
                 return HttpResponseRedirect(reverse("login_user"))
-        
+
 
         #插入Temlate变量
         request.repo = repo
         request.context = {
             "repo" : repo
         }
+
         if re.search('^/(\w+)/([-_\.a-zA-Z0-9]+)/issues', request.path):
             request.context.update({
                 "current_block" : "issues"
@@ -54,6 +83,10 @@ class RepoAccessMiddleWare(object):
             request.context.update({
                 "current_block" : "admin"
             })
+
+        request.context.update(self.watch_notify(request))
+
+        print request.context
 
         return None
 

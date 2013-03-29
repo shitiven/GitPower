@@ -18,14 +18,14 @@ class IssueForm(forms.ModelForm):
 
     class Meta:
         model = Issue
-        exclude = ('created', 'updated', 'commented', 'state', 'order', )
+        exclude = ('created', 'updated', 'commented', 'state', 'order','subscribers','ignores',)
 
 
 class CommentForm(forms.ModelForm):
 
     class Meta:
         model = Comment
-        exclude = ('created',)
+        exclude = ('created', 'comment_type', )
 
 
 class LabelForm(forms.ModelForm):

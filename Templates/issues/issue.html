@@ -55,6 +55,23 @@
                 </div>
                 {%for comment in comments%}
                 <div class="discussion discussion-comment">
+                    {%if comment.comment_type == "CTI"%}
+                    <label class="label label-important label-issue-state">Closed</label>
+                    <div class="bubble discussion-bubble">
+                        <a href="/{{comment.submitter}}">
+                            <strong>{{comment.submitter|user_profile:"display_name"}}</strong>
+                        </a> 
+                        closed the issue {{comment.created|timesince}}
+                    </div>
+                    {%elif comment.comment_type == "OTI" %}
+                    <label class="label label-warning label-issue-state">Opened</label>
+                    <div class="bubble discussion-bubble">
+                        <a href="/{{comment.submitter}}">
+                            <strong>{{comment.submitter|user_profile:"display_name"}}</strong>
+                        </a> 
+                        open the issue {{comment.created|timesince}}
+                    </div>
+                    {%else%}
                     <img src="{%assets%}/img/avatar_default.png" class="avatar" width="48" height="48"/>
                     <div class="bubble discussion-bubble">
                         <div class="discussion-bubble-inner">
@@ -74,6 +91,7 @@
                             </div>
                         </div>
                     </div>
+                    {%endif%}
                 </div>
                 {%endfor%}
                 <form action="{%url issue_comment repo.owner.username repo.name issue.id%}" method="POST">
@@ -91,6 +109,7 @@
                     <button type="submit" class="btn btn-primary">评论</button>
                 </p>
                 </form>
+                {%include "notify.html" with watching=watch_issue%}
             </div>
 
             <div class="span2">

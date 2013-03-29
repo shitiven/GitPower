@@ -6,7 +6,9 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save,post_delete
 from django.dispatch import receiver
 
+import Common.tasks.notify as notify
 import datetime
+
 
 class MileStone(models.Model):
     '''milestone model'''
@@ -90,7 +92,21 @@ class Issue(models.Model):
     state     = models.CharField(max_length = 10, default = "opened")
     repo      = models.ForeignKey(Repo, related_name="issuse_repo")
     order     = models.IntegerField(max_length = 10)
-    subscribers = models.ManyToManyField(User)    
+    subscribers = models.ManyToManyField(User, related_name="issue_subscribers")
+    ignores     = models.ManyToManyField(User, related_name="issue_ignores")
+    action_user = None 
+
+
+    @property
+    def subscribers_mail(self, *args, **kwargs):
+        mails = list(self.subscribers.values_list("email", flat=True))
+        mails.extend(list(self.repo.subscribers.values_list("email", flat=True)))
+        mails = list(set(mails))
+
+        ignore_mails = self.ignores.values_list("email", flat=True)
+        mails = [mail for mail in mails if mail not in ignore_mails]
+
+        return mails
 
 
     def save(self, *args, **kwargs):
@@ -98,44 +114,98 @@ class Issue(models.Model):
         if self.order is None:
             self.order = Issue.objects.filter(repo = self.repo).count() + 1
 
+        first_saved = [False, True][self.id is None]
+
         super(Issue, self).save(*args, **kwargs)
+
+        if first_saved:
+            self.subscribers.add(self.submitter) 
+            if self.assigner:
+                self.subscribers.add(self.assigner)
+            notify.issue_assign.delay(self)
+            
+        else:
+            notify.issue_update.delay(self)
+
+
+    def assign(self, *args, **kwargs):
+        self.save(*args, **kwargs)
+        notify.issue_assign.delay(self)
 
     def close(self, *args, **kwargs):
 
         self.state = "closed"
         super(Issue, self).save(*args, **kwargs)
 
+
     def open(self, *args, **kwargs):
 
         self.state = "opened"
         super(Issue, self).save(*args, **kwargs)
 
+
     def state_toggle(self, *args, **kwargs):
+
+        comment = Comment()
+        comment.submitter = self.action_user
+        comment.issue     = self
 
         if self.is_open:
             self.close()
+            comment.content   = "clos the issue"
+            comment.save_cti()
         else:
             self.open()
+            comment.content   = "open the issue"
+            comment.save_oti()
 
     @property
     def is_open(self):
         return self.state == "opened"
+  
 
+COMMENT_TYPE_OTI = 'OTI'
+COMMENT_TYPE_CTI = 'CTI'
+COMMENT_TYPE_CCI = 'CCI'
+COMMENT_TYPE_CFI = 'CFI'
 
-@receiver(post_save, sender=Issue)
-def IssueSaved(sender, **kwargs):
-    '''send mail to subscribers when issue modified or created'''
-    saved_issue = kwargs["instance"]
-    subscribers = saved_issue.subscribers.all()
-    
-
+COMMENT_TYPES = (
+    (COMMENT_TYPE_OTI, 'open this issue'),
+    (COMMENT_TYPE_CTI, 'close this issue'),
+    (COMMENT_TYPE_CCI, 'commit to this issues'),
+    (COMMENT_TYPE_CFI, 'comment for this issue'),
+)        
 
 class Comment(models.Model):
     '''issue's comments'''
     
-    content   = models.TextField(u'内容')
-    submitter = models.ForeignKey(User)
-    created   = models.DateTimeField(default = datetime.datetime.now())
-    issue     = models.ForeignKey(Issue, related_name="issue_comment")
+    content      = models.TextField(u'内容')
+    submitter    = models.ForeignKey(User)
+    created      = models.DateTimeField(default = datetime.datetime.now())
+    issue        = models.ForeignKey(Issue, related_name="issue_comment")
+    comment_type = models.CharField(max_length=4, choices=COMMENT_TYPES, default=COMMENT_TYPE_CFI)
+
+    @property
+    def subscribers(self):
+        return self.issue.subscribers_mail
+
+    def save(self, *args, **kwargs):
+        self.comment_type = COMMENT_TYPE_CFI
+        super(Comment, self).save(*args, **kwargs)
+        notify.issue_comment.delay(self)
+
+    def save_oti(self, *args, **kwargs):
+        self.comment_type = COMMENT_TYPE_OTI
+        super(Comment, self).save(*args, **kwargs)
+        notify.issue_state_change.delay(self,"open")
+
+    def save_cti(self, *args, **kwargs):
+        self.comment_type = COMMENT_TYPE_CTI
+        super(Comment, self).save(*args, **kwargs)
+        notify.issue_state_change.delay(self,"close")
+
+
+
+
     
     

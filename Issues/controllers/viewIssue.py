@@ -58,7 +58,7 @@ def issue_assign_assigner(request, username, repo_name, issue_id, assigner_id):
     issue    = get_object_or_404(Issue, id = issue_id)
     assigner = get_object_or_404(User, id = assigner_id)
     issue.assigner = assigner
-    issue.save()
+    issue.assign()
 
     messages.success(request, "指派成功")
 
@@ -212,6 +212,7 @@ def issue_state_toggle(request, username, repo_name):
         issues = request.POST.getlist("issue")
         for issue in issues:
             issue = Issue.objects.get(id=issue)
+            issue.action_user = request.user
             issue.state_toggle()
 
         messages.success(request, "操作成功")

@@ -15,6 +15,21 @@ def repo_admin(request, username , repo_name):
     return render("repo/admin/option.html", request, context = context)
 
 
+@csrf_protect
+def repo_admin_competence(request, username, repo_name):
+    public = request.POST.get("public", None)
+    repo   = request.repo
+    if public:
+        repo.is_public = True
+        repo.save()
+    else:
+        repo.is_public = False
+
+    messages.success(request, "项目权限更改成功")
+
+    return HttpResponseRedirect(reverse("repo_admin", args=[username, repo_name])) 
+
+
 @repo_access_required("owner")
 @csrf_protect
 def repo_rename(request, username, repo_name):
