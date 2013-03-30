@@ -87,11 +87,12 @@ GIT_PATH = "/usr/bin/git"
 #STORE_PASSWORD = ''
 
 
-EMAIL_USE_TLS = False
-EMAIL_HOST = 'SMTP HOST'
-EMAIL_HOST_USER = 'SMTP USER'
-EMAIL_HOST_PASSWORD = 'SMTP PASSWORD'
+#you can set local shell path ex./usr/bin/sendmail
+EMAIL_HOST = 'smtp.exmail.qq.com'
+EMAIL_HOST_USER = 'service@gitpower.com' 
+EMAIL_HOST_PASSWORD = 'sdhzff88'
 EMAIL_PORT = 25
+EMAIL_USE_TLS = False
 
 #set site is public for every one
 SITE_PUBLIC = True
@@ -111,7 +112,8 @@ GRAVATAR_URL = "http://www.gravatar.com/avatar/"
 BROKER_URL = "redis://localhost:6379/0"
 CELERY_RESULT_BACKEND = "redis"
 CELERY_REDIS_DB = 0
-CELERY_IMPORTS = ("Common.notify", )
+CELERY_IMPORTS = ("Common.tasks.notify", )
 CELERY_SEND_TASK_ERROR_EMAILS = True
-CELERYD_LOG_FILE='/tmp/celery.log'
 djcelery.setup_loader()
+
+PROTECT_USERS=["accounts","assets","repo",""]
