@@ -24,7 +24,7 @@ class RepoAccessMiddleWare(object):
         if request.user is None:return False
 
         watch_data["watch_repo"] = [False, True][request.user in request.repo.subscribers.all()]
-
+        
         issue_parttern = re.compile('^/\w+/[-_\.a-zA-Z0-9]+/issues/(\d+)')
         if issue_parttern.search(request.path):
             issue_id = issue_parttern.search(request.path).groups()[0]
@@ -38,7 +38,6 @@ class RepoAccessMiddleWare(object):
                 watch_data["watch_issue"]  = False
 
             watch_data["watch_param"] = "issue="+issue_id
-
 
         return watch_data
 
@@ -85,8 +84,6 @@ class RepoAccessMiddleWare(object):
             })
 
         request.context.update(self.watch_notify(request))
-
-        print request.context
 
         return None
 

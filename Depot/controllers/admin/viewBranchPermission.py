@@ -5,7 +5,6 @@ from Depot.decorators import repo_access_required
 from Depot.models import BranchPermission
 
 
-@repo_access_required("owner")
 @csrf_protect
 def branch_permission(request, username, repo_name):
 
@@ -33,7 +32,7 @@ def branch_permission(request, username, repo_name):
 
     return render("repo/admin/branch_permission.html", request, context=request.context)
 
-@repo_access_required("owner")
+
 @csrf_protect
 def branch_permission_remove(request, username, repo_name):
 

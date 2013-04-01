@@ -5,7 +5,6 @@ from forms  import RenameForm
 from Depot.decorators import repo_access_required
 
 
-@repo_access_required("owner")
 def repo_admin(request, username , repo_name):
     '''the admin default page'''
 
@@ -30,7 +29,6 @@ def repo_admin_competence(request, username, repo_name):
     return HttpResponseRedirect(reverse("repo_admin", args=[username, repo_name])) 
 
 
-@repo_access_required("owner")
 @csrf_protect
 def repo_rename(request, username, repo_name):
     '''rename project '''
@@ -53,7 +51,6 @@ def repo_rename(request, username, repo_name):
     return HttpResponseRedirect(reverse("repo_admin", args=[username, repo.name]))
 
 
-@repo_access_required("owner")
 @csrf_protect
 def repo_delete(request, username, repo_name):
     '''delete the project'''

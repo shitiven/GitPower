@@ -4,7 +4,6 @@ from Common import *
 from Depot.decorators import repo_access_required
 
 
-@repo_access_required("owner")
 @csrf_protect
 def repo_admin_members_remove(request, ownername, repo_name):
 
@@ -22,7 +21,6 @@ def repo_admin_members_remove(request, ownername, repo_name):
         return HttpResponseRedirect(reverse("repo_admin_members", args=[ownername, repo_name]))
 
 
-@repo_access_required("owner")
 def repo_admin_members(request, ownername, repo_name):
     context = request.context
     repo = request.repo

@@ -28,6 +28,7 @@ def pull_item(request, owner_username, repo_name, pull_id):
         "pull" :pull,
         "newsfeed" : newsfeed
     }
+    template_context.update(request.context)
     return render_to_response("pull/pull.html", context_instance  = RequestContext(request,template_context))
  
 
@@ -49,6 +50,7 @@ def get_pulls(repo, requester = None, current_user = None):
         "current_user_pulls_length" : current_user_pulls_length
     }
 
+
 def pulls(request, owner_username, repo_name):
     repo  = get_object_or_404(Repo, owner__username = owner_username, name = repo_name)
     template_context = {
@@ -60,7 +62,9 @@ def pulls(request, owner_username, repo_name):
     current_user = None
     if request.user.is_authenticated():
         current_user = request.user
+
     template_context.update(get_pulls(repo, current_user = current_user))
+    template_context.update(request.context)
 
     return render_to_response("pull/pulls.html", context_instance  = RequestContext(request,template_context))
 
@@ -81,6 +85,7 @@ def your_pulls(request, owner_username, repo_name, requester):
         current_user = request.user
 
     template_context.update(get_pulls(repo, requester = requester, current_user = current_user))
+    template_context.update(request.context)
 
     return render_to_response("pull/pulls.html", context_instance  = RequestContext(request,template_context)) 
 
@@ -117,6 +122,8 @@ def pull_new(request, username, repo_name):
         "git_repo" : repo.repo(),
         "branch" : "master"
     }
+
+    template_context.update(request.context)
 
     return render_to_response("pull/request.html", context_instance  = RequestContext(request,template_context))
 

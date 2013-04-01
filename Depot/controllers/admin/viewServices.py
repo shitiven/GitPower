@@ -7,7 +7,6 @@ from Depot.decorators  import repo_access_required
 from Service.models import DeployService
 
 
-@repo_access_required("owner")
 def repo_services_filter(request, username, repo_name):
     '''public to this project's services list'''
 
@@ -33,7 +32,7 @@ def repo_services_filter(request, username, repo_name):
 
     return render("repo/admin/services/filter.html", request, context = context)
 
-@repo_access_required("owner")
+
 def repo_services(request, username, repo_name):
     '''current git project services'''
 
@@ -49,7 +48,6 @@ def repo_services(request, username, repo_name):
     return  render("repo/admin/services/service.html", request, context = context) 
 
 
-@repo_access_required("owner")
 def repo_service_add(request, username, repo_name):
     '''add service to project'''
 
@@ -64,7 +62,6 @@ def repo_service_add(request, username, repo_name):
     return HttpResponseRedirect(reverse("repo_services_filter", args=[username, repo.name]))
 
 
-@repo_access_required("owner")
 def repo_service_remove(request, username, repo_name):
     '''remove service from project'''
 

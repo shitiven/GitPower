@@ -17,7 +17,6 @@ def repo_index(request, username, repo_name):
     repo = get_object_or_404(Repo, owner__username = username, name = repo_name)
 
     template_context = get_repo_tree(repo, "master", "")
-    
     readme = get_readme(repo,"master")
     if readme is not None:
         template_context.update({
@@ -59,6 +58,8 @@ def repo_index(request, username, repo_name):
         "current_block" : "code"
     })
 
+    template_context.update(request.context)
+    
     return render_to_response("repo/index.html", context_instance  = RequestContext(request,template_context))
 
 
@@ -94,6 +95,7 @@ def repo_commits(request, username, repo_name, branch, path):
         "current_path" : path,
         "current_block" : "code"
     }
+    template_context.update(request.context)
     return render_to_response("repo/commits.html", context_instance = RequestContext(request, template_context))
 
 
@@ -118,6 +120,8 @@ def repo_commit(request, username, repo_name, commit_hexsha, path):
         "diffes" : diffes,
         "current_block" : "code"
     }
+
+    template_context.update(request.context)
 
     return render_to_response("repo/commit.html", context_instance = RequestContext(request, template_context))
 
@@ -197,13 +201,14 @@ def add_repo(request):
             if request.user.username == team_owner.username:
                 owner_teams.append(team)
 
-
-    return render_to_response("repo/add.html", context_instance  = RequestContext(request,{
+    context = {
                 "page" : "repo",
                 "form"  : form,
                 "owner_teams" : owner_teams,
                 "gitignores" : gitignores()
-    }))
+    }
+
+    return render('repo/add.html', request, context=context)
 
 
 def repo_list(request):
@@ -335,6 +340,8 @@ def repo_tree(request, username, repo_name, branch, path):
     template_context.update({
         "current_block" : "code"
     })
+
+    template_context.update(request.context)
 
     return render_to_response("repo/index.html", context_instance  = RequestContext(request,template_context))
 
