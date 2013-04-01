@@ -52,7 +52,7 @@ def notify(subject=None, title=None, action=None, comment=None, to_mails=[]):
 def account_active(to_mail, active_url):
     subject = u'GitPower激活邮件'
     title   = u'账户激活'
-    action  = u'请点击以下链接进行激活: <a href="%(active_url)s">%(active_url)s</a>'%dict(active_url=active_url) 
+    action  = u'请点击以下链接进行激活: <a href="%(active_url)s" target="_blank">%(active_url)s</a>'%dict(active_url=active_url) 
     to_mails = [to_mail]
 
     notify(subject=subject, title=title, action=action, to_mails=[to_mail])
@@ -67,11 +67,11 @@ def issue_comment(comment):
 
     subject = u'note for issue #%s'%issue.id
     title   = u'%s'%repo.name
-    action  = u'%(author)s left new comment for Issue #%(id)s <a href="%(url)s">%(title)s</a>'%dict(
+    action  = u'%(author)s left new comment for Issue #%(id)s <a href="%(url)s" target="_blank">%(title)s</a>'%dict(
             id      = issue.id,
             author  = comment.submitter,
             title   = issue.title,
-            url = reverse("issue", args=[repo.owner.username, repo.name, issue.id])
+            url     = issue.absolute_url
         )
 
     notify(subject=subject, title=title, action=action, comment=comment.content, to_mails=comment.subscribers) 
@@ -85,10 +85,10 @@ def issue_state_change(comment, state):
 
     subject = u'note for issue state change'
     title   = u'%s'%repo.name
-    action  = u'%(author)s %(state)s the Issue #%(id)s <a href="%(url)s">%(title)s</a>'%dict(
+    action  = u'%(author)s %(state)s the Issue #%(id)s <a href="%(url)s" target="_blank">%(title)s</a>'%dict(
             id      = issue.id,
             author  = comment.submitter,
-            url     = reverse("issue", args=[repo.owner.username, repo.name, issue.id]),
+            url     = issue.absolute_url,
             title   = issue.title,
             state   = state
         )
@@ -101,9 +101,9 @@ def issue_assign(issue):
     repo    = issue.repo
     subject = u'note for issue assign to you'
     title   = u'%s'%repo.name
-    action  = u'You are assigned the Issue #%(id)s <a href="%(url)s">%(title)s</a>'%dict(
+    action  = u'You are assigned the Issue #%(id)s <a href="%(url)s" target="_blank">%(title)s</a>'%dict(
             id    = issue.id,
-            url   = reverse("issue", args=[repo.owner.username, repo.name, issue.id]),
+            url   = issue.absolute_url,
             title = issue.title
         )
     notify(subject=subject, title=title, action=action, to_mails=[issue.assigner.email])
@@ -114,9 +114,9 @@ def issue_update(issue):
     repo    = issue.repo
     subject = u'note for issue update'
     title   = u'%s'%repo.name
-    action  = u'updated the Issue #%(id)s <a href="%(url)s">%(title)s</a>'%dict(
+    action  = u'updated the Issue #%(id)s <a href="%(url)s" target="_blank">%(title)s</a>'%dict(
             id    = issue.id,
-            url   = reverse("issue", args=[repo.owner.username, repo.name, issue.id]),
+            url   = issue.absolute_url,
             title = issue.title
         )
     notify(subject=subject, title=title, action=action, to_mails=issue.subscribers_mail)
@@ -126,7 +126,7 @@ def issue_update(issue):
 def repo_manager(repo, to_mails):
     subject = u'note for be repo manager'
     title   = u'%s'%repo.name
-    action  = u'you has be the \'<a href="%(url)s">%(repo)s</a>\' project manager'%dict(
+    action  = u'you has be the \'<a href="%(url)s" target="_blank">%(repo)s</a>\' project manager'%dict(
             repo = repo.name,
             url  = repo.absolute_url
         )
@@ -137,7 +137,7 @@ def repo_manager(repo, to_mails):
 def repo_manager_remove(repo, to_mails):
     subject = u'note for remove repo manager'
     title   = u'%s'%repo.name
-    action  = u'you has remove the \'<a href="%(url)s">%(repo)s</a>\' project manager'%dict(
+    action  = u'you has remove the \'<a href="%(url)s" target="_blank">%(repo)s</a>\' project manager'%dict(
             repo = repo.name,
             url  = repo.absolute_url
         )

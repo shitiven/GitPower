@@ -4,10 +4,10 @@ from Common import User, models, reverse
 
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
+from django.conf import settings
 from Service.models import DeployService
 
 import Common.tasks.notify as notify
-import GitPower.settings as settings
 import datetime, os, git, time
 import Account
 

@@ -5,7 +5,9 @@ from Depot.models import Repo
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save,post_delete
 from django.dispatch import receiver
+from django.conf import settings
 
+from Common import reverse
 import Common.tasks.notify as notify
 import datetime
 
@@ -107,6 +109,11 @@ class Issue(models.Model):
         mails = [mail for mail in mails if mail not in ignore_mails]
 
         return mails
+     
+
+    @property 
+    def absolute_url(self):
+        return settings.APP_URL + reverse("issue", args=[self.owner.username, self.name, self.id])
 
 
     def save(self, *args, **kwargs):
