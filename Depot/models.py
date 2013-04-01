@@ -136,7 +136,7 @@ class Repo(models.Model):
         return
         
 
-    def create_repo(self):
+    def create_repo(self, *args, **kwargs):
         '''create the git project'''
 
         repo_path = self.repo_path()
@@ -176,6 +176,8 @@ class Repo(models.Model):
             cl_repo.git.execute(['git', 'push', 'origin', 'master'])
 
             os.popen('rm -rf %s'%cl_path)
+
+        super(Repo, self).save(*args, **kwargs)
             
 
     def rename(self, new_name, *args, **kwargs):
@@ -191,16 +193,6 @@ class Repo(models.Model):
         self.name = new_name
         super(Repo, self).save(*args, **kwargs)
 
-    def save(self, *args, **kwargs):
-        '''create project and save data to the database'''
-
-        self.create_repo()
-        sshkey = Account.models.SSHKey()
-
-        super(Repo, self).save(*args, **kwargs)
-
-        sshkey.create_access_conf(self)
-        self.create_split_conf()
 
     def delete(self, *args, **kwargs):
         '''delete the project'''

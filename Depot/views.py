@@ -178,7 +178,7 @@ def add_repo(request):
             repo = form.save(commit=False)
             repo.touchreadme = request.POST.get("touchreadme", False)
             repo.gitignore   = request.POST.get("gitignores", None)
-            repo.save()
+            repo.create_repo()
             return HttpResponseRedirect("/%s/%s"%(repo.owner.username, repo.name))
 
         else:
