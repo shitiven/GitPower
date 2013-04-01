@@ -113,7 +113,7 @@ class Issue(models.Model):
 
     @property 
     def absolute_url(self):
-        return settings.APP_URL + reverse("issue", args=[self.owner.username, self.name, self.id])
+        return settings.APP_URL + reverse("issue", args=[self.repo.owner.username, self.repo.name, self.id])
 
 
     def save(self, *args, **kwargs):
