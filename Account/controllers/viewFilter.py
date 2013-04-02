@@ -24,7 +24,7 @@ def my_projects(request):
             "name"  : repo.name
         })
     
-    if keyword.strip().__len__():
+    if not keyword.strip().__len__():
         result = result[:10]
 
     return render_json({
