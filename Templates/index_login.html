@@ -1,4 +1,5 @@
 {%extends "sample.html"%}
+{%load custom%}
 {%block style%}
   <style type="text/css">
     h5 {
@@ -106,6 +107,7 @@
               <ul class="repo-listing">
                 <form class="form-search">
                 <li>
+                    <img src="{%assets%}/img/loading.gif" width="20px" height="20px" class="loading"/>
                     <i class="mini-icon mega-icon-search-input"></i>
                     <input type="text" class="input-medium search-query filter-myproject" placeholder="搜索自己的项目"/>
                 </li>
@@ -138,14 +140,20 @@
         $(data["repos"]).each(function(index, item){
            var item_a  = $('<a href="#"></a>');
            var item_li = $('<li class="source"></li>');
-           item_a.html(item.owner + "/" + item.name).appendTo(item_li);
-
+           item_a.attr("href","/"+item.owner+"/"+item.name);
+           item_a.html(item.owner + " / <strong>" + item.name + "</strong>").appendTo(item_li);
            item_li.insertBefore($(".repo-listing .more"));
         });
+        $(".repo-listing .loading").hide();
+
+        if(!data["repos"].length && !$(".repo-listing .none").length){
+          $('<li class="none source"><p>空</p></li>').insertBefore($(".repo-listing .more"))
+        }
       }
     });
 
     $(".filter-myproject").keyup(function(){
+        $(".repo-listing .loading").show();
         api.send({
           "keyword" : $(this).val()
         })

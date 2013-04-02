@@ -1262,6 +1262,12 @@ table .table-td-header-block{
   padding-left: 30px;
   font-size: 12px;
 }
+.repo-listing .loading{
+  position: absolute;
+  right:28px;
+  top:8px;
+  display: none;
+}
 .boxed-group .list-browser-filterbar .list-browser-filter-tabs a.filter-tab.repos-list-selected{
   background: #f8f8f8;
   border-bottom: 1px solid #f8f8f8;
