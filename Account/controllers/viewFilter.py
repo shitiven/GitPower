@@ -23,6 +23,9 @@ def my_projects(request):
             "owner" : repo.owner.username,
             "name"  : repo.name
         })
+    
+    if keyword.strip().__len__():
+        result = result[:10]
 
     return render_json({
             "status" : "ok",
