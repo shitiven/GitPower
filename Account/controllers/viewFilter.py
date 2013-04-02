@@ -13,9 +13,9 @@ def my_projects(request):
 
     teams   = UserProfile.objects.filter(owners__in=[request.user])
     for team in teams:
-        repos   = Repo.objects.filter(owner=team.user, name__contains=keyword)
-    repos.extend(Repo.objects.filter(owner=request.user, name__contains=keyword))
-    repos.extend(Repo.objects.filter(managers__in=[request.user], name__contains=keyword))
+        repos.extend(Repo.objects.filter(owner=team.user, name__icontains=keyword))
+    repos.extend(Repo.objects.filter(owner=request.user, name__icontains=keyword))
+    repos.extend(Repo.objects.filter(managers__in=[request.user], name__icontains=keyword))
 
     result = []
     for repo in repos:
