@@ -88,11 +88,10 @@
     </div>
     <div class="span5">
           <div class="boxed-group no-padding">
-            <!--h2>我的项目 <em>({{rlen}})</em></h2-->
             <div class="list-browser-filterbar">
               <ul class="list-browser-filter-tabs">
               <li>
-                <a href="#" data-filter="open" class="filter-tab selected">
+                <a href="#" data-filter="open" class="filter-tab selected repos-list-selected">
                   我管理的项目 ({{current_profile.repos|length}})
                 </a>
               </li>
@@ -105,18 +104,53 @@
             </div>
             <div class="boxed-group-inner no-padding">
               <ul class="repo-listing">
-                {%for repo in current_profile.repos%}
+                <form class="form-search">
+                <li>
+                    <i class="mini-icon mega-icon-search-input"></i>
+                    <input type="text" class="input-medium search-query filter-myproject" placeholder="搜索自己的项目"/>
+                </li>
+                </form>
+
+                {%for repo in current_profile.repos|slice:":10"%}
                 <li class="source">
                   <a href="/{{repo.owner.username}}/{{repo.name}}">
                     {{repo.owner.username}} / <strong>{{repo.name}}</strong>
                   </a>
                 </li>
                 {%endfor%}
-                  <li style="text-align:right"><a style="border-bottom:none;" href="/{{request.user}}">查看所有项目</a></li>
+                  <li style="text-align:right" class="more"><a style="border-bottom:none;" href="/{{request.user}}">查看所有项目</a></li>
               </ul>
             </div>
         </div>
     </div>
   </div>
 </div>
+{%endblock%}
+
+{%block script%}
+<script type="text/javascript">
+  $(document).ready(function(){
+
+    var api = new gpapi({
+      url  : "{%url filter_my_projects%}",
+      success : function(data){
+        $(".repo-listing .source").remove();
+        $(data["repos"]).each(function(index, item){
+           var item_a  = $('<a href="#"></a>');
+           var item_li = $('<li class="source"></li>');
+           item_a.html(item.owner + "/" + item.name).appendTo(item_li);
+
+           item_li.insertBefore($(".repo-listing .more"));
+        });
+      }
+    });
+
+    $(".filter-myproject").keyup(function(){
+        api.send({
+          "keyword" : $(this).val()
+        })
+    })
+
+  })
+</script>
 {%endblock%}

@@ -1,8 +1,10 @@
 from django.conf.urls import patterns, include, url
+import controllers.viewFilter as viewFilter
 import settings.views as settings
 import profile.views as profile
 
 urlpatterns = patterns('',
+
     url(r'index$',profile.index),
     url(r'filter$',profile.filter_user),
     url(r'login', profile.login_user, name="login_user"),
@@ -11,6 +13,7 @@ urlpatterns = patterns('',
     url(r'validate_code', profile.user_to_active, name="validate_code"),
     url(r'user_active', profile.user_active, name="user_active"),
 
+    url(r'filter/my_projects$',viewFilter.my_projects, name="filter_my_projects"),
     url(r'settings/profile', settings.profile, name="settings_profile"),
     url(r'settings/sshkey/(\d+)/delete$', settings.sshkey_delete),
     url(r'settings/sshkey$', settings.sshkey, name="settings_sshkey"),

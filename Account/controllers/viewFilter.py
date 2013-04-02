@@ -1,0 +1,30 @@
+# -*- coding:utf-8 -*-
+
+from Common import *
+from Depot.models import Repo
+from Account.models import UserProfile
+
+
+@login_required
+def my_projects(request):
+    '''filter project related with me'''
+    keyword = request.POST.get("keyword")
+    repos   = []
+
+    teams   = UserProfile.objects.filter(owners__in=[request.user])
+    for team in teams:
+        repos   = Repo.objects.filter(owner=team.user, name__contains=keyword)
+    repos.extend(Repo.objects.filter(owner=request.user, name__contains=keyword))
+    repos.extend(Repo.objects.filter(managers__in=[request.user], name__contains=keyword))
+
+    result = []
+    for repo in repos:
+        result.append({
+            "owner" : repo.owner.username,
+            "name"  : repo.name
+        })
+
+    return render_json({
+            "status" : "ok",
+            "repos"  : result
+        })

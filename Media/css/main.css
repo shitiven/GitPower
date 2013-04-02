@@ -1242,6 +1242,30 @@ table .table-td-header-block{
 .repo-listing li.source{
   border-bottom: 1px solid #E5E5E5;
 }
+.repo-listing .form-search li{
+  margin: 0;
+  position: relative;
+  border-bottom: 1px solid #E5E5E5;
+  background: #f8f8f8;
+}
+.repo-listing .form-search i.mega-icon-search-input{
+  position: absolute;
+  left:18px;
+  top:12px;
+  font-size: 15px;
+  color: #999;
+
+}
+.repo-listing .form-search input.search-query{
+  height: 15px;
+  width: 300px;
+  padding-left: 30px;
+  font-size: 12px;
+}
+.boxed-group .list-browser-filterbar .list-browser-filter-tabs a.filter-tab.repos-list-selected{
+  background: #f8f8f8;
+  border-bottom: 1px solid #f8f8f8;
+}
 
 code {
   font-size: 12px!important;
