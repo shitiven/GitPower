@@ -23,6 +23,7 @@ def repo_admin_competence(request, username, repo_name):
         repo.save()
     else:
         repo.is_public = False
+        repo.save()
 
     messages.success(request, "项目权限更改成功")
 

@@ -50,8 +50,8 @@ git push -u origin master
 <script type="text/javascript">
 $.ajax({
   type: "GET",
-  url: "/repo/tree_ajax",
-  data: {"repo_id" : "{{repo.id}}", "branch" : "{{branch}}", "path" : "{{current_path}}"}
+  url: "{%url repo_tree_ajax repo.owner.username repo.name%}",
+  data: {"branch" : "{{branch}}", "path" : "{{current_path}}"}
 }).done(function( data ) {
   $("#treeContainer").html(data);
 });

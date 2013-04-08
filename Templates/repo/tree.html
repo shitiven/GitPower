@@ -30,7 +30,7 @@ $(document).ready(function() {
       $("#treeLoading").show();
       $.ajax({
           type: "GET",
-          url: "/repo/tree_ajax",
+          url: "{%url repo_tree_ajax repo.owner.username repo.name%}",
           data: {"repo_id" : repo_id, "branch" : branch, "path" : path}
         }).done(function( data ) {
            $("#tree-box-slide").html(data);

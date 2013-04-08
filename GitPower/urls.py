@@ -1,6 +1,10 @@
 from django.conf.urls import patterns, include, url
 from GitPower.views import *
-from Depot.views import repo_index, repo_tree ,repo_commits, repo_commit
+from Depot.views import repo_index
+from Depot.views import repo_tree
+from Depot.views import repo_commits
+from Depot.views import repo_commit
+from Depot.views import repo_tree_ajax
 from Depot import (
     repo_admin, 
     repo_admin_members,
@@ -55,6 +59,7 @@ urlpatterns += patterns('',
     url(r'^pull/', include('Pull.urls')),
     url(r'^service/', include('Service.urls')),
 
+    url(r'^(\w+)/([-_\.a-zA-Z0-9]+)/tree/ajax$', repo_tree_ajax, name = "repo_tree_ajax"),
     url(r'^(\w+)/([-_\.a-zA-Z0-9]+)/tree/([-_\.\w+]+)/(.*)$', repo_tree, name = "repo_tree"),
 
     url(r'^(\w+)/([-_\.a-zA-Z0-9]+)/commits/([-_\.\w+]+)/(.*)$', repo_commits, name = "repo_commits"),

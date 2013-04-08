@@ -347,11 +347,10 @@ def repo_tree(request, username, repo_name, branch, path):
     return render_to_response("repo/index.html", context_instance  = RequestContext(request,template_context))
 
 
-def repo_tree_ajax(request):
-    repo_id = request.GET.get('repo_id')
+def repo_tree_ajax(request, username, repo_name):
+    repo    = request.repo
     branch  = request.GET.get('branch')
     path    = request.GET.get('path')
-    repo = get_object_or_404(Repo, id = repo_id)
 
     template_context = get_repo_tree(repo, branch, path)
 
