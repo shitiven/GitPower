@@ -134,7 +134,8 @@ def fliter_project(request):
     
     if request.user.is_authenticated():
         profile = request.user.get_profile()
-        repos    = Repo.objects.filter(name__contains = keyword, is_public=True)[:20]
+        repos    = Repo.objects.filter(name__icontains = keyword, is_public=True)[:20]
+
 
     result = {"result":[]}
     for repo in repos:
