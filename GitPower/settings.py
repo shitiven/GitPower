@@ -1,8 +1,7 @@
 # Django settings for GitPower project.
 
-#import conf
+import os, time, djcelery
 from conf import *
-import os, time
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
