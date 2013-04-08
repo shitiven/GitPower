@@ -8,8 +8,8 @@ import GitPower.settings as settings
 setup_environ(settings)
 
 from django.contrib.auth.models import User
+from Account.models import SSHKey
 from Depot.models import Repo
-import Account
 import logging
 
 DEBUG = True
@@ -22,7 +22,7 @@ def log(msg):
 
 def filter_users_bykey(pubkey):
     '''filter users by sshkey'''
-    return list(Account.models.SSHKey.objects.filter(content=pubkey))
+    return list(SSHKey.objects.filter(content=pubkey))
 
 
 def repo_access(username, repo_path):
