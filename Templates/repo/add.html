@@ -66,23 +66,21 @@
       </span>
     </label>
     {%endif%}
-
-    <div class="control-group">
-      <label class="checkbox">
-        <input type="checkbox" name="touchreadme"/> 生成README文件
-      </label>
-      <div class="btn-group">
-        <a class="btn" href="#">.gitignore文件</a>
-        <a class="btn dropdown-toggle" data-toggle="dropdown-filter" href="#">
-          <span class="caret"></span>
-        </a>
-        <div id="JSFilterGitignores" class="dropdown-menu filter-context-panel js-gitignores"></div>
-        <input type="hidden" name="gitignores"/>
-      </div>
-
-    </div>
   </div>
+  <div class="control-group">
+    <label class="checkbox">
+      <input type="checkbox" name="touchreadme"/> 生成README文件
+    </label>
+    <div class="btn-group">
+      <a class="btn" href="#">.gitignore文件</a>
+      <a class="btn dropdown-toggle" data-toggle="dropdown-filter" href="#">
+        <span class="caret"></span>
+      </a>
+      <div id="JSFilterGitignores" class="dropdown-menu filter-context-panel js-gitignores"></div>
+      <input type="hidden" name="gitignores"/>
+    </div>
 
+  </div>
   <div class="control-group">
       <button type="submit" class="btn btn-primary">创建项目</button>
   </div>
