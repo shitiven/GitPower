@@ -178,6 +178,10 @@ class Repo(models.Model):
             os.popen('rm -rf %s'%cl_path)
 
         super(Repo, self).save(*args, **kwargs)
+
+        for owner in self.allowners:
+            self.subscribers.add(owner)
+        self.save()
             
 
     def rename(self, new_name, *args, **kwargs):
