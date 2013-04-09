@@ -45,12 +45,12 @@
             <td class="tree">
               <a class="tree-dir" href="{%url repo_tree repo.owner.username repo.name branch element.path%}" data-repoid="{{repo.id}}" data-branch="{{branch}}" data-path="{{element.path}}">{{element.name}}</a>
             </td>
-            <td>
-              <span style="color:#aaa;font-size:12px">
+            <td class="meta">
+              <span>
               {{element.path|gener_args:branch|last_commit:git_repo|last_commit_age}}
               </span>
             </td>
-            <td>
+            <td class="message">
               {%autoescape off%}
               {{element.path|gener_args:branch|last_commit:git_repo|last_commit_message}}
               {%endautoescape%}
@@ -60,8 +60,8 @@
        <tr>
            <td class="file">
             <a class="tree-dir" href="{%url repo_tree repo.owner.username repo.name branch element.path%}" data-repoid="{{repo.id}}" data-branch="{{branch}}" data-path="{{element.path}}">{{element.name}}</a></td>
-           <td> 
-            <span style="color:#aaa;font-size:12px">
+           <td class="meta"> 
+            <span>
             {{element.path|gener_args:branch|last_commit:git_repo|last_commit_age}}
             </span>
            </td>

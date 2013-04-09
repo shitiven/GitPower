@@ -205,7 +205,14 @@ p.meta{
   padding: 3px 8px;
 }
 .tree-browser .message{
-  max-width: 200px;
+  max-width: 450px;
+}
+.tree-browser .meta{
+  min-width: 160px;
+}
+.tree-browser .meta span{
+  color:#aaa;
+  font-size:12px
 }
 #readme{
   padding: 3px;
