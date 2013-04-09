@@ -663,6 +663,7 @@ table.pull_list a.commit-msg{
 }
 .permission-choose .just-help{
   margin-left: 8px;
+  display: inline-block;
 }
 .permission-choose .just-help .name{
   font-weight: bold;

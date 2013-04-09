@@ -10,6 +10,3 @@
 
 #### Install python requirements
 `sudo pip install -r requirements.txt`
-
-
-
