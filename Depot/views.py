@@ -301,12 +301,13 @@ def get_repo_tree(repo, branch, path):
         f,t = os.path.splitext(path)
         md_data = False
         data = tree.data_stream.read()
-        if(t.lower() == ".md"): md_data = markdown.markdown(force_unicode(data, 'UTF8'))
+        if(t.lower() == ".md"): md_data = markdown.markdown(force_unicode(data, 'UTF8'), ['codehilite'])
         template_context.update({
             'data': data,
             'md_data'  : md_data,
             'data_size'  : float(tree.data_stream.size)/1000,
-            "data_lines" : data.splitlines().__len__()
+            "data_lines" : data.splitlines().__len__(),
+            'file_type'  : t
         })
 
     return template_context

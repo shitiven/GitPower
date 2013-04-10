@@ -1,21 +1,13 @@
 # encoding: utf-8
+'''custom templatefilter tag'''
 
 from django import template
 from Account.models import UserProfile
-from pygments import highlight 
-from pygments.lexers import get_lexer_by_name, PhpLexer 
-from pygments.formatters import HtmlFormatter 
-from pygments.util import ClassNotFound 
-from pygments import highlight
-from pygments.lexers import get_lexer_by_name
-from pygments.formatters import HtmlFormatter
 from Pull.models import PullRequest
-from django.utils.encoding import force_unicode
 from django.utils.html import conditional_escape 
 
-import pygments
 import GitPower.settings as settings
-import git, re, time, datetime, difflib
+import re, time, datetime, difflib
 
 register = template.Library()
 
@@ -39,18 +31,6 @@ def owner_teams(owner):
   teams = UserProfile.objects.filter(owners__in = [owner])
   return teams 
  
-@register.filter 
-def highlight_code(code, lang): 
-  if code is not None: 
-    try: 
-      lexer = get_lexer_by_name(lang, encoding='utf-8', stripall=True, startinline=True) 
-    except ClassNotFound: 
-      lexer = get_lexer_by_name('text') 
-    formatter = HtmlFormatter(encoding='utf-8', style='colorful', linenos='table', cssclass='highlight', lineanchors="line") 
-    return highlight(code, lexer, formatter)   
-  else: 
-    return code 
-
 
 @register.filter
 def arrayIndex(arr, item):
@@ -77,32 +57,6 @@ def get_submodule(element, submodules):
         return sub.url
 
   return None
-
-
-@register.filter
-def code2Css(style, lang):
-  lexer = get_lexer_by_name(lang, encoding='utf-8', stripall=True)
-  formatter = HtmlFormatter(
-          linenos=True,
-          encoding='utf-8',
-          style = style,
-          noclasses="True")
-  result = highlight("", lexer, formatter)
-  css = formatter.get_style_defs()
-  return css
-
-
-@register.filter
-def code2html(code,lang):
-  lexer = get_lexer_by_name(lang, encoding='utf-8', stripall=True)
-  formatter = HtmlFormatter(
-          linenos=True,
-          encoding='utf-8',
-          style = 'friendly',
-          noclasses="False")
-  result = highlight(code, lexer, formatter)
-  css = formatter.get_style_defs()
-  return result
 
 
 @register.filter

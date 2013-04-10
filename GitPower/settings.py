@@ -154,6 +154,7 @@ PIPELINE_CSS = {
             'css/main.css',
             'css/icon.css',
             'css/jquery-ui.css',
+            'css/pygments.css',
         ),
         'output_filename' : 'css/master.min.css',
     },
