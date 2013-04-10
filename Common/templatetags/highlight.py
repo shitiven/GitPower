@@ -3,6 +3,7 @@
 
 from django import template
 from pygments import highlight, formatters
+from pygments.lexers import guess_lexer
 from pygments.lexers import guess_lexer_for_filename
 
 register = template.Library()
@@ -17,8 +18,11 @@ def highlight_blob(filename, code):
           encoding='utf-8',
           style = 'friendly',
           noclasses="False")
+    try:
+        lexer = guess_lexer_for_filename(filename, code, encoding='utf-8')
+    except:
+        lexer = guess_lexer(code)
 
-    lexer = guess_lexer_for_filename(filename, code, encoding='utf-8')
     result = highlight(code, lexer, formatter)
     return result
 
