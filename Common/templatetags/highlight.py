@@ -18,7 +18,7 @@ def highlight_blob(filename, code):
           style = 'friendly',
           noclasses="False")
 
-    lexer = guess_lexer_for_filename(filename, code)
+    lexer = guess_lexer_for_filename(filename, code, encoding='utf-8')
     result = highlight(code, lexer, formatter)
     return result
 
