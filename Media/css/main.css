@@ -454,6 +454,15 @@ p.meta{
   padding:0 7px;
   font-size: 11px;
 }
+#files .diff-file td.summary{
+  color:#999;
+  text-align: center;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+  line-height: 14px;
+}
+#files .diff-file p.summary{
+  color: #999;
+}
 /*pull request*/
 div.pull-head {
   margin-bottom: 20px;

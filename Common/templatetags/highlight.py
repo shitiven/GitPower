@@ -38,8 +38,3 @@ def highlight_blob_css():
           noclasses="True")
 
     return formatter.get_style_defs()
-
-
-
-
-

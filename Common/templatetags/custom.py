@@ -183,7 +183,7 @@ def is_tree(name, git_repo):
 #将diff内容转换成HTML格式  
 @register.filter
 def diff2html(diff):
-  lexer = pygments.lexers.get_lexer_by_name("diff")
+
   def show_diff(seqm, a, b, init= False, delete = False):
     html   = '<table class="diff-code" cellPadding="0"><tbody>'
     c_num  = 1

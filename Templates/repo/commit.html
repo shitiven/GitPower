@@ -1,13 +1,10 @@
 {%extends "sample.html"%}
 {%load custom%}
+{%load diff%}
 {%block h1_title%}
   {%include "repo/repo_head.html"%}
 {%endblock%}
-{%block style%}
-<style type="text/css">
-    {{"emacs"|code2Css:"diff"}}
-</style>
-{%endblock%}
+
 {%block container%}
     {%include "repo/menu_ul.html"%}
     <table class="table table-bordered" style="position:relative">
@@ -34,7 +31,7 @@
           </div>
         </div>
         <div class="file diff-file">
-            {{diff|diff2html|safe}}
+            {{diff.diff|diff_to_html|safe}}
         </div>
     </div>
     {%endfor%}

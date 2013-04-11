@@ -105,9 +105,11 @@ def repo_commit(request, username, repo_name, commit_hexsha, path):
     git_repo = repo.repo() 
     commit   = git_repo.commit(commit_hexsha)
     try:
-        diffes = commit.diff(commit.parents[0], path, create_patch=True)
+        diffes = commit.parents[0].diff(commit, path, create_patch=True)
     except:
         diffes = commit.diff()
+
+    print diffes[0].diff
 
     template_context = {
         "repo" : repo,
