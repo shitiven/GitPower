@@ -425,6 +425,9 @@ p.meta{
 }
 #files .diff-file{
   background: ghostWhite;
+  overflow: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 #files .diff-file p.pre-code{
   margin: 0;
@@ -441,23 +444,30 @@ p.meta{
   border-spacing:0;
   border-collapse:collapse;
   width: 100%;
-  font-size: 12px;
+  font-size: 13px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
 }
 #files .diff-file td.num{
   background: #ECECEC;
   color:#AAA;
   width: 20px;
   border-right: 1px solid #DDD;
+  vertical-align: top;
 }
 #files .diff-file td.num span{
   display: block;
   padding:0 7px;
   font-size: 11px;
 }
+#files .diff-file td.add{
+  background-color: #ceffce;
+}
+#files .diff-file td.del{
+  background-color: #f7c8c8;
+}
 #files .diff-file td.summary{
   color:#999;
   text-align: center;
-  font-family: Consolas, "Liberation Mono", Courier, monospace;
   line-height: 14px;
 }
 #files .diff-file p.summary{

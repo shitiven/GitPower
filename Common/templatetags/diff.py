@@ -46,6 +46,10 @@ def opcodes(line):
     return None
 
 
+def sub_space(text):
+    return re.sub(r'\s', '&nbsp;', text)
+
+
 def block_to_html(block):
     arr = []
     a_num = block["a_start_line"]
@@ -56,20 +60,22 @@ def block_to_html(block):
 
     for line in block["lines"]:
 
+        line = sub_space(conditional_escape(line))
+
         if opcodes(line) == 'add':
-            html = '<tr><td class="num"><span></span></td><td class="num"><span>%s</span></td><td><p class="add pre-code">%s</p></td></tr>' % (str(a_num), conditional_escape(line))
-            arr.append(html)
-
-            a_num = a_num + 1
-
-        elif opcodes(line) == 'del':
-            html = '<tr><td class="num"><span>%s</span></td><td class="num"><span></span></td><td><p class="del pre-code">%s</p></td></tr>' % (str(b_num), conditional_escape(line))
+            html = '<tr><td class="num add"><span></span></td><td class="num add"><span>%s</span></td><td><p class="add pre-code">%s</p></td></tr>' % (str(b_num), line)
             arr.append(html)
 
             b_num = b_num + 1
 
+        elif opcodes(line) == 'del':
+            html = '<tr><td class="num del"><span>%s</span></td><td class="num del"><span></span></td><td><p class="del pre-code">%s</p></td></tr>' % (str(a_num), line)
+            arr.append(html)
+
+            a_num = a_num + 1
+
         else:
-            html = '<tr class="nochange-hide"><td class="num"><span>%s</span></td><td class="num"><span>%s</span></td><td><p class="pre-code">&nbsp;&nbsp;%s</p></td></tr>' % (str(b_num), str(a_num), conditional_escape(line))
+            html = '<tr class="nochange-hide"><td class="num"><span>%s</span></td><td class="num"><span>%s</span></td><td><p class="pre-code">%s</p></td></tr>' % (str(a_num), str(b_num), line)
             arr.append(html)
 
             a_num = a_num + 1
