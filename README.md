@@ -1,5 +1,4 @@
-
-[GitHub项目地址](https://github.com/shitiven/GitPower)
+[GitPower Demo](https://www.gitpower.com)
 
 ## Installation Guide
 
