@@ -1,4 +1,4 @@
-[GitPower Demo](https://www.gitpower.com)
+[GitPower Demo](http://www.gitpower.com)
 
 ## Installation Guide
 
